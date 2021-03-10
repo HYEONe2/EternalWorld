@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class LoadingSceneManager : MonoBehaviour
 {
-    public static string curScene;
-    public static string nextScene;
+    public static string m_CurScene;
+    public static string m_NextScene;
 
     private Image m_ProgressBar;
 
@@ -19,8 +19,8 @@ public class LoadingSceneManager : MonoBehaviour
 
     public static void LoadScene(string sceneName)
     {
-        curScene = SceneManager.GetActiveScene().name;
-        nextScene = sceneName;
+        m_CurScene = SceneManager.GetActiveScene().name;
+        m_NextScene = sceneName;
 
         SceneManager.LoadScene("LoadingScene");
     }
@@ -29,7 +29,7 @@ public class LoadingSceneManager : MonoBehaviour
     {
         yield return null;
 
-        AsyncOperation op = SceneManager.LoadSceneAsync(nextScene);
+        AsyncOperation op = SceneManager.LoadSceneAsync(m_NextScene);
         op.allowSceneActivation = false;
 
         float timer = 0f;

@@ -6,6 +6,8 @@ public class Player : MonoBehaviour
 {
     // My Components
     private CharacterController m_Controller;
+    public GameObject m_Axe;
+    //private Transform m_EquipPoint;
 
     // Child Components
     private GameObject m_Mesh;
@@ -15,6 +17,7 @@ public class Player : MonoBehaviour
     private Transform m_CamArmTrans;
 
     // Other Components
+    public GameObject m_NearObject;
 
     // Values
     private Vector3 m_Pos;
@@ -27,10 +30,13 @@ public class Player : MonoBehaviour
     private float m_JumpPower;
     private bool m_bSprint;
 
+    private bool[] m_bInitialEquip = new bool[2];
+    public bool m_bSwingAxe;
+
     // Start is called before the first frame update
     void Start()
     {
-        Screen.SetResolution(Screen.width, (Screen.width * 16) / 9, true);
+        //Screen.SetResolution(Screen.width, (Screen.width * 16) / 9, true);
 
         InitializeComponents();
         InitializeValues();
@@ -39,8 +45,10 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //UpdateKeyInput();
         UpdateMovement();
+        //UpdateKeyInput();
+        UpdateAction();
+        UpdateInteraction();
     }
 
     private void FixedUpdate()
@@ -52,6 +60,8 @@ public class Player : MonoBehaviour
     {
         // My Components
         if (!m_Controller) m_Controller = gameObject.GetComponent<CharacterController>();
+        if(!m_Axe) m_Axe = transform.Find("Axe").gameObject;
+        //if (!m_EquipPoint) m_EquipPoint = transform.Find("EquipPoint");
 
         // Child Components
         if (!m_Mesh) m_Mesh = transform.Find("PlayerMesh").gameObject;
@@ -63,6 +73,9 @@ public class Player : MonoBehaviour
         }
 
         if (!m_CamArmTrans) m_CamArmTrans = transform.Find("CameraArm");
+
+        // Other Components
+        if(!m_NearObject) m_NearObject = null;
     }
 
     void InitializeValues()
@@ -79,10 +92,18 @@ public class Player : MonoBehaviour
         m_bJump = false;
         m_JumpPower = 3f;
         m_bSprint = false;
+
+        // Equip
+        m_bInitialEquip[0] = false;
+        m_bInitialEquip[1] = false;
+        m_bSwingAxe = false;
     }
 
     void UpdateMovement()
     {
+        if (m_bSwingAxe)
+            return;
+
         if (!m_Controller.isGrounded)
         {
             m_Pos.y += m_Gravity * Time.deltaTime * 0.8f;
@@ -188,6 +209,69 @@ public class Player : MonoBehaviour
                 m_bSprint = true;
             else
                 m_bSprint = false;
+        }
+    }
+    
+    void UpdateAction()
+    {
+        SwingAxe();
+    }
+
+    void SwingAxe()
+    {
+        if (m_Animator.GetBool("UseSpace"))
+            return;
+
+        if (m_bInitialEquip[0] && m_Axe.activeSelf)
+        {
+            if(Input.GetMouseButtonDown(0))
+            {
+                m_bSwingAxe = true;
+                m_Animator.SetBool("UseLButton", true);
+            }
+        }
+    }
+
+    void UpdateInteraction()
+    {
+        Equip();
+        InitialEquip();
+    }
+
+    void InitialEquip()
+    {
+        if (!m_NearObject || m_bJump || !m_Controller.isGrounded || (m_bInitialEquip[0] && m_bInitialEquip[1]))
+            return;
+
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            if(m_NearObject.tag == "Equipment")
+            {
+                Destroy(m_NearObject);
+
+                if (m_Axe)
+                {
+                    m_Axe.SetActive(true);
+                    m_bInitialEquip[0] = true;
+                }
+            }
+        }
+    }
+
+    void Equip()
+    {
+        if (m_bInitialEquip[0])
+        {
+            if (m_Axe)
+            {
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    if (m_Axe.activeSelf)
+                        m_Axe.SetActive(false);
+                    else
+                        m_Axe.SetActive(true);
+                }
+            }
         }
     }
 }
