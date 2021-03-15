@@ -19,16 +19,12 @@ public class Equipment : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
-        {
-            other.gameObject.GetComponent<Player>().m_NearObject = this.gameObject;
-        }
+            other.gameObject.GetComponent<Player>().SetNearObject(this.gameObject);
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
-        {
-            other.gameObject.GetComponent<Player>().m_NearObject = null;
-        }
+            other.gameObject.GetComponent<Player>().SetNearObject(null);
     }
 }

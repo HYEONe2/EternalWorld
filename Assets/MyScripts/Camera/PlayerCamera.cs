@@ -16,6 +16,9 @@ public class PlayerCamera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Cursor.visible)
+            return;
+
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
         Vector3 camAngle = m_CamArmTrans.rotation.eulerAngles;
 

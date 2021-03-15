@@ -26,8 +26,19 @@ public class PlayerAnimationEvent : MonoBehaviour
     {
         if (m_PlayerAnimator)
         {
-            m_Player.m_bSwingAxe = false;
+            m_Player.SetSwingAxe(false);
             m_PlayerAnimator.SetBool("UseLButton", false);
         }
+    }
+
+    void StartAttack()
+    {
+        if (!m_Player.GetNearObject())
+            return;
+
+        Commodity commodity = m_Player.GetNearObject().GetComponent<Commodity>();
+
+        if (commodity)
+            commodity.SetCheckAttack(true);
     }
 }

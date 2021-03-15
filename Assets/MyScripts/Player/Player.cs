@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     private Transform m_CamArmTrans;
 
     // Other Components
-    public GameObject m_NearObject;
+    private GameObject m_NearObject;
 
     // Values
     private Vector3 m_Pos;
@@ -31,13 +31,17 @@ public class Player : MonoBehaviour
     private bool m_bSprint;
 
     private bool[] m_bInitialEquip = new bool[2];
-    public bool m_bSwingAxe;
+    private bool m_bSwingAxe;
+
+    // Function
+    public void SetNearObject(GameObject nearObj) { m_NearObject = nearObj; }
+    public void SetSwingAxe(bool bSwing) { m_bSwingAxe = bSwing; }
+
+    public GameObject GetNearObject() { return m_NearObject; }
 
     // Start is called before the first frame update
     void Start()
     {
-        //Screen.SetResolution(Screen.width, (Screen.width * 16) / 9, true);
-
         InitializeComponents();
         InitializeValues();
     }
@@ -219,7 +223,7 @@ public class Player : MonoBehaviour
 
     void SwingAxe()
     {
-        if (m_Animator.GetBool("UseSpace"))
+        if (m_Animator.GetBool("UseSpace") || Cursor.visible)
             return;
 
         if (m_bInitialEquip[0] && m_Axe.activeSelf)
@@ -264,7 +268,7 @@ public class Player : MonoBehaviour
         {
             if (m_Axe)
             {
-                if (Input.GetKeyDown(KeyCode.F))
+                if (Input.GetKeyDown(KeyCode.X))
                 {
                     if (m_Axe.activeSelf)
                         m_Axe.SetActive(false);

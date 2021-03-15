@@ -59,7 +59,14 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 1
+      - time: 0.25
+        functionName: StartAttack
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9246575
         functionName: StopSwingAxe
         data: 
         objectReferenceParameter: {instanceID: 0}
