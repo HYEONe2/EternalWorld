@@ -10,7 +10,7 @@ public class PlayerCamera : MonoBehaviour
     void Start()
     {
         if (!m_CamArmTrans)
-            m_CamArmTrans = GameObject.Find("CameraArm").GetComponent<Transform>();
+            m_CamArmTrans = GameObject.Find("CameraArm").transform;
     }
 
     // Update is called once per frame

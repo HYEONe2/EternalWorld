@@ -5,6 +5,19 @@ using UnityEngine.UI;
 
 public class BuildPanel : MonoBehaviour
 {
+    //
+    private enum BUILDING { BUILDING_WOOD, BUILDING_STONE, BUILDING_END};
+    private BUILDING m_eBuilding;
+    private bool m_bBuilding;
+
+    //
+    private GameObject m_Player;
+    private GameObject m_BuildingArm;
+    private GameObject m_Building;
+
+    private PlayerProperty m_PlayerProperty;
+    private UIManager m_UIManager;
+
     // 외부에서 입력받을 값
     public Sprite BuildingImage;
     public string BuildingName;
@@ -34,11 +47,25 @@ public class BuildPanel : MonoBehaviour
     private int m_UpgradeAmount;
     public int m_MaxUpgradeAmount;
 
-    private GameObject m_Player;
-    private PlayerProperty m_PlayerProperty;
-
     // Start is called before the first frame update
     void Start()
+    {
+        InitializeUI();
+        InitializeValues();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (!isActiveAndEnabled)
+            return;
+
+        CheckToBuild();
+        CheckBuilding();
+        CheckToUpgrade();
+    }
+
+    private void InitializeUI()
     {
         m_BuildingImage = transform.Find("BuildingImage").GetComponent<Image>();
         m_BuildingImage.sprite = BuildingImage;
@@ -62,101 +89,122 @@ public class BuildPanel : MonoBehaviour
 
         m_BuildButton = transform.Find("BuildButton").GetComponent<Button>();
         m_UpgradeButton = transform.Find("UpgradeButton").GetComponent<Button>();
-
-        m_Player = GameObject.Find("Player");
-        m_PlayerProperty = GameObject.Find("Player").GetComponent<PlayerProperty>();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void InitializeValues()
     {
-        if (!isActiveAndEnabled)
-            return;
+        if (BuildingName == "통나무집")
+            m_eBuilding = BUILDING.BUILDING_WOOD;
+        else if (BuildingName == "돌집")
+            m_eBuilding = BUILDING.BUILDING_STONE;
 
-        CheckToBuild();
-        CheckToUpgrade();
+        m_Player = GameObject.Find("Player");
+        m_PlayerProperty = m_Player.GetComponent<PlayerProperty>();
+        m_BuildingArm = m_Player.transform.Find("BuildingArm").gameObject;
+
+        m_UIManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+        m_bBuilding = false;
     }
 
     private void CheckToBuild()
     {
-        if (m_BuildingName.text == "통나무집")
+        switch(m_eBuilding)
         {
-            m_BuildingAmount = m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD);
+            case BUILDING.BUILDING_WOOD:
+                {
+                    m_BuildingAmount = m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD);
 
-            if (m_BuildingAmount < m_MaxBuildingAmount)
-            {
-                m_BuildMaximum.color = Color.red;
-                m_BuildButton.interactable = false;
-            }
-            else
-            {
-                m_BuildMaximum.color = m_TextColor;
-                m_BuildButton.interactable = true;
+                    if (m_BuildingAmount < m_MaxBuildingAmount)
+                    {
+                        m_BuildMaximum.color = Color.red;
+                        m_BuildButton.interactable = false;
+                    }
+                    else
+                    {
+                        m_BuildMaximum.color = m_TextColor;
+                        m_BuildButton.interactable = true;
 
-                m_BuildMaximum.text = m_BuildingAmount + " / " + m_MaxBuildingAmount;
-            }
-        }
-        else if (m_BuildingName.text == "돌집")
-        {
-            m_BuildingAmount = m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_STONE);
+                        m_BuildMaximum.text = m_BuildingAmount + " / " + m_MaxBuildingAmount;
+                    }
+                }
+                break;
+            case BUILDING.BUILDING_STONE:
+                {
+                    m_BuildingAmount = m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_STONE);
 
-            if (m_BuildingAmount < m_MaxBuildingAmount)
-            {
-                m_BuildMaximum.color = Color.red;
-                m_BuildButton.interactable = false;
-            }
-            else
-            {
-                m_BuildMaximum.color = m_TextColor;
-                m_BuildButton.interactable = true;
+                    if (m_BuildingAmount < m_MaxBuildingAmount)
+                    {
+                        m_BuildMaximum.color = Color.red;
+                        m_BuildButton.interactable = false;
+                    }
+                    else
+                    {
+                        m_BuildMaximum.color = m_TextColor;
+                        m_BuildButton.interactable = true;
 
-                m_BuildMaximum.text = m_BuildingAmount + " / " + m_MaxBuildingAmount;
-            }
+                        m_BuildMaximum.text = m_BuildingAmount + " / " + m_MaxBuildingAmount;
+                    }
+                }
+                break;
         }
     }
 
     private void CheckToUpgrade()
     {
-        if (m_BuildingName.text == "통나무집")
+        switch (m_eBuilding)
         {
-            if(m_UpgradeAmount < m_MaxUpgradeAmount)
-            {
-                m_UpgradeMaximum.color = Color.red;
-                m_UpgradeButton.interactable = false;
-            }
-            else
-            {
-                m_UpgradeMaximum.color = m_TextColor;
-                m_UpgradeButton.interactable = true;
+            case BUILDING.BUILDING_WOOD:
+                {
+                    if (m_UpgradeAmount < m_MaxUpgradeAmount)
+                    {
+                        m_UpgradeMaximum.color = Color.red;
+                        m_UpgradeButton.interactable = false;
+                    }
+                    else
+                    {
+                        m_UpgradeMaximum.color = m_TextColor;
+                        m_UpgradeButton.interactable = true;
 
-                m_UpgradeMaximum.text = m_UpgradeAmount + " / " + m_MaxUpgradeAmount;
-            }
-        }
-        else if (m_BuildingName.text == "돌집")
-        {
-            if (m_UpgradeAmount < m_MaxUpgradeAmount)
-            {
-                m_UpgradeMaximum.color = Color.red;
-                m_UpgradeButton.interactable = false;
-            }
-            else
-            {
-                m_UpgradeMaximum.color = m_TextColor;
-                m_UpgradeButton.interactable = true;
+                        m_UpgradeMaximum.text = m_UpgradeAmount + " / " + m_MaxUpgradeAmount;
+                    }
+                }
+                break;
+            case BUILDING.BUILDING_STONE:
+                {
+                    if (m_UpgradeAmount < m_MaxUpgradeAmount)
+                    {
+                        m_UpgradeMaximum.color = Color.red;
+                        m_UpgradeButton.interactable = false;
+                    }
+                    else
+                    {
+                        m_UpgradeMaximum.color = m_TextColor;
+                        m_UpgradeButton.interactable = true;
 
-                m_UpgradeMaximum.text = m_UpgradeAmount + " / " + m_MaxUpgradeAmount;
-            }
+                        m_UpgradeMaximum.text = m_UpgradeAmount + " / " + m_MaxUpgradeAmount;
+                    }
+                }
+                break;
         }
+    }
+
+    private void CheckBuilding()
+    {
+        if (!m_Building)
+            m_bBuilding = false;
+
+        m_UIManager.SetPhoneCanvasBuilding(m_bBuilding);
     }
 
     public void ClickBuildButton()
     {
-        Vector3 PlayerPosition = m_Player.transform.position;
-        PlayerPosition.y += 5f;
-        Vector3 PlayerLook = m_Player.transform.forward;
-        PlayerLook.Normalize();
+        m_Building = Instantiate(Building, new Vector3(0f, 0f, 0f), new Quaternion(0f, 0f, 0f, 0f));
+        m_Building.transform.SetParent(m_BuildingArm.transform);
 
-        GameObject building = Instantiate(Building, PlayerPosition + PlayerLook * 5f, new Quaternion(0f, 0f, 0f, 0f));
+        m_bBuilding = true;
+        m_UIManager.SetPhoneCanvasActive(false);
+
+        Cursor.visible = false;
     }
 
     public void ClickUpgradeButton()

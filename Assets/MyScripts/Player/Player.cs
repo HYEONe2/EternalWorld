@@ -53,6 +53,7 @@ public class Player : MonoBehaviour
         //UpdateKeyInput();
         UpdateAction();
         UpdateInteraction();
+        //Debug.Log("Player: " +transform.position.x + "\t" + transform.position.y + '\t' + transform.position.z);
     }
 
     private void FixedUpdate()
@@ -268,7 +269,7 @@ public class Player : MonoBehaviour
         {
             if (m_Axe)
             {
-                if (Input.GetKeyDown(KeyCode.X))
+                if (Input.GetKeyDown("1"))
                 {
                     if (m_Axe.activeSelf)
                         m_Axe.SetActive(false);

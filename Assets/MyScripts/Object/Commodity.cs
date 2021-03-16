@@ -62,7 +62,7 @@ public class Commodity : MonoBehaviour
         if (m_HP <= 0)
         {
             Instantiate(m_Particle, transform.position, new Quaternion(0, 0, 0, 0));
-            GameObject Reward = Instantiate(m_Reward, transform.position, new Quaternion(-90f, 0, 0, 0));
+            GameObject Reward = Instantiate(m_Reward, transform.position, new Quaternion(0, 0, 0, 0));
 
             if(m_eType == OBJTYPE.OBJ_TREE)
                 Reward.GetComponent<Reward>().SetObjType(global::Reward.OBJTYPE.OBJ_TREE);
@@ -100,7 +100,7 @@ public class Commodity : MonoBehaviour
         {
             case OBJTYPE.OBJ_TREE:
                 m_HurtParticle = Resources.Load<GameObject>("Particle/Commodity/WFX_BImpact Wood");
-                m_Reward = Resources.Load<GameObject>("Object/Reward/Firewood/12303_Firewood_Stack_v1_l3");
+                m_Reward = Resources.Load<GameObject>("Object/Reward/Firewood/Firewood");
                 //m_HurtParticle.transform.localScale = new Vector3(2f, 2f, 2f);
                 break;
             case OBJTYPE.OBJ_ROCK:

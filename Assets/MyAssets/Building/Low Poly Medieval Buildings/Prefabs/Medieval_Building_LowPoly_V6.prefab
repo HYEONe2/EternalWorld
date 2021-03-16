@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3348102}
   - component: {fileID: 2338710}
   - component: {fileID: 6474022}
-  - component: {fileID: 6537303550100678271}
   m_Layer: 0
   m_Name: Medieval_Building_LowPoly_V6
   m_TagString: Untagged
@@ -95,15 +94,3 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: c0d2705fad2ad8c4684521ae1fee56c4, type: 3}
---- !u!114 &6537303550100678271
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 186626}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0ca0e2b198c6a84e80565d4523562a4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

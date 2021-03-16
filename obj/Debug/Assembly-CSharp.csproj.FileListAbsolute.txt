@@ -269,7 +269,6 @@ E:\Unity\EternalWorld\Temp\bin\Debug\System.Collections.Concurrent.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Collections.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Collections.NonGeneric.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Collections.Specialized.dll
-E:\Unity\EternalWorld\Temp\bin\Debug\System.ComponentModel.Composition.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.ComponentModel.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.ComponentModel.EventBasedAsync.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.ComponentModel.Primitives.dll
@@ -286,16 +285,12 @@ E:\Unity\EternalWorld\Temp\bin\Debug\System.Diagnostics.StackTrace.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Diagnostics.TextWriterTraceListener.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Diagnostics.Tools.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Diagnostics.TraceSource.dll
-E:\Unity\EternalWorld\Temp\bin\Debug\System.Diagnostics.Tracing.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.dll
-E:\Unity\EternalWorld\Temp\bin\Debug\System.Drawing.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Drawing.Primitives.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Dynamic.Runtime.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Globalization.Calendars.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Globalization.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Globalization.Extensions.dll
-E:\Unity\EternalWorld\Temp\bin\Debug\System.IO.Compression.dll
-E:\Unity\EternalWorld\Temp\bin\Debug\System.IO.Compression.FileSystem.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.IO.Compression.ZipFile.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.IO.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.IO.FileSystem.dll
@@ -310,7 +305,6 @@ E:\Unity\EternalWorld\Temp\bin\Debug\System.Linq.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Linq.Expressions.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Linq.Parallel.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Linq.Queryable.dll
-E:\Unity\EternalWorld\Temp\bin\Debug\System.Net.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Net.Http.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Net.NameResolution.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Net.NetworkInformation.dll
@@ -352,7 +346,6 @@ E:\Unity\EternalWorld\Temp\bin\Debug\System.Security.Cryptography.Primitives.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Security.Cryptography.X509Certificates.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Security.Principal.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Security.SecureString.dll
-E:\Unity\EternalWorld\Temp\bin\Debug\System.ServiceModel.Web.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Text.Encoding.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Text.Encoding.Extensions.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Text.RegularExpressions.dll
@@ -363,14 +356,10 @@ E:\Unity\EternalWorld\Temp\bin\Debug\System.Threading.Tasks.Parallel.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Threading.Thread.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Threading.ThreadPool.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Threading.Timer.dll
-E:\Unity\EternalWorld\Temp\bin\Debug\System.Transactions.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.ValueTuple.dll
-E:\Unity\EternalWorld\Temp\bin\Debug\System.Web.dll
-E:\Unity\EternalWorld\Temp\bin\Debug\System.Windows.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Xml.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Xml.Linq.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Xml.ReaderWriter.dll
-E:\Unity\EternalWorld\Temp\bin\Debug\System.Xml.Serialization.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Xml.XDocument.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Xml.XmlDocument.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Xml.XmlSerializer.dll
@@ -831,3 +820,21 @@ E:\Unity\Eternal World\Temp\bin\Debug\Boo.Lang.Compiler.dll
 E:\Unity\Eternal World\Temp\bin\Debug\Boo.Lang.PatternMatching.dll
 E:\Unity\Eternal World\Temp\bin\Debug\Boo.Lang.Parser.dll
 E:\Unity\Eternal World\Temp\bin\Debug\Boo.Lang.Useful.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\Boo.Lang.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\Microsoft.CSharp.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\System.ComponentModel.Annotations.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\System.Net.Http.Rtc.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\System.Reflection.Emit.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\System.Reflection.Emit.ILGeneration.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\System.Reflection.Emit.Lightweight.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\System.ServiceModel.Duplex.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\System.ServiceModel.Http.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\System.ServiceModel.NetTcp.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\System.ServiceModel.Primitives.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\System.ServiceModel.Security.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\UnityScript.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\UnityScript.Lang.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\Boo.Lang.Compiler.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\Boo.Lang.PatternMatching.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\Boo.Lang.Parser.dll
+E:\Unity\EternalWorld\Temp\bin\Debug\Boo.Lang.Useful.dll

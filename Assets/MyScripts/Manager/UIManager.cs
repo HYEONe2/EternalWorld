@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    private GameObject m_PhoneCanvas;
+
     private GameObject m_Menu;
     private GameObject m_ReturnIcon;
     private GameObject m_Inventory;
@@ -12,10 +14,12 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (!m_PhoneCanvas) m_PhoneCanvas = GameObject.Find("PhoneCanvas");
+
         if (!m_Menu) m_Menu = GameObject.Find("MenuUI");
         if (!m_ReturnIcon) m_ReturnIcon = GameObject.Find("ReturnIcon");
         if (!m_Inventory) m_Inventory = GameObject.Find("InventoryUI");
-        if(!m_Build) m_Build = GameObject.Find("BuildUI");
+        if (!m_Build) m_Build = GameObject.Find("BuildUI");
 
         m_ReturnIcon.SetActive(false);
         m_Inventory.SetActive(false);
@@ -25,7 +29,7 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void ClickInventory()
@@ -58,7 +62,7 @@ public class UIManager : MonoBehaviour
 
     public void ClickBackward()
     {
-        if(m_Menu.activeSelf)
+        if (m_Menu.activeSelf)
         {
             return;
         }
@@ -70,5 +74,15 @@ public class UIManager : MonoBehaviour
             m_ReturnIcon.SetActive(false);
             m_Menu.SetActive(true);
         }
+    }
+
+    public void SetPhoneCanvasActive(bool active)
+    {
+        m_PhoneCanvas.SetActive(active);
+    }
+
+    public void SetPhoneCanvasBuilding(bool bBuilding)
+    {
+        m_PhoneCanvas.GetComponent<PhoneCanvas>().SetBuilding(bBuilding);
     }
 }

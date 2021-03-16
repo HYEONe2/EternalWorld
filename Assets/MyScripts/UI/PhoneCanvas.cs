@@ -8,6 +8,9 @@ public class PhoneCanvas : MonoBehaviour
     private Transform m_PhoneTrans;
 
     private bool m_bUsePhone;
+    private bool m_bBuilding;
+
+    public void SetBuilding(bool building) { m_bBuilding = building; }
 
     // Start is called before the first frame update
     void Start()
@@ -24,16 +27,19 @@ public class PhoneCanvas : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (m_bBuilding)
+            return;
+
         if(Input.GetKeyDown(KeyCode.I))
             m_bUsePhone = !m_bUsePhone;
 
         if (m_bUsePhone)
             GoingUp();
         else
-            GoindDown();
+            GoingDown();
     }
 
-    void GoingUp()
+    private void GoingUp()
     {
         if (m_PhoneTrans.position.y >= 275f)
         {
@@ -44,7 +50,7 @@ public class PhoneCanvas : MonoBehaviour
         m_PhoneTrans.position += new Vector3(0f, 500f * Time.deltaTime, 0f);
     }
 
-    void GoindDown()
+    private void GoingDown()
     {
         if (m_PhoneTrans.position.y <= -300f)
         {
