@@ -6,9 +6,8 @@ using UnityEngine.UI;
 public class BuildPanel : MonoBehaviour
 {
     //
-    private enum BUILDING { BUILDING_WOOD, BUILDING_STONE, BUILDING_END};
+    private enum BUILDING { BUILDING_WOOD, BUILDING_STONE, BUILDING_END };
     private BUILDING m_eBuilding;
-    private bool m_bBuilding;
 
     //
     private GameObject m_Player;
@@ -47,6 +46,8 @@ public class BuildPanel : MonoBehaviour
     private int m_UpgradeAmount;
     public int m_MaxUpgradeAmount;
 
+    public int m_BuildTime;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -61,7 +62,6 @@ public class BuildPanel : MonoBehaviour
             return;
 
         CheckToBuild();
-        CheckBuilding();
         CheckToUpgrade();
     }
 
@@ -74,7 +74,7 @@ public class BuildPanel : MonoBehaviour
         m_BuildingName.text = BuildingName;
 
         m_BuildingContext = transform.Find("BuildingContext").GetComponent<Text>();
-        m_BuildingContext.text = BuildingContext;
+        m_BuildingContext.text = m_BuildTime + BuildingContext;
 
         m_BuildMaximum = transform.Find("BuildMaximum").GetComponent<Text>();
         m_BuildMaximum.text = "0 / " + m_MaxBuildingAmount;
@@ -86,9 +86,11 @@ public class BuildPanel : MonoBehaviour
 
         m_UpgradeMaximum = transform.Find("UpgradeMaximum").GetComponent<Text>();
         m_UpgradeMaximum.text = "0 / " + m_MaxUpgradeAmount;
+        m_UpgradeMaximum.color = Color.red;
 
         m_BuildButton = transform.Find("BuildButton").GetComponent<Button>();
         m_UpgradeButton = transform.Find("UpgradeButton").GetComponent<Button>();
+        m_UpgradeAmount = 2;
     }
 
     private void InitializeValues()
@@ -103,97 +105,85 @@ public class BuildPanel : MonoBehaviour
         m_BuildingArm = m_Player.transform.Find("BuildingArm").gameObject;
 
         m_UIManager = GameObject.Find("UIManager").GetComponent<UIManager>();
-        m_bBuilding = false;
     }
 
     private void CheckToBuild()
     {
-        switch(m_eBuilding)
+        m_BuildingAmount = m_PlayerProperty.GetPropertyAmount((PlayerProperty.OBJTYPE)m_eBuilding);
+
+        if (m_BuildingAmount < m_MaxBuildingAmount)
         {
-            case BUILDING.BUILDING_WOOD:
-                {
-                    m_BuildingAmount = m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD);
-
-                    if (m_BuildingAmount < m_MaxBuildingAmount)
-                    {
-                        m_BuildMaximum.color = Color.red;
-                        m_BuildButton.interactable = false;
-                    }
-                    else
-                    {
-                        m_BuildMaximum.color = m_TextColor;
-                        m_BuildButton.interactable = true;
-
-                        m_BuildMaximum.text = m_BuildingAmount + " / " + m_MaxBuildingAmount;
-                    }
-                }
-                break;
-            case BUILDING.BUILDING_STONE:
-                {
-                    m_BuildingAmount = m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_STONE);
-
-                    if (m_BuildingAmount < m_MaxBuildingAmount)
-                    {
-                        m_BuildMaximum.color = Color.red;
-                        m_BuildButton.interactable = false;
-                    }
-                    else
-                    {
-                        m_BuildMaximum.color = m_TextColor;
-                        m_BuildButton.interactable = true;
-
-                        m_BuildMaximum.text = m_BuildingAmount + " / " + m_MaxBuildingAmount;
-                    }
-                }
-                break;
+            m_BuildMaximum.color = Color.red;
+            m_BuildButton.interactable = false;
         }
+        else
+        {
+            m_BuildMaximum.color = m_TextColor;
+            m_BuildButton.interactable = true;
+        }
+
+        m_BuildMaximum.text = m_BuildingAmount + " / " + m_MaxBuildingAmount;
     }
 
     private void CheckToUpgrade()
     {
-        switch (m_eBuilding)
+        // 빌딩이 클릭되었는지 확인
+        ClickTheBuilding();
+
+        if (!m_Building)
         {
-            case BUILDING.BUILDING_WOOD:
-                {
-                    if (m_UpgradeAmount < m_MaxUpgradeAmount)
-                    {
-                        m_UpgradeMaximum.color = Color.red;
-                        m_UpgradeButton.interactable = false;
-                    }
-                    else
-                    {
-                        m_UpgradeMaximum.color = m_TextColor;
-                        m_UpgradeButton.interactable = true;
-
-                        m_UpgradeMaximum.text = m_UpgradeAmount + " / " + m_MaxUpgradeAmount;
-                    }
-                }
-                break;
-            case BUILDING.BUILDING_STONE:
-                {
-                    if (m_UpgradeAmount < m_MaxUpgradeAmount)
-                    {
-                        m_UpgradeMaximum.color = Color.red;
-                        m_UpgradeButton.interactable = false;
-                    }
-                    else
-                    {
-                        m_UpgradeMaximum.color = m_TextColor;
-                        m_UpgradeButton.interactable = true;
-
-                        m_UpgradeMaximum.text = m_UpgradeAmount + " / " + m_MaxUpgradeAmount;
-                    }
-                }
-                break;
+            m_UpgradeAmount = 0;
         }
+        else
+        {
+            // 빌딩타입이 일치하면
+            if (m_eBuilding == (BuildPanel.BUILDING)m_Building.GetComponent<Building>().GetBuildingType())
+            {
+                //m_UpgradeAmount = m_PlayerProperty.GetPropertyAmount((PlayerProperty.OBJTYPE)m_eBuilding);
+                m_UpgradeAmount = 1;
+            }
+            else
+            {
+                m_UpgradeAmount = 0;
+            }
+        }
+
+        if (m_UpgradeAmount < m_MaxUpgradeAmount)
+        {
+            m_UpgradeMaximum.color = Color.red;
+            m_UpgradeButton.interactable = false;
+        }
+        else
+        {
+            m_UpgradeMaximum.color = m_TextColor;
+            m_UpgradeButton.interactable = true;
+        }
+
+        m_UpgradeMaximum.text = m_UpgradeAmount + " / " + m_MaxUpgradeAmount;
     }
 
-    private void CheckBuilding()
+    private void ClickTheBuilding()
     {
-        if (!m_Building)
-            m_bBuilding = false;
-
-        m_UIManager.SetPhoneCanvasBuilding(m_bBuilding);
+        if (Input.GetMouseButton(0))
+        {
+            RaycastHit Hit;
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out Hit, 100))
+            {
+                if (Hit.collider.gameObject.GetComponent<Building>())
+                {
+                    m_Building = Hit.collider.gameObject;
+                    m_BuildTime = (int)m_Building.GetComponent<Building>().GetBuildTime();
+                    // m_BuildTime을 각 Reward마다 설정해주지 않으면 모두 같은 m_BuildTime으로 시간이 바뀜
+                    //m_BuildingContext.text = m_BuildTime + BuildingContext;
+                }
+                else
+                {
+                    m_Building = null;
+                    m_BuildTime = 10;
+                    //m_BuildingContext.text = m_BuildTime + BuildingContext;
+                }
+            }
+        }
     }
 
     public void ClickBuildButton()
@@ -201,14 +191,28 @@ public class BuildPanel : MonoBehaviour
         m_Building = Instantiate(Building, new Vector3(0f, 0f, 0f), new Quaternion(0f, 0f, 0f, 0f));
         m_Building.transform.SetParent(m_BuildingArm.transform);
 
-        m_bBuilding = true;
+        Building BuildingScript = m_Building.GetComponent<Building>();
+
+        BuildingScript.SetBuildingType((Building.BUILDING)m_eBuilding);
+        BuildingScript.SetBuildTime(m_BuildTime);
+        BuildingScript.SetBuildAmount(m_MaxBuildingAmount);
+        BuildingScript.SetUpgradeAmount(m_MaxUpgradeAmount);
+
         m_UIManager.SetPhoneCanvasActive(false);
 
         Cursor.visible = false;
+        m_Building = null;
     }
 
     public void ClickUpgradeButton()
     {
+        Building BuildingScript = m_Building.GetComponent<Building>();
+        float BuildTime = BuildingScript.GetBuildTime();
 
+        if (BuildTime - 9 <= 0)
+            return;
+
+        BuildingScript.SetBuildTime(BuildTime-9);
+        m_UpgradeAmount -= m_MaxUpgradeAmount;
     }
 }

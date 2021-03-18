@@ -823,8 +823,10 @@ MonoBehaviour:
   BuildingName: 
   BuildingContext: 
   UpgradeImage: {fileID: 0}
+  Building: {fileID: 0}
   m_MaxBuildingAmount: 0
   m_MaxUpgradeAmount: 0
+  m_BuildTime: 0
 --- !u!1 &5191468932094468138
 GameObject:
   m_ObjectHideFlags: 0

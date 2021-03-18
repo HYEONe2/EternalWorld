@@ -248,7 +248,7 @@ public class Player : MonoBehaviour
         if (!m_NearObject || m_bJump || !m_Controller.isGrounded || (m_bInitialEquip[0] && m_bInitialEquip[1]))
             return;
 
-        if(Input.GetKeyDown(KeyCode.F))
+        if(Input.GetKeyDown(KeyCode.E))
         {
             if(m_NearObject.tag == "Equipment")
             {

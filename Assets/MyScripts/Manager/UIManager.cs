@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    private GameObject m_PlayerCanvas;
     private GameObject m_PhoneCanvas;
 
     private GameObject m_Menu;
@@ -14,6 +15,7 @@ public class UIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (!m_PlayerCanvas) m_PlayerCanvas = GameObject.Find("PlayerCanvas");
         if (!m_PhoneCanvas) m_PhoneCanvas = GameObject.Find("PhoneCanvas");
 
         if (!m_Menu) m_Menu = GameObject.Find("MenuUI");
@@ -79,10 +81,12 @@ public class UIManager : MonoBehaviour
     public void SetPhoneCanvasActive(bool active)
     {
         m_PhoneCanvas.SetActive(active);
+        Cursor.visible = active;
     }
 
-    public void SetPhoneCanvasBuilding(bool bBuilding)
+    public void SetNoticeUI(NoticeUI.OBJTYPE eType, int amount)
     {
-        m_PhoneCanvas.GetComponent<PhoneCanvas>().SetBuilding(bBuilding);
+        m_PlayerCanvas.transform.Find("NoticeUI").GetComponent<NoticeUI>().SetNoticeUI(eType, amount);
+        m_PlayerCanvas.GetComponent<PlayerCanvas>().SetUseNoticeUI(true);
     }
 }

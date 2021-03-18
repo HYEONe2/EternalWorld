@@ -8,9 +8,6 @@ public class PhoneCanvas : MonoBehaviour
     private Transform m_PhoneTrans;
 
     private bool m_bUsePhone;
-    private bool m_bBuilding;
-
-    public void SetBuilding(bool building) { m_bBuilding = building; }
 
     // Start is called before the first frame update
     void Start()
@@ -27,7 +24,7 @@ public class PhoneCanvas : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_bBuilding)
+        if (!gameObject.activeSelf)
             return;
 
         if(Input.GetKeyDown(KeyCode.I))

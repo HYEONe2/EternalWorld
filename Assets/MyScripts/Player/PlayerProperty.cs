@@ -13,7 +13,8 @@ public class PlayerProperty : MonoBehaviour
 
     private List<int> m_Property = new List<int>();
 
-    public void AddProperty(OBJTYPE eType, int amount) { m_Property[(int)eType] = m_Property[(int)eType] + amount; }
+    public void AddProperty(OBJTYPE eType, int amount) { m_Property[(int)eType] += amount; }
+    public void ReduceProperty(OBJTYPE eType, int amount) { m_Property[(int)eType] -= amount; }
     public int GetPropertyAmount(OBJTYPE eType) { return m_Property[(int)eType]; }
 
     // Start is called before the first frame update
@@ -21,11 +22,5 @@ public class PlayerProperty : MonoBehaviour
     {
         for (int i = 0; i < (int)OBJTYPE.OBJ_END; ++i)
             m_Property.Add(0);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
