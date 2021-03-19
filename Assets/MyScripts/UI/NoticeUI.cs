@@ -5,31 +5,35 @@ using UnityEngine.UI;
 
 public class NoticeUI : MonoBehaviour
 {
-    public enum OBJTYPE
-    {
-        OBJ_WOOD,
-        OBJ_STONE,
-        OBJ_END
-    };
-
     private Image m_NoticeIcon;
     private Text m_NoticeText;
 
     // Function
-    public void SetNoticeUI(OBJTYPE eType, int amount)
+    public void SetNoticeUI(PlayerProperty.OBJTYPE eType, int amount)
     {
         switch(eType)
         {
-            case OBJTYPE.OBJ_WOOD:
+            case PlayerProperty.OBJTYPE.OBJ_WOOD:
                 {
                     m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Wooden Plank");
                 }
                 break;
-            case OBJTYPE.OBJ_STONE:
+            case PlayerProperty.OBJTYPE.OBJ_STONE:
                 {
                     m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Coal");
                 }
                 break;
+            case PlayerProperty.OBJTYPE.OBJ_REDGEMSTONE:
+                {
+                    m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Cut Ruby");
+                }
+                break;
+            case PlayerProperty.OBJTYPE.OBJ_BLUEGEMSTONE:
+                {
+                    m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Cut Sapphire");
+                }
+                break;
+
         }
 
         m_NoticeText.text = "+" + amount;

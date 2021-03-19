@@ -4,14 +4,7 @@ using UnityEngine;
 
 public class Commodity : MonoBehaviour
 {
-    public enum OBJTYPE
-    {
-        OBJ_TREE,
-        OBJ_ROCK,
-        OBJ_END
-    };
-
-    public OBJTYPE m_eType;
+    public PlayerProperty.OBJTYPE m_eType;
 
     private Player m_Player;
     private GameObject m_PlayerEquip;
@@ -64,10 +57,10 @@ public class Commodity : MonoBehaviour
             Instantiate(m_Particle, transform.position, new Quaternion(0, 0, 0, 0));
             GameObject Reward = Instantiate(m_Reward, transform.position, new Quaternion(0, 0, 0, 0));
 
-            if(m_eType == OBJTYPE.OBJ_TREE)
-                Reward.GetComponent<Reward>().SetObjType(global::Reward.OBJTYPE.OBJ_TREE);
-            else if(m_eType == OBJTYPE.OBJ_ROCK)
-                Reward.GetComponent<Reward>().SetObjType(global::Reward.OBJTYPE.OBJ_ROCK);
+            if(m_eType == PlayerProperty.OBJTYPE.OBJ_WOOD)
+                Reward.GetComponent<Reward>().SetObjType(PlayerProperty.OBJTYPE.OBJ_WOOD);
+            else if(m_eType == PlayerProperty.OBJTYPE.OBJ_STONE)
+                Reward.GetComponent<Reward>().SetObjType(PlayerProperty.OBJTYPE.OBJ_STONE);
 
             m_Player.SetNearObject(null);
             Destroy(gameObject);
@@ -93,17 +86,17 @@ public class Commodity : MonoBehaviour
 
     void InitializeParticle()
     {
-        if (m_eType == OBJTYPE.OBJ_END)
+        if (m_eType == PlayerProperty.OBJTYPE.OBJ_END)
             return;
 
         switch(m_eType)
         {
-            case OBJTYPE.OBJ_TREE:
+            case PlayerProperty.OBJTYPE.OBJ_WOOD:
                 m_HurtParticle = Resources.Load<GameObject>("Particle/Commodity/WFX_BImpact Wood");
                 m_Reward = Resources.Load<GameObject>("Object/Reward/Firewood/Firewood");
                 //m_HurtParticle.transform.localScale = new Vector3(2f, 2f, 2f);
                 break;
-            case OBJTYPE.OBJ_ROCK:
+            case PlayerProperty.OBJTYPE.OBJ_STONE:
                 m_HurtParticle = Resources.Load<GameObject>("Particle/Commodity/WFX_BImpact Concrete");
                 int rand = Random.Range(0, 2);
                 if (rand == 0)

@@ -126,6 +126,7 @@
     <Compile Include="Assets\MyScripts\Manager\UIManager.cs" />
     <Compile Include="Assets\MyScripts\Object\Commodity.cs" />
     <Compile Include="Assets\MyScripts\Object\Equipment.cs" />
+    <Compile Include="Assets\MyScripts\Object\Gemstone.cs" />
     <Compile Include="Assets\MyScripts\Object\Reward.cs" />
     <Compile Include="Assets\MyScripts\Player\Player.cs" />
     <Compile Include="Assets\MyScripts\Player\PlayerAnimationEvent.cs" />

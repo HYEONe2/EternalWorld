@@ -84,9 +84,14 @@ public class UIManager : MonoBehaviour
         Cursor.visible = active;
     }
 
-    public void SetNoticeUI(NoticeUI.OBJTYPE eType, int amount)
+    public void SetNoticeUI(PlayerProperty.OBJTYPE eType, int amount)
     {
         m_PlayerCanvas.transform.Find("NoticeUI").GetComponent<NoticeUI>().SetNoticeUI(eType, amount);
         m_PlayerCanvas.GetComponent<PlayerCanvas>().SetUseNoticeUI(true);
+    }
+
+    public void SetReturnIconActive(bool visible)
+    {
+        m_ReturnIcon.SetActive(visible);
     }
 }

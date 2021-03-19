@@ -8,6 +8,8 @@ public class PlayerProperty : MonoBehaviour
     {
         OBJ_WOOD,
         OBJ_STONE,
+        OBJ_REDGEMSTONE,
+        OBJ_BLUEGEMSTONE,
         OBJ_END
     };
 

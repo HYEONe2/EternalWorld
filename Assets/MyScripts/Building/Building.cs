@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
-    private enum BUILD{ BUILDING, BUILT, BUILD_END};
+    public enum BUILD{ BUILDING, BUILT, BUILD_END};
     public enum BUILDING { BUILDING_WOOD, BUILDING_STONE, BUILDING_END };
 
     private BUILD m_eBuild;
@@ -29,7 +29,9 @@ public class Building : MonoBehaviour
 
     private float m_CheckTime;
     private bool m_bCanTakeReward;
+    private bool m_bIsClicked;
 
+    public void SetBuild(BUILD build) { m_eBuild = build; if (m_eBuild == BUILD.BUILDING) m_BuildingGuide.SetActive(true); }
     public void SetBuildingType(BUILDING type) { m_eBuildingType = type; }
     public void SetBuildTime(float time) { m_BuildTime = time; }
     public void SetBuildAmount(int amount) { m_BuildAmount = amount; }
@@ -37,6 +39,7 @@ public class Building : MonoBehaviour
 
     public BUILDING GetBuildingType() { return m_eBuildingType; }
     public float GetBuildTime() { return m_BuildTime; }
+    public void SetIsClicked(bool clicked) { m_bIsClicked = clicked; }
 
     // Start is called before the first frame update
     void Start()
@@ -76,7 +79,7 @@ public class Building : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (!m_bCanTakeReward)
+        if (!m_bCanTakeReward || m_bIsClicked)
             return;
 
         if(other.gameObject.CompareTag("Player"))
@@ -84,7 +87,7 @@ public class Building : MonoBehaviour
             if(Input.GetKey(KeyCode.E))
             {
                 m_PlayerProperty.AddProperty((PlayerProperty.OBJTYPE)m_eBuildingType, 1);
-                m_UIManager.SetNoticeUI((NoticeUI.OBJTYPE)m_eBuildingType, 1);
+                m_UIManager.SetNoticeUI((PlayerProperty.OBJTYPE)m_eBuildingType, 1);
                 SetOriginOpaque();
 
                 m_CheckTime = 0;
@@ -114,7 +117,8 @@ public class Building : MonoBehaviour
     private void SetDestroy()
     {
         m_UIManager.SetPhoneCanvasActive(true);
-        Destroy(m_BuildingGuide.gameObject);
+        m_BuildingGuide.SetActive(false);
+
         Destroy(gameObject);
     }
 
@@ -126,10 +130,6 @@ public class Building : MonoBehaviour
         SetAlpha(1f);
         transform.SetParent(null);
         m_BuildingGuide.SetActive(false);
-
-        // 플레이어 프로퍼티 감소
-        // 개수 BuildPanel에서 가져와서 줄여주기..!
-        m_PlayerProperty.ReduceProperty((PlayerProperty.OBJTYPE)m_eBuildingType, m_BuildAmount);
 
         m_eBuild = BUILD.BUILT;
     }
@@ -177,8 +177,11 @@ public class Building : MonoBehaviour
         if (m_CheckTime >= m_BuildTime)
         {
             m_bCanTakeReward = true;
-            SetPingPongTransparent();
-            //m_CheckTime = 0;  재화습득후 초기화 시켜줘야함
+
+            if (!m_bIsClicked)
+                SetPingPongTransparent(0, 0, 1f, 1f);
+            else
+                SetTransparent(0.5f);
         }
         else
             m_CheckTime += Time.deltaTime;
@@ -224,7 +227,7 @@ public class Building : MonoBehaviour
         m_MeshMaterial.color = new Color(m_MeshOriginColor.r, m_MeshOriginColor.g, m_MeshOriginColor.b, alpha);
     }
 
-    private void SetPingPongTransparent()
+    private void SetPingPongTransparent(float r, float g, float b, float timeSpeed)
     {
         m_MeshMaterial.SetFloat("_Mode", 3f);
         m_MeshMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
@@ -235,8 +238,24 @@ public class Building : MonoBehaviour
         m_MeshMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
         m_MeshMaterial.renderQueue = 3000;
 
-        m_PingpongColor = Color.Lerp(new Color(0, 0, 1f, 0), new Color(0, 0, 1f, 1f), Mathf.PingPong(Time.time, 1f));
+        m_PingpongColor = Color.Lerp(new Color(r, g, b, 0), new Color(r, g, b, 1f), Mathf.PingPong(Time.time, timeSpeed));
         m_MeshMaterial.color = m_PingpongColor;
+    }
+
+    public void ClickedToUpdate()
+    {
+        SetTransparent(0.5f);
+        m_bIsClicked = true;
+    }
+
+    public void ResetToOrigin()
+    {
+        m_bIsClicked = false;
+
+        if (m_bCanTakeReward)
+            SetPingPongTransparent(0, 0, 1f, 1f);
+        else
+            SetOriginOpaque();
     }
 }
 

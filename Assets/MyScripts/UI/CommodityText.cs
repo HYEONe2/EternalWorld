@@ -5,14 +5,7 @@ using UnityEngine.UI;
 
 public class CommodityText : MonoBehaviour
 {
-    public enum OBJTYPE
-    {
-        OBJ_WOOD,
-        OBJ_STONE,
-        OBJ_END
-    };
-
-    public OBJTYPE m_eType;
+    public PlayerProperty.OBJTYPE m_eType;
     private Text m_Text;
 
     private PlayerProperty m_PlayerProperty;
@@ -27,6 +20,6 @@ public class CommodityText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_Text.text = "X" + m_PlayerProperty.GetPropertyAmount((PlayerProperty.OBJTYPE)(m_eType));
+        m_Text.text = "X" + m_PlayerProperty.GetPropertyAmount(m_eType);
     }
 }

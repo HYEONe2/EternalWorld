@@ -4,14 +4,7 @@ using UnityEngine;
 
 public class Reward : MonoBehaviour
 {
-    public enum OBJTYPE
-    {
-        OBJ_TREE,
-        OBJ_ROCK,
-        OBJ_END
-    };
-
-    private OBJTYPE m_eType;
+    private PlayerProperty.OBJTYPE m_eType;
 
     private PlayerProperty m_PlayerProperty;
     private UIManager m_UIManager;
@@ -19,7 +12,7 @@ public class Reward : MonoBehaviour
     private bool m_bOnce;
 
     // Function
-    public void SetObjType(OBJTYPE eType) { m_eType = eType; }
+    public void SetObjType(PlayerProperty.OBJTYPE eType) { m_eType = eType; }
 
     // Start is called before the first frame update
     void Start()
@@ -46,7 +39,7 @@ public class Reward : MonoBehaviour
 
                 int Amount = Random.Range(1, 10);
                 m_PlayerProperty.AddProperty((global::PlayerProperty.OBJTYPE)m_eType, Amount);
-                m_UIManager.SetNoticeUI((NoticeUI.OBJTYPE)m_eType, Amount);
+                m_UIManager.SetNoticeUI(m_eType, Amount);
 
                 Destroy(gameObject);
             }
