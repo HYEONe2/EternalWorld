@@ -136,6 +136,8 @@
     <Compile Include="Assets\MyScripts\UI\NoticeUI.cs" />
     <Compile Include="Assets\MyScripts\UI\PhoneCanvas.cs" />
     <Compile Include="Assets\MyScripts\UI\PlayerCanvas.cs" />
+    <Compile Include="Assets\MyScripts\UI\ShopPanel.cs" />
+    <Compile Include="Assets\MyScripts\UI\ShopUI.cs" />
     <None Include="Assets\MyAssets\UI\PhoneUI\Pixel Art Icon Pack - RPG\Shader\SH UI Icon Outline Color.shader" />
     <None Include="Assets\MyAssets\Environment\NatureStarterKit2\Standard Assets\Effects\ImageEffects\Shaders\Tonemapper.shader" />
     <None Include="Assets\MyAssets\Particle\Object\Commodity\JMO Assets\WarFX\Shaders\WFX_S Multiply Soft.shader" />

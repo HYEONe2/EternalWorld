@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class BuildPanel : MonoBehaviour
 {
     //
-    private Building.BUILDING m_eBuilding;
+    public Building.BUILDING m_eBuilding;
 
     //
     private GameObject m_Player;
@@ -95,11 +95,6 @@ public class BuildPanel : MonoBehaviour
 
     private void InitializeValues()
     {
-        if (BuildingName == "통나무집")
-            m_eBuilding = global::Building.BUILDING.BUILDING_WOOD;
-        else if (BuildingName == "돌집")
-            m_eBuilding = global::Building.BUILDING.BUILDING_STONE;
-
         m_Player = GameObject.Find("Player");
         m_PlayerProperty = m_Player.GetComponent<PlayerProperty>();
         m_BuildingArm = m_Player.transform.Find("BuildingArm").gameObject;
@@ -109,6 +104,9 @@ public class BuildPanel : MonoBehaviour
 
     private void CheckToBuild()
     {
+        if (m_Building)
+            return;
+
         m_BuildingAmount = m_PlayerProperty.GetPropertyAmount((PlayerProperty.OBJTYPE)m_eBuilding);
 
         if (m_BuildingAmount < m_MaxBuildingAmount)
@@ -130,38 +128,41 @@ public class BuildPanel : MonoBehaviour
         // 빌딩이 클릭되었는지 확인
         ClickTheBuilding();
 
+        // 빌딩 선택이 안된 경우
         if (!m_Building)
-        {
             m_UpgradeButton.interactable = false;
-        }
+        // 선택된 경우
         else
-        {
-            // 빌딩타입이 일치하면
-            if (m_eBuilding == m_Building.GetComponent<Building>().GetBuildingType())
-            {
-                m_BuildingContext.text = m_Building.GetComponent<Building>().GetBuildTime() + BuildingContext;
-                m_BuildButton.interactable = true;
-                m_UpgradeButton.interactable = true;
-                m_BuildButton.transform.Find("Text").GetComponent<Text>().text = "재배치";
-            }
-            else
-            {
-                m_UpgradeButton.interactable = false;
-            }
-        }
+            ClickedBuildingSetting();
 
         m_UpgradeAmount = m_PlayerProperty.GetPropertyAmount((PlayerProperty.OBJTYPE)(m_eBuilding + 2));
 
         if (m_UpgradeAmount < m_MaxUpgradeAmount)
         {
             m_UpgradeMaximum.color = Color.red;
+            m_UpgradeButton.interactable = false;
         }
         else
-        {
             m_UpgradeMaximum.color = m_TextColor;
-        }
 
         m_UpgradeMaximum.text = m_UpgradeAmount + " / " + m_MaxUpgradeAmount;
+    }
+
+    private void ClickedBuildingSetting()
+    {
+        // 빌딩타입이 일치하면
+        if (m_eBuilding == m_Building.GetComponent<Building>().GetBuildingType())
+        {
+            m_BuildingContext.text = m_Building.GetComponent<Building>().GetBuildTime() + BuildingContext;
+            m_BuildButton.interactable = true;
+            if (m_UpgradeAmount >= m_MaxUpgradeAmount)
+                m_UpgradeButton.interactable = true;
+
+            m_BuildButton.transform.Find("Text").GetComponent<Text>().text = "재배치";
+        }
+        // 일치 안하면
+        else
+            m_UpgradeButton.interactable = false;
     }
 
     private void ClickTheBuilding()
@@ -233,8 +234,8 @@ public class BuildPanel : MonoBehaviour
         if (BuildTime - 9 <= 0)
             return;
 
-        m_PlayerProperty.ReduceProperty((PlayerProperty.OBJTYPE)(m_eBuilding +2 ), m_MaxUpgradeAmount);
-        BuildingScript.SetBuildTime(BuildTime-9);
+        m_PlayerProperty.ReduceProperty((PlayerProperty.OBJTYPE)(m_eBuilding + 2), m_MaxUpgradeAmount);
+        BuildingScript.SetBuildTime(BuildTime - 9);
         m_UpgradeAmount -= m_MaxUpgradeAmount;
     }
 
