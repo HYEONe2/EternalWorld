@@ -26,7 +26,7 @@ public class PlayerAnimationEvent : MonoBehaviour
     {
         if (m_PlayerAnimator)
         {
-            m_Player.SetSwingAxe(false);
+            m_Player.SetSwing(false);
             m_PlayerAnimator.SetBool("UseLButton", false);
         }
     }

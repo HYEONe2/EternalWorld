@@ -8,6 +8,9 @@ TagManager:
   - FxTemporaire
   - Quest
   - Floor
+  - Weapon
+  - Boundary
+  - Monster
   layers:
   - Default
   - TransparentFX

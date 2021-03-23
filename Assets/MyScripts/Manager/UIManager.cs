@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
 {
     private GameObject m_PlayerCanvas;
     private GameObject m_PhoneCanvas;
+    private GameObject m_QuestCanvas;
 
     private GameObject m_Menu;
     private GameObject m_Inventory;
@@ -29,6 +30,7 @@ public class UIManager : MonoBehaviour
     {
         if (!m_PlayerCanvas) m_PlayerCanvas = GameObject.Find("PlayerCanvas");
         if (!m_PhoneCanvas) m_PhoneCanvas = GameObject.Find("PhoneCanvas");
+        if (!m_QuestCanvas) m_QuestCanvas = GameObject.Find("QuestCanvas");
 
         if (!m_Menu) m_Menu = GameObject.Find("MenuUI");
         if (!m_Inventory) m_Inventory = GameObject.Find("InventoryUI");
@@ -49,7 +51,21 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_CoinIcon.transform.Find("Text").GetComponent<Text>().text = m_PlayerProperty.GetCoin() +"";
+        UpdateActiveCanvas();
+        UpdatePlayerPropertyUI();
+    }
+
+    void UpdateActiveCanvas()
+    {
+        if(m_QuestCanvas.activeSelf)
+            m_PhoneCanvas.SetActive(false);
+        else
+            m_PhoneCanvas.SetActive(true);
+    }
+    
+    void UpdatePlayerPropertyUI()
+    {
+        m_CoinIcon.transform.Find("Text").GetComponent<Text>().text = m_PlayerProperty.GetCoin() + "";
     }
 
     public void ClickInventory()

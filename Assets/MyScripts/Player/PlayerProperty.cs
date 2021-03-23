@@ -31,4 +31,9 @@ public class PlayerProperty : MonoBehaviour
 
         m_Coin = 500;
     }
+
+    private void OnDestroy()
+    {
+        m_Property.Clear();
+    }
 }

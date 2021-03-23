@@ -84,7 +84,7 @@ public class Building : MonoBehaviour
 
         if(other.gameObject.CompareTag("Player"))
         {
-            if(Input.GetKey(KeyCode.E))
+            if(Input.GetKey(KeyCode.F))
             {
                 m_PlayerProperty.AddProperty((PlayerProperty.OBJTYPE)m_eBuildingType, 1);
                 m_UIManager.SetNoticeUI((PlayerProperty.OBJTYPE)m_eBuildingType, 1);
@@ -150,7 +150,6 @@ public class Building : MonoBehaviour
         if (Physics.Raycast(transform.position, -transform.up, out m_Hit))
         {
             //Debug.Log(m_Hit.collider.tag);
-
             if (!m_Hit.collider.CompareTag("Untagged"))
                 m_BoundaryY = transform.position.y - m_Hit.distance;
             Debug.DrawRay(transform.position, -transform.up * m_Hit.distance, Color.red);

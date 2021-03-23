@@ -33,7 +33,7 @@ public class Reward : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if (!m_bOnce && Input.GetKey(KeyCode.E))
+            if (!m_bOnce && Input.GetKey(KeyCode.F))
             {
                 m_bOnce = true;
 

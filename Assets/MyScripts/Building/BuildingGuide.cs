@@ -35,19 +35,31 @@ public class BuildingGuide : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Floor"))
+        {
+            if (other.CompareTag("Boundary"))
+                return;
             m_bOtherTag = true;
+        }
     }
 
     private void OnTriggerStay(Collider other)
     {
         if (!other.CompareTag("Floor"))
+        {
+            if (other.CompareTag("Boundary"))
+                return;
             SetColor(1f, 0f, 0f, 0.3f);
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Floor"))
+        {
+            if (other.CompareTag("Boundary"))
+                return;
             m_bOtherTag = false;
+        }
     }
 
     private void SetColor(float r, float g, float b, float a)

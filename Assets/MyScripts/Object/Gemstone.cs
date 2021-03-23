@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Gemstone : MonoBehaviour
 {
-    public enum COLOR { COLOR_RED, COLOR_GREEN, COLOR_BLUE, COLOR_END };
+    public enum COLOR { COLOR_RED, COLOR_BLUE, COLOR_GREEN, COLOR_END };
     public COLOR m_eColor;
 
     private PlayerProperty m_PlayerProperty;
@@ -32,7 +32,7 @@ public class Gemstone : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if (!m_bOnce && Input.GetKey(KeyCode.E))
+            if (!m_bOnce && Input.GetKey(KeyCode.F))
             {
                 m_bOnce = true;
 

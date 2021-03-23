@@ -42,6 +42,12 @@ public class ShopUI : MonoBehaviour
             LateInit();
     }
 
+    private void OnDestroy()
+    {
+        m_ShopPanelList.Clear();
+        m_BuySellTextList.Clear();
+    }
+
     private void LateInit()
     {
         Transform Content = transform.GetChild(0).GetChild(0).GetChild(0);
