@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     private CharacterController m_Controller;
     public GameObject m_Equipment;
     public GameObject m_Weapon;
+    private GameObject m_Target;
 
     // Child Components
     private GameObject m_Mesh;
@@ -37,6 +38,7 @@ public class Player : MonoBehaviour
 
     private bool[] m_bInitialEquip = new bool[2];
     private bool m_bSwing;
+    private bool m_bUsePhone;
 
     // Function
     public void SetNearObject(GameObject nearObj) { m_NearObject = nearObj; }
@@ -45,8 +47,11 @@ public class Player : MonoBehaviour
 
     public GameObject GetNearObject() { return m_NearObject; }
     public GameObject GetSkillObject() { return m_SkillObject; }
+    public GameObject GetTarget() { return m_Target; }
+
     public ABILITY GetAbility() { return m_eAbility; }
     public bool GetAttack() { return m_bSwing; }
+    public void SetUsePhone(bool use) { m_bUsePhone = use; }
 
     // Start is called before the first frame update
     void Start()
@@ -59,10 +64,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         if (Cursor.visible)
-        {
             ResetAnimator();
-            return;
-        }
 
         UpdateMovement();
         UpdateKeyInput();
@@ -77,7 +79,7 @@ public class Player : MonoBehaviour
 
     }
 
-    void InitializeComponents()
+    private void InitializeComponents()
     {
         // My Components
         if (!m_Controller) m_Controller = gameObject.GetComponent<CharacterController>();
@@ -98,7 +100,7 @@ public class Player : MonoBehaviour
         if(!m_NearObject) m_NearObject = null;
     }
 
-    void InitializeValues()
+    private void InitializeValues()
     {
         m_eAbility = ABILITY.ABIL_END;
 
@@ -121,7 +123,7 @@ public class Player : MonoBehaviour
         m_bSwing = false;
     }
 
-    void UpdateMovement()
+    private void UpdateMovement()
     {
         if (m_bSwing)
             return;
@@ -141,7 +143,7 @@ public class Player : MonoBehaviour
         m_Controller.Move(m_Pos * m_MoveSpeed * Time.deltaTime);
     }
 
-    void UpdateKeyInput()
+    private void UpdateKeyInput()
     {
         switch (Input.inputString)
         {
@@ -162,7 +164,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void Move()
+    private void Move()
     {
         // Animation Initialize
         m_Animator.SetBool("UseShift", false);
@@ -201,12 +203,15 @@ public class Player : MonoBehaviour
             }
 
             // Rotate
-            Quaternion newRotation = Quaternion.LookRotation(moveDir * m_MoveSpeed * Time.deltaTime);
-            m_Mesh.transform.rotation = Quaternion.Slerp(m_Mesh.transform.rotation, newRotation, m_RotateSpeed * Time.deltaTime);
+            if (!m_Target)
+            {
+                Quaternion newRotation = Quaternion.LookRotation(moveDir * m_MoveSpeed * Time.deltaTime);
+                m_Mesh.transform.rotation = Quaternion.Slerp(m_Mesh.transform.rotation, newRotation, m_RotateSpeed * Time.deltaTime);
+            }
         }
     }
 
-    void Walk(Vector3 moveDir)
+    private void Walk(Vector3 moveDir)
     {
         m_Animator.SetBool("UseShift", false);
         m_Animator.SetFloat("MoveSpeed", m_MoveSpeed);
@@ -215,7 +220,7 @@ public class Player : MonoBehaviour
         m_JumpPower = 3f;
     }
 
-    void Sprint(Vector3 moveDir)
+    private void Sprint(Vector3 moveDir)
     {
         m_Animator.SetBool("UseShift", true);
         m_Animator.SetFloat("MoveSpeed", m_MoveSpeed * 1.8f);
@@ -224,7 +229,7 @@ public class Player : MonoBehaviour
         m_JumpPower = 3.5f;
     }
 
-    void Jump()
+    private void Jump()
     {
         m_Animator.SetBool("UseSpace", false);
         m_bJump = false;
@@ -245,14 +250,40 @@ public class Player : MonoBehaviour
     
     void UpdateAction()
     {
-        if (m_Animator.GetBool("UseSpace") || Cursor.visible || m_bSwing)
+        if (m_Animator.GetBool("UseSpace") || Cursor.visible || m_bUsePhone || m_bSwing)
             return;
 
+        Targeting();
         Swing();
         UseMagicSpell();
     }
 
-    void Swing()
+    public void SetTargetMonster(GameObject target)
+    {
+        if (Input.GetMouseButton(1))
+            m_Target = target;
+    }
+
+    private void Targeting()
+    {
+        if (!Input.GetMouseButton(1))
+            m_Target = null;
+
+        if (!m_Target)
+        {
+            m_MoveSpeed = 4.5f;
+            return;
+        }
+
+        m_MoveSpeed = 4.5f * 2f;
+        Vector3 vDir = m_Target.transform.position - transform.position;
+        Quaternion newRotation = Quaternion.LookRotation(vDir * m_MoveSpeed * Time.deltaTime);
+
+        m_Mesh.transform.rotation = Quaternion.Slerp(m_Mesh.transform.rotation, newRotation, m_RotateSpeed * 3f * Time.deltaTime);
+        m_CamArmTrans.rotation = Quaternion.Slerp(m_Mesh.transform.rotation, newRotation, m_RotateSpeed * 3f * Time.deltaTime);
+    }
+
+    private void Swing()
     {
         if (m_Equipment.activeSelf)
         {
@@ -272,12 +303,12 @@ public class Player : MonoBehaviour
         }
     }
 
-    void UseMagicSpell()
+    private void UseMagicSpell()
     {
         if (!m_Weapon.activeSelf || m_SkillObject)
             return;
 
-        if (Input.GetMouseButton(1))
+        if (Input.GetKey(KeyCode.Q))
         {
             m_bSwing = true;
             m_Animator.SetBool("UseLButton", true);
@@ -293,13 +324,13 @@ public class Player : MonoBehaviour
         }
     }
 
-    void UpdateInteraction()
+    private void UpdateInteraction()
     {
         Equip();
         InitialEquip();
     }
 
-    void InitialEquip()
+    private void InitialEquip()
     {
         if (!m_NearObject || m_bJump || !m_Controller.isGrounded || (m_bInitialEquip[0] && m_bInitialEquip[1]))
             return;
@@ -332,7 +363,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void Equip()
+    private void Equip()
     {
         if (m_bSwing)
             return;
@@ -397,5 +428,15 @@ public class Player : MonoBehaviour
         m_Animator.SetBool("UseSpace", false);
         m_Animator.SetBool("IsGrounded", true);
         m_Animator.SetBool("UseLButton", false);
+    }
+
+    public bool GetActive(string objectName)
+    {
+        if (objectName == "Equipment")
+            return m_Equipment.activeSelf;
+        else if (objectName == "Weapon")
+            return m_Weapon.activeSelf;
+        else
+            return false;
     }
 }

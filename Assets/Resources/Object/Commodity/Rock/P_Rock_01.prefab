@@ -103,7 +103,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4172234733235080}
-  - component: {fileID: -945884446978174691}
+  - component: {fileID: 1754460278470514449}
   - component: {fileID: 5025642521039144033}
   m_Layer: 0
   m_Name: P_Rock_01
@@ -127,8 +127,8 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &-945884446978174691
-SphereCollider:
+--- !u!65 &1754460278470514449
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -138,8 +138,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.8
-  m_Center: {x: -0.1, y: 0.2, z: 0}
+  m_Size: {x: 1.5, y: 1, z: 1}
+  m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!114 &5025642521039144033
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -17,13 +17,21 @@ public class UIManager : MonoBehaviour
     private GameObject m_ReturnIcon;
     private GameObject m_CoinIcon;
 
+    private Player m_Player;
     private PlayerProperty m_PlayerProperty;
     private bool m_bTurnAlpha;
     private float m_PingPongTime;
 
+    private bool m_bRebuild;
+    private bool m_bUpgrade;
+
     public GameObject GetCoinIcon() { return m_CoinIcon; }
     public ShopUI GetShopUIScript() { return m_Shop.GetComponent<ShopUI>(); }
     public PlayerProperty GetPlayerProperty() { return m_PlayerProperty; }
+
+    public void SetRebuild(bool bRebuild) { m_bRebuild = bRebuild; }
+    public void SetUpgrade(bool bUpgrade) { m_bUpgrade = bUpgrade; }
+    public bool GetRebuildUpgrade() { bool check = (m_bRebuild && m_bUpgrade) ? true : false; return check; }
 
     // Start is called before the first frame update
     void Start()
@@ -40,6 +48,7 @@ public class UIManager : MonoBehaviour
         if (!m_ReturnIcon) m_ReturnIcon = GameObject.Find("ReturnIcon");
         if (!m_CoinIcon) m_CoinIcon = GameObject.Find("CoinIcon");
 
+        m_Player = GameObject.Find("Player").GetComponent<Player>();
         m_PlayerProperty = GameObject.Find("Player").GetComponent<PlayerProperty>();
 
         m_ReturnIcon.SetActive(false);
@@ -57,14 +66,21 @@ public class UIManager : MonoBehaviour
 
     void UpdateActiveCanvas()
     {
-        if(m_QuestCanvas.activeSelf)
-            m_PhoneCanvas.SetActive(false);
-        else
-            m_PhoneCanvas.SetActive(true);
+        //if (m_Inventory.activeSelf)
+        //{
+        //    Cursor.visible = true;
+        //    return;
+        //}
+        if (m_QuestCanvas.activeSelf)
+        {
+            if (m_QuestCanvas.transform.Find("QuestUI").GetComponent<QuestUI>().GetState() == QuestUI.STATE.ASK)
+                Cursor.visible = true;
+        }
     }
-    
+
     void UpdatePlayerPropertyUI()
     {
+        m_Player.SetUsePhone(m_bRebuild);
         m_CoinIcon.transform.Find("Text").GetComponent<Text>().text = m_PlayerProperty.GetCoin() + "";
     }
 
@@ -158,8 +174,18 @@ public class UIManager : MonoBehaviour
         text.color = new Color(r, g, b, a);
     }
 
-    public bool GetActive(GameObject tempObject)
+    public bool GetActive(string uiName)
     {
-        return tempObject.activeSelf;
+        switch (uiName)
+        {
+            case "InventoryUI":
+                return m_Inventory.activeSelf;
+            case "BuildUI":
+                return m_Build.activeSelf;
+            case "PhoneCanvas":
+                return m_PhoneCanvas.activeSelf;
+            default:
+                return false;
+        }
     }
 }

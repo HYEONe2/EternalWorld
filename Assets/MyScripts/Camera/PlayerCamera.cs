@@ -4,19 +4,20 @@ using UnityEngine;
 
 public class PlayerCamera : MonoBehaviour
 {
+    private Player m_Player;
     private Transform m_CamArmTrans;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (!m_CamArmTrans)
-            m_CamArmTrans = GameObject.Find("CameraArm").transform;
+        m_Player = GameObject.Find("Player").GetComponent<Player>();
+        m_CamArmTrans = GameObject.Find("CameraArm").transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Cursor.visible)
+        if (Cursor.visible || m_Player.GetTarget())
             return;
 
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));

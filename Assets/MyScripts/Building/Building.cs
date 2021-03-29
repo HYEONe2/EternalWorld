@@ -37,6 +37,7 @@ public class Building : MonoBehaviour
     public void SetBuildAmount(int amount) { m_BuildAmount = amount; }
     public void SetUpgradeAmount(int amount) { m_UpgradeAmount = amount; }
 
+    public BUILD GetBuild() { return m_eBuild; }
     public BUILDING GetBuildingType() { return m_eBuildingType; }
     public float GetBuildTime() { return m_BuildTime; }
     public void SetIsClicked(bool clicked) { m_bIsClicked = clicked; }

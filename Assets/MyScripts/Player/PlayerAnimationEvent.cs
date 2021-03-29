@@ -41,4 +41,19 @@ public class PlayerAnimationEvent : MonoBehaviour
         if (commodity)
             commodity.SetCheckAttack(true);
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (m_Player.GetTarget())
+            return;
+
+        if(other.CompareTag("Monster"))
+            m_Player.SetTargetMonster(other.gameObject);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Monster"))
+            m_Player.SetTargetMonster(null);
+    }
 }

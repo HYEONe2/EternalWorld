@@ -13,6 +13,12 @@ public class QuestUI : MonoBehaviour
     private GameObject m_Answer;
     private GameObject m_AnswerOnce;
 
+    // Other Components
+    private UIManager m_UIManager;
+    private ObjectManager m_ObjMgrScript;
+    private Player m_Player;
+    private PlayerProperty m_PlayerProperty;
+
     // Values
     public enum STATE { TALK, QUEST, ASK, PAUSE, END };
     private STATE m_eState;
@@ -23,6 +29,9 @@ public class QuestUI : MonoBehaviour
 
     private bool[] m_bCheckList = new bool[4];
     private bool m_bFinishTask;
+    private bool m_bFinishSpawn;
+
+    private int m_WoodCnt;
 
     public STATE GetState() { return m_eState; }
 
@@ -38,6 +47,11 @@ public class QuestUI : MonoBehaviour
         m_AnswerOnce = transform.Find("AnswerOnce").gameObject;
         m_AnswerOnce.SetActive(false);
 
+        m_UIManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+        m_ObjMgrScript = GameObject.Find("ObjectManager").GetComponent<ObjectManager>();
+        m_Player = GameObject.Find("Player").GetComponent<Player>();
+        m_PlayerProperty = GameObject.Find("Player").GetComponent<PlayerProperty>();
+
         m_eState = STATE.TALK;
 
         InitializeTalkingText();
@@ -45,6 +59,9 @@ public class QuestUI : MonoBehaviour
         m_TextCnt = 0;
 
         m_bFinishTask = false;
+        m_bFinishSpawn = false;
+
+        m_WoodCnt = 0;
     }
 
     // Update is called once per frame
@@ -62,38 +79,165 @@ public class QuestUI : MonoBehaviour
         m_TalkingText.Clear();
     }
 
+    /*
+    영토확장 ->     
+    나무 돌 캠(한번만 생성됨) ->
+    재화수급 -> 
+    얻은 재화로 건물 건설(나무,돌같은게 한번만 생성되니깐,,건물로 승화) ->
+    상점에서 사고팜(플레이어 경험치오름 + 희귀보석 얻음) + 던전 파밍-> 
+    플레이어 레벨오르면 영토확장
+    */
     private void InitializeTalkingText()
     {
         List<string> FirstTalking = new List<string>();
         List<string> SecondTalking = new List<string>();
         List<string> ThirdTalking = new List<string>();
         List<string> ForthTalking = new List<string>();
+        List<string> FifthTalking = new List<string>();
+        List<string> SixthTalking = new List<string>();
+        List<string> SeventhTalking = new List<string>();
+        List<string> EighthTalking = new List<string>();
+        List<string> NinethTalking = new List<string>();
+        List<string> TenthTalking = new List<string>();
+        List<string> EleventhTalking = new List<string>();
+        List<string> TwelfthTalking = new List<string>();
+        List<string> ThirteenthTalking = new List<string>();
+        List<string> FourteenthTalking = new List<string>();
+        List<string> FifteenthTalking = new List<string>();
+        List<string> SixteenthTalking = new List<string>();
+        List<string> SeventeenthTalking = new List<string>();
+        List<string> EighteenthTalking = new List<string>();
+        List<string> NineteenthTalking = new List<string>();
 
-        // Talking
+        //1 ASK
         FirstTalking.Add("어서오세요. Player님.");
-        FirstTalking.Add("저희 VR 게임을 이용해주셔서 감사합니다.");
-        FirstTalking.Add("Player님의 게임 이용 여부를 확인하겠습니다.");
+        FirstTalking.Add("저희 VR 게임인 Eternal World를 이용해주셔서 감사합니다.");
+        FirstTalking.Add("저희 Eternal World에서는 Player님만의 마을을 만들 수 있도록 가상 월드를 제공합니다.");
+        FirstTalking.Add("이곳은 마을로 입성하기 전 기능 체험을 위한 가상 튜토리얼 공간입니다.");
+        FirstTalking.Add("Player님만의 세상을 만들기에 앞서 Player님의 게임 이용 여부를 확인하겠습니다.");
         FirstTalking.Add("...");
         FirstTalking.Add("Player님의 게임 이용 여부 확인 결과 없음으로 판명되었습니다.");
         FirstTalking.Add("이 게임을 위한 튜토리얼을 진행하겠습니까?");
-        //FirstTalking.Add("먼저 게임 적응을 위한 튜토리얼을 진행하겠습니다.");
         m_TalkingText.Add(FirstTalking);
 
-        // Asking
-        SecondTalking.Add("그럼 튜토리얼 시작하도록 하겠습니다.");
-        SecondTalking.Add("먼저 WSAD를 이용하여 몸을 움직여 보십시오.");
+        //2 WSAD 퀘스트
+        SecondTalking.Add("좋습니다. 그럼 튜토리얼을 시작하겠습니다.");
+        SecondTalking.Add("먼저 기본 조작법 설명입니다.");
+        SecondTalking.Add("WASD 키를 이용하여 몸을 움직여 보십시오.");
         m_TalkingText.Add(SecondTalking);
 
-        // Talking
+        //3 Mouse 시야 테스트
         ThirdTalking.Add("잘하셨습니다.");
         ThirdTalking.Add("이제 마우스를 움직여 시야를 조절해 보십시오.");
         m_TalkingText.Add(ThirdTalking);
 
+        //4
         ForthTalking.Add("잘하셨습니다.");
+        ForthTalking.Add("Shift 키를 눌러 달려보십시오.");
         m_TalkingText.Add(ForthTalking);
 
-        // Giving Quest
+        //5
+        FifthTalking.Add("잘하셨습니다.");
+        FifthTalking.Add("Space 키를 눌러 점프하십시오.");
+        m_TalkingText.Add(FifthTalking);
 
+        //6 영토 설명 Queset
+        SixthTalking.Add("좋습니다. 기본 이동 기술을 모두 익혔습니다.");
+        SixthTalking.Add("Player님께 기본 제공품인 도끼를 드리기 앞서 영토 설명을 해드리겠습니다.");
+        SixthTalking.Add("먼저 다음 장소로 이동해보십시오.");
+        m_TalkingText.Add(SixthTalking);
+
+        //7 재화획득 퀘스트
+        SeventhTalking.Add("Player는 Level에 따라 영토가 한정되어 있기 때문에 투명 장벽으로 일정 범위 이외로 나갈 수 없도록 설계되어 있습니다.");
+        SeventhTalking.Add("따라서 Player는 나의 마을 영토를 넓히기 위해 레벨을 올려야 합니다.");
+        SeventhTalking.Add("레벨을 올리기 위한 경험치를 재화 획득, 건물 건설, 상점 이용, 던전 파밍을 통해 얻을 수 있습니다.");
+        SeventhTalking.Add("먼저 재화 획득에 대해 알려드리도록 하겠습니다.");
+        SeventhTalking.Add("재화 획득의 방법에는 크게 두 가지가 있습니다.");
+        SeventhTalking.Add("첫 번째로는 내 영토 내에 있는 오브젝트에서 획득하는 방법과");
+        SeventhTalking.Add("두 번째로는 건물 건설을 통한 재화 방법이 있습니다.");
+        SeventhTalking.Add("첫 번째 방법 튜토리얼을 위한 도끼를 제공해드리겠습니다.");
+        SeventhTalking.Add("F키를 통해 집어주십시오.");
+        m_TalkingText.Add(SeventhTalking);
+
+        // 8 
+        EighthTalking.Add("잘하셨습니다.");
+        EighthTalking.Add("이제 1번 키로 도끼를 집어 넣어주십시오.");
+        m_TalkingText.Add(EighthTalking);
+
+        //9
+        NinethTalking.Add("잘하셨습니다.");
+        NinethTalking.Add("다시 1번 키로 도끼를 꺼내주십시오.");
+        m_TalkingText.Add(NinethTalking);
+
+        //10
+        TenthTalking.Add("잘하셨습니다.");
+        TenthTalking.Add("이제 제가 생성해드릴 나무와 돌을 5개 채집해주십시오.");
+        m_TalkingText.Add(TenthTalking);
+
+        //SecondTalking.Add("궁금적인 목표는 Player님만의 마을 구축과 Player 성장입니다.");
+        //SecondTalking.Add("마을 구축을 위해선 건물을 건설해야 하고 Player 성장을 위해서 Level을 올려야 합니다.");
+        //SecondTalking.Add("건물 건설을 위해 필요한 재료들은 제공되는 영토에서 얻을 수 있지만 딱 한 번만 재화를 얻을 수 있기에 재화 생산 건물을 지어야 합니다");
+        //11
+        EleventhTalking.Add("잘하셨습니다.");
+        EleventhTalking.Add("지금 한 작업은 재화 획득의 첫 번째 방법인 나의 영토 내의 오브젝트로부터 재화를 수집하는 방법입니다.");
+        EleventhTalking.Add("두 번째 방법인 건물 건설을 통한 재화 획득을 해보도록 합시다.");
+        EleventhTalking.Add("I 버튼을 눌러 스마트폰을 꺼내보십시오.");
+        m_TalkingText.Add(EleventhTalking);
+
+        //12
+        TwelfthTalking.Add("스마트폰을 켜면 인벤토리, 상점, 건물 짓기, 세팅 어플이 있습니다.");
+        TwelfthTalking.Add("먼저 인벤토리에 아까 채집한 나무와 돌의 개수를 확인하여주십시오.");
+        m_TalkingText.Add(TwelfthTalking);
+
+        //13
+        ThirteenthTalking.Add("좋습니다.");
+        ThirteenthTalking.Add("이제 메인 화면으로 돌아간 뒤, 건물 짓기 어플을 이용하여 나무집을 지어보십시오.");
+        m_TalkingText.Add(ThirteenthTalking);
+
+        //14
+        FourteenthTalking.Add("잘하셨습니다.");
+        FourteenthTalking.Add("지어진 건물을 클릭하면 해당 건물에 투명화가 적용되며 지목화가 됩니다.");
+        FourteenthTalking.Add("지목된 건물은 어플에 정보가 뜨게 되고 건물 재배치와 업그레이드가 가능하게 됩니다.");
+        FourteenthTalking.Add("건물 재배치로 위치를 옮겨보고 업그레이드까지 진행하여 보십시오.");
+        FourteenthTalking.Add("참고로 건물 재배치는 시야 회전을 통한 위치 조절과 마우스 휠을 통해 건물 자체를 회전시킬 수 있습니다.");
+        m_TalkingText.Add(FourteenthTalking);
+
+        //15
+        FifteenthTalking.Add("잘하셨습니다.");
+        FifteenthTalking.Add("업그레이드를 진행하면 건물의 생산속도가 올라가게 되거나 생산품의 개수가 올라갑니다.");
+        FifteenthTalking.Add("건물에서 생산이 완료된 경우 건물에 반짝이는 이펙트가 뜨게 됩니다.");
+        FifteenthTalking.Add("이 때 건물 근처로 가 F 버튼을 누르면 재화를 획득하실 수 있습니다.");
+        FifteenthTalking.Add("F 버튼을 눌러 재화를 획득하여 보십시오.");
+        m_TalkingText.Add(FifteenthTalking);
+
+        //16
+        SixteenthTalking.Add("잘하셨습니다.");
+        SixteenthTalking.Add("지금까지 경험치를 얻기 위한 재화 습득의 두 가지 방법과 건물 짓기에 대해 알아보았습니다.");
+        SixteenthTalking.Add("이제 마지막으로 던전 파밍을 알려드리기 전에 Player 능력을 고르는 시간을 갖도록 하겠습니다.");
+        SixteenthTalking.Add("어떤 능력을 습득하시겠습니까?");
+        m_TalkingText.Add(SixteenthTalking);
+
+        //17
+        SeventeenthTalking.Add("좋습니다.");
+        SeventeenthTalking.Add("던전 파밍을 위해 다음 영토를 확장해야 하기 때문에 레벨을 임의로 올려드리겠습니다.");
+        SeventeenthTalking.Add("이제 F 버튼을 통해 무기를 집고 마우스 왼 클릭으로 근접 공격을 해보십시오.");
+        m_TalkingText.Add(SeventeenthTalking);
+
+        //18
+        EighteenthTalking.Add("잘하셨습니다.");
+        EighteenthTalking.Add("추가로 말씀드리자면 무기 또한 도끼와 비슷하게 2번 버튼을 통해 장착과 해제하실 수 있습니다.");
+        EighteenthTalking.Add("이제 몬스터 타겟팅에 대해 설명해드리도록 하겠습니다.");
+        EighteenthTalking.Add("우클릭을 하면 일정 거리 안 몬스터 중 하나에게 타겟팅이 적용되게 됩니다.");
+        EighteenthTalking.Add("타겟팅을 사용하게 되면 플레이어가 바라보는 방향으로 시전되는 스킬 사용이 편리해집니다.");
+        EighteenthTalking.Add("우클릭을 통해 타겟팅 후, Q 키를 눌러 원거리 스킬을 사용하여 보십시오.");
+        m_TalkingText.Add(EighteenthTalking);
+
+        //19
+        NineteenthTalking.Add("잘하셨습니다.");
+        NineteenthTalking.Add("E키와 R키로 각각 다른 스킬을 사용할 수 있습니다.");
+        NineteenthTalking.Add("Player님께서 원하시는 만큼 여러 기능들을 체험하시고 체험이 끝나면 이 튜토리얼 방 끝에 있는 문으로 와주십시오.");
+        NineteenthTalking.Add("Player님만의 세계를 구축할 수 있도록 준비해놓도록 하겠습니다.");
+        m_TalkingText.Add(NineteenthTalking);
     }
 
     private void UpdateAIImages()
@@ -107,13 +251,10 @@ public class QuestUI : MonoBehaviour
 
     private void UpdateQuestText()
     {
-        //    // m_Talking[0][5]의 5 <= m_TextCnt
-        //    // m_Talking[1][1]의 1 <= m_TextCnt
-        //    // m_Talking[2][1]의 1 <= m_TextCnt
         // 마지막 인덱스에 도달한 경우 -> 새로운 이벤트의 시작
         if (m_TalkingText[m_CheckEvent].Count - 1 <= m_TextCnt)
         {
-            if (m_TalkingText.Count - 1 <= m_CheckEvent + 1)
+            if (m_TalkingText.Count - 1 <= m_CheckEvent)
             {
                 // Quest UI 종료
                 if (Input.GetKeyDown(KeyCode.Return))
@@ -122,8 +263,8 @@ public class QuestUI : MonoBehaviour
                     return;
                 }
             }
-
-            BeforeUpdate();
+            else
+                BeforeUpdate();
         }
         // 마지막 인덱스가 아닌 경우
         else
@@ -139,37 +280,56 @@ public class QuestUI : MonoBehaviour
 
         // 계속 false이다가 버튼 클릭/퀘스트 클리어하면 true
         // 초기화되면 false로 다시 바뀜
-        //Debug.Log("1: "+m_bFinishTask);
         MainUpdate();
-        //Debug.Log("2: " + m_bFinishTask);
-        //AfterUpdate();
-
-        //Debug.Log(m_eState);
     }
 
     private void BeforeUpdate()
     {
         // 새로운 이벤트 시작 전, 초기화
-        switch(m_CheckEvent)
+        switch(m_CheckEvent + 1)
         {
             // ASK
-            case 0:
+            case 1:
+            case 16:
                 {
-                    m_Answer.SetActive(false);
-
+                    m_bFinishSpawn = false;
                     m_bFinishTask = false;
                     m_CheckEvent += 1;
                     m_TextCnt = 0;
                 }
                 break;
             // Quest
-            case 1:
             case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+            case 17:
+            case 18:
                 {
                     if (!m_bFinishTask)
                         return;
 
                     // Quest가 끝나면 다음 이벤트로 초기화
+                    m_bFinishSpawn = false;
+                    m_bFinishTask = false;
+                    m_CheckEvent += 1;
+                    m_TextCnt = 0;
+                }
+                break;
+            // Talk
+            default:
+                {
+                    m_bFinishSpawn = false;
                     m_bFinishTask = false;
                     m_CheckEvent += 1;
                     m_TextCnt = 0;
@@ -181,6 +341,8 @@ public class QuestUI : MonoBehaviour
     private void MainUpdate()
     {
         CheckState();
+        //Debug.Log(m_CheckEvent+": "+m_eState);
+        SpawnEvent();
 
         switch(m_eState)
         {
@@ -202,21 +364,41 @@ public class QuestUI : MonoBehaviour
         switch (m_CheckEvent)
         {
             case 1:
+            case 16:
                 if (!m_bFinishTask)
                     m_eState = STATE.ASK;
                 else
                 {
-                    Cursor.visible = false;
-                    m_Answer.SetActive(false);
+                    if (m_Answer.activeSelf)
+                    {
+                        Cursor.visible = false;
+                        m_Answer.SetActive(false);
+                    }
                     m_eState = STATE.TALK;
                 }
                 break;
             case 2:
             case 3:
-                if (!m_bFinishTask)
-                    m_eState = STATE.QUEST;
-                else
-                    m_eState = STATE.TALK;
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+            case 17:
+            case 18:
+                {
+                    if (!m_bFinishTask)
+                        m_eState = STATE.QUEST;
+                    else
+                        m_eState = STATE.TALK;
+                }
                 break;
         }
     }
@@ -227,8 +409,11 @@ public class QuestUI : MonoBehaviour
         {
             case 1:
                 {
-                    Cursor.visible = true;
-                    m_Answer.SetActive(true);
+                    if (!m_Answer.activeSelf)
+                    {
+                        Cursor.visible = true;
+                        m_Answer.SetActive(true);
+                    }
 
                     if (m_bCheckList[0])
                         m_bFinishTask = true;
@@ -237,6 +422,15 @@ public class QuestUI : MonoBehaviour
                         gameObject.SetActive(false);
                         // 씬 전환
                     }
+                }
+                break;
+            case 16:
+                {
+                    if (m_AnswerOnce.activeSelf)
+                        return;
+
+                    Cursor.visible = true;
+                    m_AnswerOnce.SetActive(true);
                 }
                 break;
         }
@@ -276,7 +470,141 @@ public class QuestUI : MonoBehaviour
                         m_bFinishTask = true;
                 }
                 break;
+            case 4:
+                {
+                    if(Input.GetKey(KeyCode.LeftShift))
+                    {
+                        if (Input.GetKey(KeyCode.W)|| Input.GetKey(KeyCode.S)
+                            || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+                            m_bFinishTask = true;
+                    }
+                }
+                break;
+            case 5:
+                {
+                    if (Input.GetKeyDown(KeyCode.Space))
+                        m_bFinishTask = true;
+                }
+                break;
+            case 6:
+                {
+                    if (m_ObjMgrScript.GetCloseEnough())
+                        m_bFinishTask = true;
+                }
+                break;
+            case 7:
+                {
+                    if (m_Player.GetActive("Equipment"))
+                        m_bFinishTask = true;
+                }
+                break;
+            case 8:
+                {
+                    if (m_Player.GetActive("Equipment"))
+                        return;
+
+                    if (Input.GetKeyDown("1"))
+                        m_bFinishTask = true;
+                }
+                break;
+            case 9:
+                {
+                    if (!m_Player.GetActive("Equipment"))
+                        return;
+
+                    if (Input.GetKeyDown("1"))
+                        m_bFinishTask = true;
+                }
+                break;
+            case 10:
+                {
+                    if (m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD) >= 5
+                        && m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_STONE) >= 5)
+                        m_bFinishTask = true;
+                }
+                break;
+            case 11:
+                {
+                    if (!m_UIManager.GetActive("PhoneCanvas"))
+                        return;
+
+                    if (Input.GetKeyDown(KeyCode.I))
+                        m_bFinishTask = true;
+                }
+                break;
+            case 12:
+                {
+                    if (m_UIManager.GetActive("InventoryUI"))
+                        m_bFinishTask = true;
+                }
+                break;
+            case 13:
+                {
+                    GameObject WoodHouse = GameObject.Find("WoodHouse(Clone)");
+                    if(WoodHouse)
+                    {
+                        if (WoodHouse.GetComponent<Building>().GetBuild() == Building.BUILD.BUILT)
+                            m_bFinishTask = true;
+                    }
+                }
+                break;
+            case 14:
+                {
+                    // 건물 재배치 & 업그레이드
+                    if (m_UIManager.GetRebuildUpgrade())
+                        m_bFinishTask = true;
+                }
+                break;
+            case 15:
+                {
+                    if(m_WoodCnt == 0)
+                        m_WoodCnt = m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD);
+
+                    // 재화 획득
+                    if (m_WoodCnt < m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD))
+                        m_bFinishTask = true;
+                }
+                break;
+            case 17:
+                {
+                    if (!m_Player.GetActive("Weapon"))
+                        return;
+
+                    if (Input.GetMouseButtonDown(0))
+                        m_bFinishTask = true;
+                }
+                break;
+            case 18:
+                {
+                    if (!m_Player.GetActive("Weapon"))
+                        return;
+
+                    if(Input.GetMouseButton(1))
+                    {
+                        if (Input.GetKeyDown(KeyCode.Q))
+                            m_bFinishTask = true;
+                    }
+                }
+                break;
         }
+    }
+
+    private void SpawnEvent()
+    {
+        if (m_bFinishSpawn)
+            return;
+
+        if (m_CheckEvent == 10 && m_TextCnt == 0)
+        {
+            m_ObjMgrScript.RespawnTrees(3);
+            m_ObjMgrScript.RespawnRocks(3);
+        }
+        else if (m_CheckEvent == 17 && m_TextCnt == 0)
+            m_ObjMgrScript.DestroyLevelBoundary();
+        else
+            return;
+
+        m_bFinishSpawn = true;
     }
 
     private void SetQuestText(string text)
@@ -309,6 +637,7 @@ public class QuestUI : MonoBehaviour
         m_AnswerOnce.SetActive(false);
 
         GameObject.Find("Player").GetComponent<Player>().SetAbility(Player.ABILITY.ABIL_FIRE);
+        m_bFinishTask = true;
     }
 
     public void ClickWaterButton()
@@ -317,6 +646,7 @@ public class QuestUI : MonoBehaviour
         m_AnswerOnce.SetActive(false);
 
         GameObject.Find("Player").GetComponent<Player>().SetAbility(Player.ABILITY.ABIL_FIRE);
+        m_bFinishTask = true;
     }
 
     public void ClickGrassButton()
@@ -325,5 +655,6 @@ public class QuestUI : MonoBehaviour
         m_AnswerOnce.SetActive(false);
 
         GameObject.Find("Player").GetComponent<Player>().SetAbility(Player.ABILITY.ABIL_FIRE);
+        m_bFinishTask = true;
     }
 }

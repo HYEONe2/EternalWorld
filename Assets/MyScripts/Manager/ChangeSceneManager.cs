@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ChangeSceneManager : MonoBehaviour
 {
+    [SerializeField] public string m_SceneName;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -18,5 +20,11 @@ public class ChangeSceneManager : MonoBehaviour
 
         if (Input.GetKeyDown("0"))
             LoadingSceneManager.LoadScene("TitleScene");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Player"))
+            LoadingSceneManager.LoadScene(m_SceneName);
     }
 }

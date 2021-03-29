@@ -7,9 +7,6 @@ using UnityEngine.EventSystems;
 public class BuildPanel : MonoBehaviour
 {
     //
-    public Building.BUILDING m_eBuilding;
-
-    //
     private GameObject m_Player;
     private GameObject m_BuildingArm;
     private GameObject m_Building;
@@ -27,6 +24,8 @@ public class BuildPanel : MonoBehaviour
     public GameObject Building;
 
     // 실제 변수
+    public Building.BUILDING m_eBuilding;
+
     private Image m_BuildingImage;
     private Text m_BuildingName;
     private Text m_BuildingContext;
@@ -174,7 +173,7 @@ public class BuildPanel : MonoBehaviour
                 return;
 
             RaycastHit Hit;
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out Hit, 100))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out Hit, 100, ~(1 << LayerMask.NameToLayer("Player"))))
             {
                 if (Hit.collider.gameObject.GetComponent<Building>())
                 {
@@ -192,6 +191,9 @@ public class BuildPanel : MonoBehaviour
                 else
                     ResetUI();
             }
+
+            m_UIManager.SetRebuild(false);
+            m_UIManager.SetUpgrade(false);
         }
     }
 
@@ -223,7 +225,7 @@ public class BuildPanel : MonoBehaviour
         }
 
         m_UIManager.SetPhoneCanvasActive(false);
-        Cursor.visible = false;
+        m_UIManager.SetRebuild(true);
     }
 
     public void ClickUpgradeButton()
@@ -237,6 +239,8 @@ public class BuildPanel : MonoBehaviour
         m_PlayerProperty.ReduceProperty((PlayerProperty.OBJTYPE)(m_eBuilding + 2), m_MaxUpgradeAmount);
         BuildingScript.SetBuildTime(BuildTime - 9);
         m_UpgradeAmount -= m_MaxUpgradeAmount;
+
+        m_UIManager.SetUpgrade(true);
     }
 
     private void ResetUI()

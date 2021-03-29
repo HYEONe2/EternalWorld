@@ -14,6 +14,10 @@ public class ObjectManager : MonoBehaviour
     List<Transform> m_LevelChildTrans = new List<Transform>();
     List<Material> m_LevelChildMat = new List<Material>();
 
+    private bool m_bCloseEnough;
+
+    public bool GetCloseEnough() { return m_bCloseEnough; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -50,10 +54,14 @@ public class ObjectManager : MonoBehaviour
             m_LevelChildMat.Clear();
             Destroy(m_LevelBoundaryTrans.gameObject);
         }
-        CheckBoundaryDistance();
+
+        if (CheckBoundaryDistance())
+            m_bCloseEnough = true;
+        else
+            m_bCloseEnough = false;
     }
 
-    private void RespawnTrees(int amount)
+    public void RespawnTrees(int amount)
     {
         Vector3 TreeBoundaryLoc = m_TreeBoundaryTrans.position;
         Vector3 TreeBoundaryScale = m_TreeBoundaryTrans.localScale;
@@ -67,7 +75,7 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
-    private void RespawnRocks(int amount)
+    public void RespawnRocks(int amount)
     {
         Vector3 TreeBoundaryLoc = m_TreeBoundaryTrans.position;
         Vector3 TreeBoundaryScale = m_TreeBoundaryTrans.localScale;
@@ -82,7 +90,7 @@ public class ObjectManager : MonoBehaviour
         }
     }
 
-    private void CheckBoundaryDistance()
+    private bool CheckBoundaryDistance()
     {
         Vector3 PlayerPos = m_PlayerTrans.position;
 
@@ -96,11 +104,16 @@ public class ObjectManager : MonoBehaviour
 
             if (Dist < 4f)
             {
-                SetTransparent(m_LevelChildMat[i], 1f -(Dist - 3f));
+                SetTransparent(m_LevelChildMat[i], 1f - (Dist - 3f));
+                return true;
             }
             else
+            {
                 SetTransparent(m_LevelChildMat[i], 0f);
+            }
         }
+
+        return false;
     }
 
     private void SetTransparent(Material material, float alpha)
@@ -115,5 +128,12 @@ public class ObjectManager : MonoBehaviour
         material.renderQueue = 3000;
 
         material.color = new Color(0f, 0f, 0f, alpha);
+    }
+
+    public void DestroyLevelBoundary()
+    {
+        m_LevelChildTrans.Clear();
+        m_LevelChildMat.Clear();
+        Destroy(m_LevelBoundaryTrans.gameObject);
     }
 }

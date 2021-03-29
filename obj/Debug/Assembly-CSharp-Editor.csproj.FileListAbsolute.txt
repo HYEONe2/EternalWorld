@@ -584,7 +584,6 @@ E:\Unity\EternalWorld\Temp\bin\Debug\Microsoft.Win32.Primitives.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\mscorlib.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\netstandard.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\nunit.framework.dll
-E:\Unity\EternalWorld\Temp\bin\Debug\SyntaxTree.VisualStudio.Unity.Bridge.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.AppContext.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Collections.Concurrent.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\System.Collections.dll
@@ -779,7 +778,6 @@ E:\Unity\EternalWorld\Temp\bin\Debug\Unity.Cecil.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\Unity.SerializationLogic.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\ExCSS.Unity.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\Unity.Legacy.NRefactory.dll
-E:\Unity\EternalWorld\Temp\bin\Debug\SyntaxTree.VisualStudio.Unity.Messaging.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\Boo.Lang.Compiler.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\Boo.Lang.PatternMatching.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\Boo.Lang.Parser.dll
