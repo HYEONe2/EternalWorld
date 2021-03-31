@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -25,9 +26,9 @@ public class Player : MonoBehaviour
     // Values
     public enum ABILITY { ABIL_FIRE, ABIL_WATER, ABIL_GRASS, ABIL_END};
     private ABILITY m_eAbility;
+    private string m_SceneName;
 
     private Vector3 m_Pos;
-
     private float m_MoveSpeed;
     private float m_RotateSpeed;
 
@@ -63,6 +64,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        LateInit();
         if (Cursor.visible)
             ResetAnimator();
 
@@ -121,6 +123,20 @@ public class Player : MonoBehaviour
         m_bInitialEquip[0] = false;
         m_bInitialEquip[1] = false;
         m_bSwing = false;
+    }
+
+    private void LateInit()
+    {
+        if (m_SceneName == SceneManager.GetActiveScene().name)
+            return;
+
+        m_SceneName = SceneManager.GetActiveScene().name;
+        switch(m_SceneName)
+        {
+            case "MainScene":
+                transform.position = new Vector3(0, 0, 0);
+                break;
+        }
     }
 
     private void UpdateMovement()
@@ -423,6 +439,8 @@ public class Player : MonoBehaviour
 
     private void ResetAnimator()
     {
+        m_bSwing = false;
+
         m_Animator.SetFloat("MoveSpeed", 0);
         m_Animator.SetBool("UseShift", false);
         m_Animator.SetBool("UseSpace", false);

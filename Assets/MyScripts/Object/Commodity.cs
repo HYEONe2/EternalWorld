@@ -7,8 +7,10 @@ public class Commodity : MonoBehaviour
     public PlayerProperty.OBJTYPE m_eType;
 
     private Player m_Player;
+    private PlayerProperty m_PlayerProperty;
     private GameObject m_PlayerEquip;
     private Animator m_PlayerAnimator;
+
     private GameObject m_HurtParticle;
     private GameObject m_Particle;
     private GameObject m_Reward;
@@ -16,7 +18,9 @@ public class Commodity : MonoBehaviour
     private bool m_bLateInit;
     private bool m_bCheckAttack;
     private bool m_bCheckHurt;
+
     private int m_HP;
+    private int m_Exp;
 
     // Function
     public void SetCheckAttack(bool bCheck) { m_bCheckAttack = bCheck; }
@@ -24,15 +28,20 @@ public class Commodity : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (!m_Player) m_Player = GameObject.Find("Player").GetComponent<Player>();
-        if (!m_PlayerEquip) m_PlayerEquip = GameObject.FindWithTag("Equipment");
-        if (!m_PlayerAnimator) m_PlayerAnimator = GameObject.Find("PlayerMesh").GetComponent<Animator>();
-        if (!m_Particle) m_Particle = Resources.Load<GameObject>("Particle/Commodity/WFX_Explosion Simple");
+        GameObject Player = GameObject.Find("Player");
+
+        m_Player = Player.GetComponent<Player>();
+        m_PlayerProperty = Player.GetComponent<PlayerProperty>();
+        m_PlayerEquip = GameObject.FindWithTag("Equipment");
+        m_PlayerAnimator = GameObject.Find("PlayerMesh").GetComponent<Animator>();
+        m_Particle = Resources.Load<GameObject>("Particle/Commodity/WFX_Explosion Simple");
 
         m_bLateInit = false;
         m_bCheckAttack = false;
         m_bCheckHurt = false;
+
         m_HP = 5;
+        m_Exp = 10;
     }
 
     // Update is called once per frame
@@ -78,6 +87,7 @@ public class Commodity : MonoBehaviour
 
             if (m_bCheckAttack && !m_bCheckHurt)
             {
+                m_PlayerProperty.AddExperience(m_Exp);
                 Instantiate(m_HurtParticle, other.transform.position, new Quaternion(0, 0, 0, 0));
                 m_bCheckHurt = true;
             }

@@ -146,6 +146,7 @@ public class ShopPanel : MonoBehaviour
 
             m_PlayerProperty.AddProperty(m_eType, m_Amount);
             m_PlayerProperty.SetCoin(m_Coin - (m_OnePerCoin * m_Amount));
+            m_PlayerProperty.AddExperience(10 * m_Amount);
 
             m_UIManager.GetShopUIScript().UpdateGauge(10 * m_Amount);
         }
@@ -159,6 +160,7 @@ public class ShopPanel : MonoBehaviour
 
             m_PlayerProperty.ReduceProperty(m_eType, m_Amount);
             m_PlayerProperty.SetCoin(m_Coin + (m_OnePerCoin * m_Amount));
+            m_PlayerProperty.AddExperience(10 * m_Amount);
 
             m_UIManager.GetShopUIScript().UpdateGauge(10 * m_Amount);
         }

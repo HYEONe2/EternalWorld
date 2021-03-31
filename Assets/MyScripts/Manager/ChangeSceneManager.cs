@@ -15,16 +15,23 @@ public class ChangeSceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("9"))
-            LoadingSceneManager.LoadScene("TutorialScene");
-
         if (Input.GetKeyDown("0"))
-            LoadingSceneManager.LoadScene("TitleScene");
+            LoadingSceneManager.LoadScene("MainScene");
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player"))
             LoadingSceneManager.LoadScene(m_SceneName);
+    }
+
+    public void StartGame()
+    {
+        LoadingSceneManager.LoadScene(m_SceneName);
+    }
+
+    public void EndGame()
+    {
+        Application.Quit();
     }
 }

@@ -24,14 +24,21 @@ public class UIManager : MonoBehaviour
 
     private bool m_bRebuild;
     private bool m_bUpgrade;
+    private bool m_bPlayerRebuild;
+    private bool m_bEarnGem;
+    private bool m_bReloadOnce;
 
     public GameObject GetCoinIcon() { return m_CoinIcon; }
     public ShopUI GetShopUIScript() { return m_Shop.GetComponent<ShopUI>(); }
     public PlayerProperty GetPlayerProperty() { return m_PlayerProperty; }
 
     public void SetRebuild(bool bRebuild) { m_bRebuild = bRebuild; }
+    public void SetPlayerRebuild(bool bRebuild) { m_bPlayerRebuild = bRebuild; }
     public void SetUpgrade(bool bUpgrade) { m_bUpgrade = bUpgrade; }
+    public void SetEarnGem(bool bEarn) { m_bEarnGem = bEarn; }
+
     public bool GetRebuildUpgrade() { bool check = (m_bRebuild && m_bUpgrade) ? true : false; return check; }
+    public bool GetEarnGem() { return m_bEarnGem; }
 
     // Start is called before the first frame update
     void Start()
@@ -60,7 +67,8 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateActiveCanvas();
+        if(m_QuestCanvas)
+            UpdateActiveCanvas();
         UpdatePlayerPropertyUI();
     }
 
@@ -74,13 +82,25 @@ public class UIManager : MonoBehaviour
         if (m_QuestCanvas.activeSelf)
         {
             if (m_QuestCanvas.transform.Find("QuestUI").GetComponent<QuestUI>().GetState() == QuestUI.STATE.ASK)
+            {
+                m_PhoneCanvas.SetActive(false);
                 Cursor.visible = true;
+                m_bReloadOnce = true;
+            }
+            else
+            {
+                if (m_bReloadOnce)
+                {
+                    m_PhoneCanvas.SetActive(true);
+                    m_bReloadOnce = false;
+                }
+            }
         }
     }
 
     void UpdatePlayerPropertyUI()
     {
-        m_Player.SetUsePhone(m_bRebuild);
+        m_Player.SetUsePhone(m_bPlayerRebuild);
         m_CoinIcon.transform.Find("Text").GetComponent<Text>().text = m_PlayerProperty.GetCoin() + "";
     }
 

@@ -7,12 +7,23 @@ public class Building : MonoBehaviour
     public enum BUILD{ BUILDING, BUILT, BUILD_END};
     public enum BUILDING { BUILDING_WOOD, BUILDING_STONE, BUILDING_END };
 
-    private BUILD m_eBuild;
-    private BUILDING m_eBuildingType;
+    [System.Serializable]
+    public struct BuildingInfo
+    {
+        public BUILDING m_eBuildingType;
+        public float m_BuildTime;
+        public int m_BuildAmount;
+        public int m_UpgradeAmount;
+        public int m_Exp;
+    };
 
-    private float m_BuildTime;
-    private int m_BuildAmount;
-    private int m_UpgradeAmount;
+    private BUILD m_eBuild;
+    private BuildingInfo m_Info;
+
+    private UIManager m_UIManager;
+    private Transform m_BuildingArmTrans;
+    private Transform m_CamArmTrans;
+    private PlayerProperty m_PlayerProperty;
 
     private Material m_MeshMaterial;
     private Color m_MeshOriginColor;
@@ -22,24 +33,15 @@ public class Building : MonoBehaviour
     private RaycastHit m_Hit;
     private float m_BoundaryY;
 
-    private UIManager m_UIManager;
-    private Transform m_BuildingArmTrans;
-    private Transform m_CamArmTrans;
-    private PlayerProperty m_PlayerProperty;
-
     private float m_CheckTime;
     private bool m_bCanTakeReward;
     private bool m_bIsClicked;
 
     public void SetBuild(BUILD build) { m_eBuild = build; if (m_eBuild == BUILD.BUILDING) m_BuildingGuide.SetActive(true); }
-    public void SetBuildingType(BUILDING type) { m_eBuildingType = type; }
-    public void SetBuildTime(float time) { m_BuildTime = time; }
-    public void SetBuildAmount(int amount) { m_BuildAmount = amount; }
-    public void SetUpgradeAmount(int amount) { m_UpgradeAmount = amount; }
+    public void SetBuildingInfo(BuildingInfo info) { m_Info = info; }
 
     public BUILD GetBuild() { return m_eBuild; }
-    public BUILDING GetBuildingType() { return m_eBuildingType; }
-    public float GetBuildTime() { return m_BuildTime; }
+    public BuildingInfo GetBuildingInfo() { return m_Info; }
     public void SetIsClicked(bool clicked) { m_bIsClicked = clicked; }
 
     // Start is called before the first frame update
@@ -47,16 +49,17 @@ public class Building : MonoBehaviour
     {
         m_eBuild = BUILD.BUILDING;
 
+        GameObject Player = GameObject.Find("Player");
+        m_UIManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+        m_BuildingArmTrans = Player.transform.Find("BuildingArm");
+        m_CamArmTrans = Player.transform.Find("CameraArm");
+        m_PlayerProperty = Player.GetComponent<PlayerProperty>();
+
         m_MeshMaterial = transform.GetChild(0).GetComponent<MeshRenderer>().material;
         m_MeshOriginColor = m_MeshMaterial.color;
 
         m_BuildingGuide = Instantiate(Resources.Load<GameObject>("Object/Building/BuildingGuide"), new Vector3(0,0,0), new Quaternion(0,0,0,0));
         m_BuildingGuide.transform.SetParent(this.transform);
-
-        m_UIManager = GameObject.Find("UIManager").GetComponent<UIManager>();
-        m_BuildingArmTrans = GameObject.Find("Player").transform.Find("BuildingArm");
-        m_CamArmTrans = GameObject.Find("Player").transform.Find("CameraArm");
-        m_PlayerProperty = GameObject.Find("Player").GetComponent<PlayerProperty>();
 
         Vector3 Look = GameObject.Find("Player").transform.position - m_CamArmTrans.transform.position;
         Look.y = 0;
@@ -67,7 +70,7 @@ public class Building : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch(m_eBuild)
+        switch (m_eBuild)
         {
             case BUILD.BUILDING:
                 UpdateBuilding();
@@ -87,8 +90,9 @@ public class Building : MonoBehaviour
         {
             if(Input.GetKey(KeyCode.F))
             {
-                m_PlayerProperty.AddProperty((PlayerProperty.OBJTYPE)m_eBuildingType, 1);
-                m_UIManager.SetNoticeUI((PlayerProperty.OBJTYPE)m_eBuildingType, 1);
+                m_PlayerProperty.AddProperty((PlayerProperty.OBJTYPE)m_Info.m_eBuildingType, 1);
+                m_UIManager.SetNoticeUI((PlayerProperty.OBJTYPE)m_Info.m_eBuildingType, 1);
+                m_PlayerProperty.AddExperience(m_Info.m_Exp * m_Info.m_UpgradeAmount);
                 SetOriginOpaque();
 
                 m_CheckTime = 0;
@@ -132,6 +136,11 @@ public class Building : MonoBehaviour
         transform.SetParent(null);
         m_BuildingGuide.SetActive(false);
 
+        m_UIManager.SetPlayerRebuild(false);
+        m_UIManager.SetRebuild(true);
+
+        m_PlayerProperty.AddExperience(m_Info.m_Exp * 10);
+
         m_eBuild = BUILD.BUILT;
     }
 
@@ -174,7 +183,7 @@ public class Building : MonoBehaviour
     /// UpdateBuilt ///
     private void SetTimer()
     {
-        if (m_CheckTime >= m_BuildTime)
+        if (m_CheckTime >= m_Info.m_BuildTime)
         {
             m_bCanTakeReward = true;
 

@@ -69,6 +69,9 @@ public class QuestUI : MonoBehaviour
     {
         UpdateAIImages();
         UpdateQuestText();
+
+        if (Input.GetKeyDown(KeyCode.P))
+            m_PlayerProperty.AddProperty(PlayerProperty.OBJTYPE.OBJ_STONE, 5);
     }
 
     private void OnDestroy()
@@ -108,6 +111,7 @@ public class QuestUI : MonoBehaviour
         List<string> SeventeenthTalking = new List<string>();
         List<string> EighteenthTalking = new List<string>();
         List<string> NineteenthTalking = new List<string>();
+        List<string> TwelvethTalking = new List<string>();
 
         //1 ASK
         FirstTalking.Add("어서오세요. Player님.");
@@ -174,10 +178,6 @@ public class QuestUI : MonoBehaviour
         TenthTalking.Add("이제 제가 생성해드릴 나무와 돌을 5개 채집해주십시오.");
         m_TalkingText.Add(TenthTalking);
 
-        //SecondTalking.Add("궁금적인 목표는 Player님만의 마을 구축과 Player 성장입니다.");
-        //SecondTalking.Add("마을 구축을 위해선 건물을 건설해야 하고 Player 성장을 위해서 Level을 올려야 합니다.");
-        //SecondTalking.Add("건물 건설을 위해 필요한 재료들은 제공되는 영토에서 얻을 수 있지만 딱 한 번만 재화를 얻을 수 있기에 재화 생산 건물을 지어야 합니다");
-        //11
         EleventhTalking.Add("잘하셨습니다.");
         EleventhTalking.Add("지금 한 작업은 재화 획득의 첫 번째 방법인 나의 영토 내의 오브젝트로부터 재화를 수집하는 방법입니다.");
         EleventhTalking.Add("두 번째 방법인 건물 건설을 통한 재화 획득을 해보도록 합시다.");
@@ -198,7 +198,7 @@ public class QuestUI : MonoBehaviour
         FourteenthTalking.Add("잘하셨습니다.");
         FourteenthTalking.Add("지어진 건물을 클릭하면 해당 건물에 투명화가 적용되며 지목화가 됩니다.");
         FourteenthTalking.Add("지목된 건물은 어플에 정보가 뜨게 되고 건물 재배치와 업그레이드가 가능하게 됩니다.");
-        FourteenthTalking.Add("건물 재배치로 위치를 옮겨보고 업그레이드까지 진행하여 보십시오.");
+        FourteenthTalking.Add("건물 재배치로 위치를 옮겨보고 원석을 집어 업그레이드까지 진행하여 보십시오.");
         FourteenthTalking.Add("참고로 건물 재배치는 시야 회전을 통한 위치 조절과 마우스 휠을 통해 건물 자체를 회전시킬 수 있습니다.");
         m_TalkingText.Add(FourteenthTalking);
 
@@ -213,31 +213,40 @@ public class QuestUI : MonoBehaviour
         //16
         SixteenthTalking.Add("잘하셨습니다.");
         SixteenthTalking.Add("지금까지 경험치를 얻기 위한 재화 습득의 두 가지 방법과 건물 짓기에 대해 알아보았습니다.");
-        SixteenthTalking.Add("이제 마지막으로 던전 파밍을 알려드리기 전에 Player 능력을 고르는 시간을 갖도록 하겠습니다.");
-        SixteenthTalking.Add("어떤 능력을 습득하시겠습니까?");
+        SixteenthTalking.Add("이제 세 번째 경험치 획득 방법인 상점 이용에 대해 알려드리겠습니다.");
+        SixteenthTalking.Add("상점은 판매와 구입이 가능하며 상점 이용을 하다보면 업그레이드 원석을 얻을 수도 있습니다.");
+        SixteenthTalking.Add("판매와 구입은 우측 상단에 있는 버튼을 통해 변경할 수 있습니다.");
+        SixteenthTalking.Add("그럼 판매와 구입 활동을 통하여 업그레이드 원석을 하나 얻어보십시오.");
         m_TalkingText.Add(SixteenthTalking);
 
         //17
         SeventeenthTalking.Add("좋습니다.");
-        SeventeenthTalking.Add("던전 파밍을 위해 다음 영토를 확장해야 하기 때문에 레벨을 임의로 올려드리겠습니다.");
-        SeventeenthTalking.Add("이제 F 버튼을 통해 무기를 집고 마우스 왼 클릭으로 근접 공격을 해보십시오.");
+        SeventeenthTalking.Add("이제 경험치를 얻을 수 있는 마지막 방법인 던전 파밍에 대한 안내를 해드리겠습니다..");
+        SeventeenthTalking.Add("던전 파밍을 알려드리기 전 Player 능력을 고르는 시간을 갖도록 하겠습니다.");
+        SeventeenthTalking.Add("어떤 능력을 습득하시겠습니까?");
         m_TalkingText.Add(SeventeenthTalking);
 
-        //18
-        EighteenthTalking.Add("잘하셨습니다.");
-        EighteenthTalking.Add("추가로 말씀드리자면 무기 또한 도끼와 비슷하게 2번 버튼을 통해 장착과 해제하실 수 있습니다.");
-        EighteenthTalking.Add("이제 몬스터 타겟팅에 대해 설명해드리도록 하겠습니다.");
-        EighteenthTalking.Add("우클릭을 하면 일정 거리 안 몬스터 중 하나에게 타겟팅이 적용되게 됩니다.");
-        EighteenthTalking.Add("타겟팅을 사용하게 되면 플레이어가 바라보는 방향으로 시전되는 스킬 사용이 편리해집니다.");
-        EighteenthTalking.Add("우클릭을 통해 타겟팅 후, Q 키를 눌러 원거리 스킬을 사용하여 보십시오.");
+        //17
+        EighteenthTalking.Add("좋습니다.");
+        EighteenthTalking.Add("던전 파밍을 위해 다음 영토를 확장해야 하기 때문에 레벨을 임의로 올려드리겠습니다.");
+        EighteenthTalking.Add("이제 F 버튼을 통해 무기를 집고 마우스 왼 클릭으로 근접 공격을 해보십시오.");
         m_TalkingText.Add(EighteenthTalking);
 
-        //19
+        //18
         NineteenthTalking.Add("잘하셨습니다.");
-        NineteenthTalking.Add("E키와 R키로 각각 다른 스킬을 사용할 수 있습니다.");
-        NineteenthTalking.Add("Player님께서 원하시는 만큼 여러 기능들을 체험하시고 체험이 끝나면 이 튜토리얼 방 끝에 있는 문으로 와주십시오.");
-        NineteenthTalking.Add("Player님만의 세계를 구축할 수 있도록 준비해놓도록 하겠습니다.");
+        NineteenthTalking.Add("추가로 말씀드리자면 무기 또한 도끼와 비슷하게 2번 버튼을 통해 장착과 해제하실 수 있습니다.");
+        NineteenthTalking.Add("이제 몬스터 타겟팅에 대해 설명해드리도록 하겠습니다.");
+        NineteenthTalking.Add("우클릭을 하면 일정 거리 안 몬스터 중 하나에게 타겟팅이 적용되게 됩니다.");
+        NineteenthTalking.Add("타겟팅을 사용하게 되면 플레이어가 바라보는 방향으로 시전되는 스킬 사용이 편리해집니다.");
+        NineteenthTalking.Add("우클릭을 통해 타겟팅 후, q 키를 눌러 원거리 스킬을 사용하여 보십시오.");
         m_TalkingText.Add(NineteenthTalking);
+
+        //19
+        TwelvethTalking.Add("잘하셨습니다.");
+        TwelvethTalking.Add("E키와 R키로 각각 다른 스킬을 사용할 수 있습니다.");
+        TwelvethTalking.Add("Player님께서 원하시는 만큼 여러 기능들을 체험하시고 체험이 끝나면 이 튜토리얼 방 끝에 있는 문으로 와주십시오.");
+        TwelvethTalking.Add("Player님만의 세계를 구축할 수 있도록 준비해놓도록 하겠습니다.");
+        m_TalkingText.Add(TwelvethTalking);
     }
 
     private void UpdateAIImages()
@@ -290,7 +299,7 @@ public class QuestUI : MonoBehaviour
         {
             // ASK
             case 1:
-            case 16:
+            case 17:
                 {
                     m_bFinishSpawn = false;
                     m_bFinishTask = false;
@@ -313,8 +322,9 @@ public class QuestUI : MonoBehaviour
             case 13:
             case 14:
             case 15:
-            case 17:
+            case 16:
             case 18:
+            case 19:
                 {
                     if (!m_bFinishTask)
                         return;
@@ -364,7 +374,7 @@ public class QuestUI : MonoBehaviour
         switch (m_CheckEvent)
         {
             case 1:
-            case 16:
+            case 17:
                 if (!m_bFinishTask)
                     m_eState = STATE.ASK;
                 else
@@ -373,6 +383,11 @@ public class QuestUI : MonoBehaviour
                     {
                         Cursor.visible = false;
                         m_Answer.SetActive(false);
+                    }
+                    else if(m_AnswerOnce.activeSelf)
+                    {
+                        Cursor.visible = false;
+                        m_AnswerOnce.SetActive(false);
                     }
                     m_eState = STATE.TALK;
                 }
@@ -391,8 +406,9 @@ public class QuestUI : MonoBehaviour
             case 13:
             case 14:
             case 15:
-            case 17:
+            case 16:
             case 18:
+            case 19:
                 {
                     if (!m_bFinishTask)
                         m_eState = STATE.QUEST;
@@ -424,13 +440,13 @@ public class QuestUI : MonoBehaviour
                     }
                 }
                 break;
-            case 16:
+            case 17:
                 {
-                    if (m_AnswerOnce.activeSelf)
-                        return;
-
-                    Cursor.visible = true;
-                    m_AnswerOnce.SetActive(true);
+                    if (!m_AnswerOnce.activeSelf)
+                    {
+                        Cursor.visible = true;
+                        m_AnswerOnce.SetActive(true);
+                    }
                 }
                 break;
         }
@@ -565,12 +581,9 @@ public class QuestUI : MonoBehaviour
                         m_bFinishTask = true;
                 }
                 break;
-            case 17:
+            case 16:
                 {
-                    if (!m_Player.GetActive("Weapon"))
-                        return;
-
-                    if (Input.GetMouseButtonDown(0))
+                    if (m_UIManager.GetEarnGem())
                         m_bFinishTask = true;
                 }
                 break;
@@ -579,7 +592,16 @@ public class QuestUI : MonoBehaviour
                     if (!m_Player.GetActive("Weapon"))
                         return;
 
-                    if(Input.GetMouseButton(1))
+                    if (Input.GetMouseButtonDown(0))
+                        m_bFinishTask = true;
+                }
+                break;
+            case 19:
+                {
+                    if (!m_Player.GetActive("Weapon"))
+                        return;
+
+                    if (Input.GetMouseButton(1))
                     {
                         if (Input.GetKeyDown(KeyCode.Q))
                             m_bFinishTask = true;
@@ -599,7 +621,7 @@ public class QuestUI : MonoBehaviour
             m_ObjMgrScript.RespawnTrees(3);
             m_ObjMgrScript.RespawnRocks(3);
         }
-        else if (m_CheckEvent == 17 && m_TextCnt == 0)
+        else if (m_CheckEvent == 18 && m_TextCnt == 0)
             m_ObjMgrScript.DestroyLevelBoundary();
         else
             return;

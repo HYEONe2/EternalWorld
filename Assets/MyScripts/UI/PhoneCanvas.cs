@@ -18,6 +18,7 @@ public class PhoneCanvas : MonoBehaviour
         if (!m_PhoneTrans) m_PhoneTrans = m_Phone.transform;
 
         m_bUsePhone = false;
+
         Cursor.visible = false;
     }
 

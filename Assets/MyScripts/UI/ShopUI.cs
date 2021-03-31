@@ -100,6 +100,8 @@ public class ShopUI : MonoBehaviour
                 m_RewardImage.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Cut Sapphire");
                 break;
         }
+
+        m_UIManager.SetEarnGem(true);
     }
 
     public void UpdateGauge(int gauge)

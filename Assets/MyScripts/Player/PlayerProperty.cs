@@ -13,6 +13,10 @@ public class PlayerProperty : MonoBehaviour
         OBJ_END
     };
 
+    private int m_Level;
+    private int m_Exp;
+    private int m_MaxExp;
+
     private List<int> m_Property = new List<int>();
     private int m_Coin;
 
@@ -26,14 +30,30 @@ public class PlayerProperty : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        m_Level = 1;
+        m_Exp = 0;
+        m_MaxExp = 100;
+
         for (int i = 0; i < (int)OBJTYPE.OBJ_END; ++i)
             m_Property.Add(0);
-
         m_Coin = 500;
     }
 
     private void OnDestroy()
     {
         m_Property.Clear();
+    }
+
+    public void AddExperience(int exp)
+    {
+        m_Exp += exp;
+
+        if(m_Exp >= m_MaxExp * m_Level)
+        {
+            m_Exp = m_MaxExp * m_Level - m_Exp;
+            ++m_Level;
+        }
+
+        Debug.Log(m_Level + ": " + m_Exp);
     }
 }
