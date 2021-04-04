@@ -19,6 +19,9 @@ public class LoadingSceneManager : MonoBehaviour
 
     public static void LoadScene(string sceneName)
     {
+        if (m_CurScene == sceneName)
+            return;
+
         m_CurScene = SceneManager.GetActiveScene().name;
         m_NextScene = sceneName;
 
@@ -54,6 +57,10 @@ public class LoadingSceneManager : MonoBehaviour
                 {
                     // Loading End
                     op.allowSceneActivation = true;
+
+                    if(m_NextScene == "MainScene")
+                    {
+                    }
 
                     yield break;
                 }

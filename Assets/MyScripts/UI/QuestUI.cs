@@ -617,10 +617,7 @@ public class QuestUI : MonoBehaviour
             return;
 
         if (m_CheckEvent == 10 && m_TextCnt == 0)
-        {
-            m_ObjMgrScript.RespawnTrees(3);
-            m_ObjMgrScript.RespawnRocks(3);
-        }
+            m_ObjMgrScript.RespawnObjects(3, 3);
         else if (m_CheckEvent == 18 && m_TextCnt == 0)
             m_ObjMgrScript.DestroyLevelBoundary();
         else

@@ -9,8 +9,9 @@ TagManager:
   - Quest
   - Floor
   - Weapon
-  - Boundary
   - Monster
+  - TreeBoundary
+  - LevelBoundary
   layers:
   - Default
   - TransparentFX

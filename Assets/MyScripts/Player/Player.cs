@@ -45,6 +45,9 @@ public class Player : MonoBehaviour
     public void SetNearObject(GameObject nearObj) { m_NearObject = nearObj; }
     public void SetSkillObject(GameObject skillObj) { m_SkillObject = skillObj; }
     public void SetSwing(bool bSwing) { m_bSwing = bSwing; }
+    public void SetUsePhone(bool use) { m_bUsePhone = use; }
+    public void SetPosition(Vector3 pos) { m_Pos = pos; }
+    public void SetSceneName(string name) { m_SceneName = name; }
 
     public GameObject GetNearObject() { return m_NearObject; }
     public GameObject GetSkillObject() { return m_SkillObject; }
@@ -52,7 +55,6 @@ public class Player : MonoBehaviour
 
     public ABILITY GetAbility() { return m_eAbility; }
     public bool GetAttack() { return m_bSwing; }
-    public void SetUsePhone(bool use) { m_bUsePhone = use; }
 
     // Start is called before the first frame update
     void Start()
@@ -130,11 +132,17 @@ public class Player : MonoBehaviour
         if (m_SceneName == SceneManager.GetActiveScene().name)
             return;
 
-        m_SceneName = SceneManager.GetActiveScene().name;
-        switch(m_SceneName)
+        switch (SceneManager.GetActiveScene().name)
         {
             case "MainScene":
-                transform.position = new Vector3(0, 0, 0);
+                Debug.Log("MainScene");
+                m_Pos.x = 0;
+                m_Pos.z = 0;
+                m_Pos.y += m_Gravity * Time.deltaTime * 0.8f;
+                transform.position = new Vector3(0, m_Pos.y, 0);
+                if (m_Pos.y<=-10)
+                    m_SceneName = SceneManager.GetActiveScene().name;
+
                 break;
         }
     }
@@ -153,10 +161,15 @@ public class Player : MonoBehaviour
         {
             Jump();
             m_Animator.SetBool("IsGrounded", true);
+            m_SceneName = SceneManager.GetActiveScene().name;
         }
 
         Move();
-        m_Controller.Move(m_Pos * m_MoveSpeed * Time.deltaTime);
+
+        if (m_SceneName == SceneManager.GetActiveScene().name)
+            m_Controller.Move(m_Pos * m_MoveSpeed * Time.deltaTime);
+        //else
+        //    m_Controller.Move(new Vector3(0, -1f, 0) * m_MoveSpeed * Time.deltaTime);
     }
 
     private void UpdateKeyInput()

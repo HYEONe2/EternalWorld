@@ -26,6 +26,9 @@ public class PlayerProperty : MonoBehaviour
 
     public int GetCoin() { return m_Coin; }
     public void SetCoin(int coin) { m_Coin = coin; }
+    public int GetLevel() { return m_Level; }
+    public int GetExp() { return m_Exp; }
+    public int GetMaxExp() { return m_MaxExp; }
 
     // Start is called before the first frame update
     void Start()
