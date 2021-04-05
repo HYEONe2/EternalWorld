@@ -111,6 +111,13 @@
      <Compile Include="Assets\MyAssets\Particle\Object\Commodity\JMO Assets\WarFX\Spawn System\CFX_SpawnSystem.cs" />
      <Compile Include="Assets\MyAssets\Particle\Player\KY_effects\Script\ConGUI.cs" />
      <Compile Include="Assets\MyAssets\Particle\Player\KY_effects\Script\Lighting.cs" />
+     <Compile Include="Assets\MyAssets\Particle\Player\PyroParticles\Prefab\Script\FireBaseScript.cs" />
+     <Compile Include="Assets\MyAssets\Particle\Player\PyroParticles\Prefab\Script\FireCollisionForwardScript.cs" />
+     <Compile Include="Assets\MyAssets\Particle\Player\PyroParticles\Prefab\Script\FireConstantBaseScript.cs" />
+     <Compile Include="Assets\MyAssets\Particle\Player\PyroParticles\Prefab\Script\FireLightScript.cs" />
+     <Compile Include="Assets\MyAssets\Particle\Player\PyroParticles\Prefab\Script\FireProjectileScript.cs" />
+     <Compile Include="Assets\MyAssets\Particle\Player\PyroParticles\Prefab\Script\MeteorSwarmScript.cs" />
+     <Compile Include="Assets\MyAssets\Particle\Player\PyroParticles\Prefab\Script\SingleLineAttribute.cs" />
      <Compile Include="Assets\MyScripts\Building\Building.cs" />
      <Compile Include="Assets\MyScripts\Building\BuildingGuide.cs" />
      <Compile Include="Assets\MyScripts\Camera\PlayerCamera.cs" />
@@ -131,6 +138,13 @@
      <Compile Include="Assets\MyScripts\Player\PlayerAnimationEvent.cs" />
      <Compile Include="Assets\MyScripts\Player\PlayerProperty.cs" />
      <Compile Include="Assets\MyScripts\Player\Skill\MagicBall.cs" />
+     <Compile Include="Assets\MyScripts\Player\Skill\MagicBomb.cs" />
+     <Compile Include="Assets\MyScripts\Player\Skill\MagicCircle.cs" />
+     <Compile Include="Assets\MyScripts\Player\Skill\MagicSeed.cs" />
+     <Compile Include="Assets\MyScripts\Player\Skill\MagicSeedBoundary.cs" />
+     <Compile Include="Assets\MyScripts\Player\Skill\MagicShield.cs" />
+     <Compile Include="Assets\MyScripts\Player\Skill\MagicShieldWave.cs" />
+     <Compile Include="Assets\MyScripts\Player\Skill\MagicWall.cs" />
      <Compile Include="Assets\MyScripts\UI\BuildPanel.cs" />
      <Compile Include="Assets\MyScripts\UI\CommodityText.cs" />
      <Compile Include="Assets\MyScripts\UI\NoticeUI.cs" />
@@ -168,6 +182,8 @@
      <None Include="Assets\MyAssets\Particle\Object\Commodity\JMO Assets\WarFX\Shaders\WFX_S Alpha-Specular TintColor.shader" />
      <None Include="Assets\MyAssets\Environment\NatureStarterKit2\Standard Assets\Effects\ImageEffects\Shaders\SunShaftsComposite.shader" />
      <None Include="Assets\MyAssets\Environment\NatureStarterKit2\Standard Assets\Effects\ImageEffects\Shaders\ConvertDepth.shader" />
+     <None Include="Assets\MyAssets\Environment\Dungeon\Toby Fredson\Rocky Hills Environment - Light Pack\Legacy Project\Legacy Project_Read Me!.txt" />
+     <None Include="Assets\MyAssets\Particle\Player\PyroParticles\Prefab\Materials\AdditiveTintable.shader" />
      <None Include="Assets\MyAssets\Environment\NatureStarterKit2\Standard Assets\Effects\ImageEffects\Shaders\TwirlEffect.shader" />
      <None Include="Assets\MyAssets\Particle\Object\Commodity\JMO Assets\WarFX\Shaders\WFX_S Add Scroll.shader" />
      <None Include="Assets\MyAssets\Particle\Player\KY_effects\MagicEffectsPackFree\ReadMe.txt" />

@@ -208,4 +208,22 @@ public class UIManager : MonoBehaviour
                 return false;
         }
     }
+
+    public void LoadingSetting(bool active)
+    {
+        m_PhoneCanvas.SetActive(active);
+        m_PlayerCanvas.SetActive(active);
+    }
+
+    public void ResetSetting()
+    {
+        m_PhoneCanvas.GetComponent<PhoneCanvas>().ResetSetting();
+
+        m_Inventory.SetActive(false);
+        m_Shop.SetActive(false);
+        m_Build.SetActive(false);
+
+        m_ReturnIcon.SetActive(false);
+        m_Menu.SetActive(true);
+    }
 }

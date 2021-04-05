@@ -45,12 +45,18 @@ public class Weapon : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!m_MeshFilter.sharedMesh)
+            return;
+
         if (other.CompareTag("Player"))
             m_Player.SetNearObject(this.gameObject);
     }
 
     private void OnTriggerExit(Collider other)
     {
+        if (!m_MeshFilter.sharedMesh)
+            return;
+
         if (other.CompareTag("Player"))
             m_Player.SetNearObject(null);
     }

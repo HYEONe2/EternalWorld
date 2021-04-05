@@ -58,11 +58,27 @@ public class LoadingSceneManager : MonoBehaviour
                     // Loading End
                     op.allowSceneActivation = true;
 
-                    if(m_NextScene == "MainScene")
+                    if (m_NextScene == "MainScene")
                     {
+                        UIManager uimanager = GameObject.Find("UIManager").GetComponent<UIManager>();
+                        if (uimanager)
+                        {
+                            uimanager.LoadingSetting(true);
+                            uimanager.ResetSetting();
+                        }
                     }
 
                     yield break;
+                }
+                else
+                {
+                    // Loading
+                    if (m_NextScene == "TutorialScene")
+                        yield return null;
+
+                    GameObject UIManager = GameObject.Find("UIManager");
+                    if (UIManager)
+                        UIManager.GetComponent<UIManager>().LoadingSetting(false);
                 }
             }
         }

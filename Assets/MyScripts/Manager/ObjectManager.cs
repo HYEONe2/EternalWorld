@@ -103,6 +103,9 @@ public class ObjectManager : MonoBehaviour
                     case 1:
                         boundary.RespawnObjects(5, 5);
                         break;
+                    case 2:
+                        boundary.RespawnObjects(4, 4);
+                        break;
                 }
             }
         }

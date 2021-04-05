@@ -8,6 +8,7 @@ public class PhoneCanvas : MonoBehaviour
     private Transform m_PhoneTrans;
 
     private bool m_bUsePhone;
+    private Vector3 m_OriginPos;
 
     // Start is called before the first frame update
     void Start()
@@ -18,6 +19,7 @@ public class PhoneCanvas : MonoBehaviour
         if (!m_PhoneTrans) m_PhoneTrans = m_Phone.transform;
 
         m_bUsePhone = false;
+        m_OriginPos = m_PhoneTrans.position;
 
         Cursor.visible = false;
     }
@@ -57,5 +59,13 @@ public class PhoneCanvas : MonoBehaviour
         }
 
         m_PhoneTrans.position -= new Vector3(0f, 500f* Time.deltaTime, 0f);
+    }
+
+    public void ResetSetting()
+    {
+        m_PhoneTrans.position = m_OriginPos;
+        m_bUsePhone = false;
+
+        Cursor.visible = false;
     }
 }

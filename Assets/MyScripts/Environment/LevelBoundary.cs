@@ -6,7 +6,6 @@ public class LevelBoundary : MonoBehaviour
 {
     [SerializeField] public int m_Level;
     private string m_SceneName;
-    private Transform m_Trans;
 
     private bool m_bCloseEnough;
     List<Transform> m_LevelChildTrans = new List<Transform>();
@@ -19,13 +18,14 @@ public class LevelBoundary : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_Trans = transform;
-
-        for (int i = 0; i < m_Trans.childCount; ++i)
+        for (int i = 0; i < transform.childCount; ++i)
         {
-            m_LevelChildTrans.Add(m_Trans.GetChild(i));
-            m_LevelChildMat.Add(m_Trans.GetChild(i).GetComponent<MeshRenderer>().material);
+            m_LevelChildTrans.Add(transform.GetChild(i));
+            m_LevelChildMat.Add(transform.GetChild(i).GetComponent<MeshRenderer>().material);
         }
+
+        for (int i = 0; i < m_LevelChildTrans.Count; ++i)
+            m_LevelChildTrans[i].GetComponent<MeshRenderer>().enabled = false;
 
         m_PlayerTrans = GameObject.Find("Player").transform;
     }
@@ -46,24 +46,56 @@ public class LevelBoundary : MonoBehaviour
 
     private bool CheckBoundaryDistance()
     {
-        Vector3 PlayerPos = m_PlayerTrans.position;
-
-        for (int i = 0; i < m_LevelChildTrans.Count; ++i)
+        if (m_Level == 0)
         {
-            Vector3 ChildTrans = m_LevelChildTrans[i].position;
-            float Dist = (PlayerPos - ChildTrans).magnitude;
+            Vector3 PlayerPos = m_PlayerTrans.position;
 
-            //if(i == 0)
-            //    Debug.Log(Dist);
-
-            if (Dist < 4f)
+            for (int i = 0; i < m_LevelChildTrans.Count; ++i)
             {
-                SetTransparent(m_LevelChildMat[i], 1f - (Dist - 3f));
+                Vector3 ChildTrans = m_LevelChildTrans[i].position;
+                float Dist = (PlayerPos - ChildTrans).magnitude;
+
+                //if(i == 0)
+                //    Debug.Log(Dist);
+                //Debug.Log(Dist);
+
+                if (Dist < 4f)
+                {
+                    m_LevelChildTrans[i].GetComponent<MeshRenderer>().enabled = true;
+                    //SetTransparent(m_LevelChildMat[i], 1f - (Dist - 3f));
+                    SetTransparent(m_LevelChildMat[i], 0.2f);
+                    return true;
+                }
+                else
+                {
+                    m_LevelChildTrans[i].GetComponent<MeshRenderer>().enabled = false;
+                }
+            }
+        }
+        else
+        {
+            if (m_Level != m_PlayerTrans.gameObject.GetComponent<PlayerProperty>().GetLevel() + 1)
+                return false;
+
+            Vector3 PlayerPos = m_PlayerTrans.position;
+            Vector3 Pos = transform.position;
+            Pos.y = PlayerPos.y;
+
+            float Dist = (PlayerPos - Pos).magnitude;
+            if (Dist > 15f * (m_Level - 1) - 1f)
+            {
+                for (int i = 0; i < m_LevelChildTrans.Count; ++i)
+                {
+                    m_LevelChildTrans[i].GetComponent<MeshRenderer>().enabled = true;
+                    //SetTransparent(m_LevelChildMat[i], (1f - (15f - Dist)) * 0.5f);
+                    SetTransparent(m_LevelChildMat[i], 0.2f);
+                }
                 return true;
             }
             else
             {
-                SetTransparent(m_LevelChildMat[i], 0f);
+                for (int i = 0; i < m_LevelChildTrans.Count; ++i)
+                    m_LevelChildTrans[i].GetComponent<MeshRenderer>().enabled = false;
             }
         }
 

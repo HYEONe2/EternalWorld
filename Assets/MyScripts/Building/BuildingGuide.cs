@@ -36,8 +36,10 @@ public class BuildingGuide : MonoBehaviour
     {
         if (!other.CompareTag("Floor"))
         {
-            if (other.CompareTag("Boundary"))
+            if (other.CompareTag("LevelBoundary")
+                || other.CompareTag("TreeBoundary"))
                 return;
+
             m_bOtherTag = true;
         }
     }
@@ -46,8 +48,10 @@ public class BuildingGuide : MonoBehaviour
     {
         if (!other.CompareTag("Floor"))
         {
-            if (other.CompareTag("Boundary"))
+            if (other.CompareTag("LevelBoundary")
+                || other.CompareTag("TreeBoundary"))
                 return;
+
             SetColor(1f, 0f, 0f, 0.3f);
         }
     }
@@ -56,8 +60,10 @@ public class BuildingGuide : MonoBehaviour
     {
         if (!other.CompareTag("Floor"))
         {
-            if (other.CompareTag("Boundary"))
+            if (other.CompareTag("LevelBoundary")
+                || other.CompareTag("TreeBoundary"))
                 return;
+
             m_bOtherTag = false;
         }
     }

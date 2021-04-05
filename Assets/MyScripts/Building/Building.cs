@@ -133,7 +133,7 @@ public class Building : MonoBehaviour
 
         transform.position = m_BuildingGuide.transform.position;
         SetAlpha(1f);
-        transform.SetParent(null);
+        transform.SetParent(GameObject.Find("Buildings").transform);
         m_BuildingGuide.SetActive(false);
 
         m_UIManager.SetPlayerRebuild(false);
@@ -162,7 +162,7 @@ public class Building : MonoBehaviour
             //Debug.Log(m_Hit.collider.tag);
             if (!m_Hit.collider.CompareTag("Untagged"))
                 m_BoundaryY = transform.position.y - m_Hit.distance;
-            Debug.DrawRay(transform.position, -transform.up * m_Hit.distance, Color.red);
+            //Debug.DrawRay(transform.position, -transform.up * m_Hit.distance, Color.red);
         }
 
         m_BuildingGuide.transform.position = new Vector3(NewPos.x, m_BoundaryY, NewPos.z);

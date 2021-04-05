@@ -17,6 +17,8 @@ public class ChangeSceneManager : MonoBehaviour
     {
         if (Input.GetKeyDown("0"))
             LoadingSceneManager.LoadScene(m_SceneName);
+        if (Input.GetKeyDown("8"))
+            LoadingSceneManager.LoadScene("TutorialScene");
     }
 
     private void OnTriggerEnter(Collider other)

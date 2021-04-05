@@ -5,17 +5,18 @@ using UnityEngine;
 public class MagicBall : MonoBehaviour
 {
     private Vector3 m_LookVector;
+    private float m_Speed;
 
     private float m_DestroyTime;
-    private float m_Speed;
 
     public void SetLookVector(Vector3 lookVec) { m_LookVector = lookVec; }
 
     // Start is called before the first frame update
     void Start()
     {
-        m_DestroyTime = 0;
         m_Speed = 10f;
+
+        m_DestroyTime = 0;
     }
 
     // Update is called once per frame
@@ -23,7 +24,7 @@ public class MagicBall : MonoBehaviour
     {
         if(m_DestroyTime > 3f)
         {
-            GameObject.Find("Player").GetComponent<Player>().SetSkillObject(null);
+            GameObject.Find("Player").GetComponent<Player>().SetSkillObject(0, null);
             Destroy(gameObject);
             return;
         }
@@ -36,7 +37,7 @@ public class MagicBall : MonoBehaviour
     {
         if(other.CompareTag("Monster"))
         {
-            GameObject.Find("Player").GetComponent<Player>().SetSkillObject(null);
+            GameObject.Find("Player").GetComponent<Player>().SetSkillObject(0, null);
             Destroy(gameObject);
         }
     }

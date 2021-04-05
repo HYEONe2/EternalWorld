@@ -21,10 +21,15 @@ public class Player : MonoBehaviour
     // Other Components
     private GameObject m_NearObject;
     private GameObject m_MagicBall;
-    private GameObject m_SkillObject;
+    private GameObject m_FirstMagicSkill;
+    private GameObject m_SecondMagicSkill;
+
+    private GameObject[] m_SkillObject = new GameObject[3];
+    private bool[] m_bSkillOn = new bool[2];
+    private float[] m_CoolTime = new float[2];
 
     // Values
-    public enum ABILITY { ABIL_FIRE, ABIL_WATER, ABIL_GRASS, ABIL_END};
+    public enum ABILITY { ABIL_FIRE, ABIL_WATER, ABIL_GRASS, ABIL_END };
     private ABILITY m_eAbility;
     private string m_SceneName;
 
@@ -43,14 +48,14 @@ public class Player : MonoBehaviour
 
     // Function
     public void SetNearObject(GameObject nearObj) { m_NearObject = nearObj; }
-    public void SetSkillObject(GameObject skillObj) { m_SkillObject = skillObj; }
+    public void SetSkillObject(int index, GameObject skillObj) { m_SkillObject[index] = skillObj; }
     public void SetSwing(bool bSwing) { m_bSwing = bSwing; }
     public void SetUsePhone(bool use) { m_bUsePhone = use; }
     public void SetPosition(Vector3 pos) { m_Pos = pos; }
     public void SetSceneName(string name) { m_SceneName = name; }
 
     public GameObject GetNearObject() { return m_NearObject; }
-    public GameObject GetSkillObject() { return m_SkillObject; }
+    public GameObject GetSkillObject(int index) { return m_SkillObject[index]; }
     public GameObject GetTarget() { return m_Target; }
 
     public ABILITY GetAbility() { return m_eAbility; }
@@ -101,7 +106,7 @@ public class Player : MonoBehaviour
         if (!m_CamArmTrans) m_CamArmTrans = transform.Find("CameraArm");
 
         // Other Components
-        if(!m_NearObject) m_NearObject = null;
+        if (!m_NearObject) m_NearObject = null;
     }
 
     private void InitializeValues()
@@ -143,7 +148,7 @@ public class Player : MonoBehaviour
             case "MainScene":
                 m_Pos.x = 0;
                 m_Pos.z = 0;
-                m_Pos.y += m_Gravity * Time.deltaTime * 0.8f;
+                m_Pos.y += m_Gravity * Time.deltaTime * 0.01f;
                 transform.position = new Vector3(0, m_Pos.y, 0);
                 break;
         }
@@ -170,26 +175,24 @@ public class Player : MonoBehaviour
 
         if (m_SceneName == SceneManager.GetActiveScene().name)
             m_Controller.Move(m_Pos * m_MoveSpeed * Time.deltaTime);
-        //else
-        //    m_Controller.Move(new Vector3(0, -1f, 0) * m_MoveSpeed * Time.deltaTime);
     }
 
     private void UpdateKeyInput()
     {
         switch (Input.inputString)
         {
-            //case "R":
-            //case "r":
-            //    SetAbility(ABILITY.ABIL_FIRE);
-            //    break;
-            //case "B":
-            //case "b":
-            //    SetAbility(ABILITY.ABIL_WATER);
-            //    break;
-            //case "G":
-            //case "g":
-            //    SetAbility(ABILITY.ABIL_GRASS);
-            //    break;
+            case "C":
+            case "c":
+                SetAbility(ABILITY.ABIL_FIRE);
+                break;
+            case "B":
+            case "b":
+                SetAbility(ABILITY.ABIL_WATER);
+                break;
+            case "G":
+            case "g":
+                SetAbility(ABILITY.ABIL_GRASS);
+                break;
             default:
                 break;
         }
@@ -278,7 +281,7 @@ public class Player : MonoBehaviour
                 m_bSprint = false;
         }
     }
-    
+
     void UpdateAction()
     {
         if (m_Animator.GetBool("UseSpace") || Cursor.visible || m_bUsePhone || m_bSwing)
@@ -286,7 +289,13 @@ public class Player : MonoBehaviour
 
         Targeting();
         Swing();
-        UseMagicSpell();
+
+        UpdateCoolTime();
+        if (!m_Weapon.activeSelf)
+            return;
+        UseMagicBall();
+        UseFirstOwnMagic();
+        UseSecondOwnMagic();
     }
 
     public void SetTargetMonster(GameObject target)
@@ -318,15 +327,15 @@ public class Player : MonoBehaviour
     {
         if (m_Equipment.activeSelf)
         {
-            if(Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0))
             {
                 m_bSwing = true;
                 m_Animator.SetBool("UseLButton", true);
             }
         }
-        else if(m_Weapon.activeSelf)
+        else if (m_Weapon.activeSelf)
         {
-            if(Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0))
             {
                 m_bSwing = true;
                 m_Animator.SetBool("UseLButton", true);
@@ -334,9 +343,34 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void UseMagicSpell()
+    private void UpdateCoolTime()
     {
-        if (!m_Weapon.activeSelf || m_SkillObject)
+        if (m_bSkillOn[0])
+        {
+            if (m_CoolTime[0] > 5f)
+            {
+                m_bSkillOn[0] = false;
+                m_CoolTime[0] = 0;
+            }
+            else
+                m_CoolTime[0] += Time.deltaTime;
+        }
+
+        if (m_bSkillOn[1])
+        {
+            if (m_CoolTime[1] > 5f)
+            {
+                m_bSkillOn[1] = false;
+                m_CoolTime[1] = 0;
+            }
+            else
+                m_CoolTime[1] += Time.deltaTime;
+        }
+    }
+
+    private void UseMagicBall()
+    {
+        if (m_SkillObject[0])
             return;
 
         if (Input.GetKey(KeyCode.Q))
@@ -346,12 +380,119 @@ public class Player : MonoBehaviour
 
             Vector3 PlayerPos = transform.position;
             Vector3 PlayerLook = m_Mesh.transform.forward;
-            
+
             Vector3 NewPos = PlayerPos + PlayerLook * 3f;
             NewPos.y = PlayerPos.y + 1f;
 
-            m_SkillObject = Instantiate(m_MagicBall, NewPos, new Quaternion(0, 0, 0, 0));
-            m_SkillObject.GetComponent<MagicBall>().SetLookVector(PlayerLook);
+            m_SkillObject[0] = Instantiate(m_MagicBall, NewPos, Quaternion.identity);
+            m_SkillObject[0].GetComponent<MagicBall>().SetLookVector(PlayerLook);
+        }
+    }
+
+    private void UseFirstOwnMagic()
+    {
+        if (m_bSkillOn[0] || m_SkillObject[1])
+            return;
+
+        if (Input.GetKey(KeyCode.E))
+        {
+            m_bSkillOn[0] = true;
+            m_bSwing = true;
+            m_Animator.SetBool("UseLButton", true);
+
+            Vector3 PlayerPos = transform.position;
+            Vector3 NewPos;
+            Vector3 PlayerLook;
+
+            switch (m_eAbility)
+            {
+                case ABILITY.ABIL_FIRE:
+                    {
+                        if (m_Target)
+                        {
+                            NewPos = m_Target.transform.position;
+                            NewPos.y = PlayerPos.y + 5f;
+                        }
+                        else
+                        {
+                            PlayerLook = m_Mesh.transform.forward;
+
+                            NewPos = PlayerPos + PlayerLook * 3f;
+                            NewPos.y += 5f;
+                        }
+                        m_SkillObject[1] = Instantiate(m_FirstMagicSkill, NewPos, Quaternion.Euler(new Vector3(90, 180, 180)));
+                    }
+                    break;
+                case ABILITY.ABIL_WATER:
+                    {
+                        PlayerLook = m_Mesh.transform.forward;
+
+                        NewPos = PlayerPos + PlayerLook * 3f;
+                        NewPos.y = PlayerPos.y + 1f;
+
+                        m_SkillObject[1] = Instantiate(m_FirstMagicSkill, NewPos, Quaternion.Euler(new Vector3(90, 180, 180)));
+                        m_SkillObject[1].GetComponent<MagicBomb>().SetLookVector(PlayerLook);
+                    }
+                    break;
+                case ABILITY.ABIL_GRASS:
+                    {
+                        PlayerLook = m_Mesh.transform.forward;
+                        NewPos = PlayerPos + PlayerLook * 3f;
+                        NewPos.y -= 0.5f;
+
+                        m_SkillObject[1] = Instantiate(m_FirstMagicSkill, NewPos, Quaternion.identity);
+                        m_SkillObject[1].transform.rotation = Quaternion.LookRotation(PlayerLook);
+                    }
+                    break;
+            }
+        }
+    }
+
+    private void UseSecondOwnMagic()
+    {
+        if (m_bSkillOn[1] || m_SkillObject[2])
+            return;
+
+        if (Input.GetKey(KeyCode.R))
+        {
+            m_bSkillOn[1] = true;
+            m_bSwing = true;
+            m_Animator.SetBool("UseLButton", true);
+
+            Vector3 PlayerPos = transform.position;
+            Vector3 NewPos;
+            Vector3 PlayerLook;
+
+            switch (m_eAbility)
+            {
+                case ABILITY.ABIL_FIRE:
+                    {
+                        PlayerLook = m_Mesh.transform.forward;
+                        NewPos = PlayerPos + PlayerLook * 3f;
+
+                        m_SkillObject[2] = Instantiate(m_SecondMagicSkill, NewPos, Quaternion.identity);
+                        m_SkillObject[2].transform.rotation = Quaternion.LookRotation(PlayerLook);
+                    }
+                    break;
+                case ABILITY.ABIL_WATER:
+                    {
+                        NewPos = new Vector3(PlayerPos.x, PlayerPos.y + 0.5f, PlayerPos.z);
+
+                        m_SkillObject[2] = Instantiate(m_SecondMagicSkill, NewPos, Quaternion.identity);
+                    }
+                    break;
+                case ABILITY.ABIL_GRASS:
+                    {
+                        PlayerLook = m_Mesh.transform.forward;
+                        NewPos = PlayerPos + PlayerLook * 3f;
+                        NewPos.y -= 0.2f;
+
+                        m_SkillObject[2] = Instantiate(m_SecondMagicSkill, NewPos, Quaternion.identity);
+                        m_SkillObject[2].transform.rotation = Quaternion.LookRotation(PlayerLook);
+                        m_SkillObject[2].GetComponent<MagicSeedBoundary>().RespawnSeeds(3);
+                    }
+                    break;
+            }
         }
     }
 
@@ -366,25 +507,25 @@ public class Player : MonoBehaviour
         if (!m_NearObject || m_bJump || !m_Controller.isGrounded || (m_bInitialEquip[0] && m_bInitialEquip[1]))
             return;
 
-        if(Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F))
         {
-            if(m_NearObject.tag == "Equipment")
+            if (m_NearObject.tag == "Equipment")
             {
                 Destroy(m_NearObject);
 
                 if (m_Equipment)
                 {
-                    if(!m_Weapon.activeSelf)
+                    if (!m_Weapon.activeSelf)
                         m_Equipment.SetActive(true);
                     m_bInitialEquip[0] = true;
                 }
             }
-            else if(m_NearObject.tag == "Weapon")
+            else if (m_NearObject.tag == "Weapon")
             {
                 m_Weapon.GetComponent<MeshFilter>().sharedMesh = m_NearObject.GetComponent<Weapon>().GetMesh();
                 Destroy(m_NearObject);
 
-                if(m_Weapon)
+                if (m_Weapon)
                 {
                     if (!m_Equipment.activeSelf)
                         m_Weapon.SetActive(true);
@@ -432,21 +573,27 @@ public class Player : MonoBehaviour
     {
         m_eAbility = eAbility;
 
-        switch(m_eAbility)
+        switch (m_eAbility)
         {
             case ABILITY.ABIL_FIRE:
                 {
                     m_MagicBall = Resources.Load<GameObject>("Particle/Player/Fire/ErekiBall2");
+                    m_FirstMagicSkill = Resources.Load<GameObject>("Particle/Player/Fire/fireShot");
+                    m_SecondMagicSkill = Resources.Load<GameObject>("Particle/Player/Fire/FlameThrower");
                 }
                 break;
             case ABILITY.ABIL_WATER:
                 {
                     m_MagicBall = Resources.Load<GameObject>("Particle/Player/Water/ErekiBall2");
+                    m_FirstMagicSkill = Resources.Load<GameObject>("Particle/Player/Water/SteamBomb");
+                    m_SecondMagicSkill = Resources.Load<GameObject>("Particle/Player/Water/MagicShield");
                 }
                 break;
             case ABILITY.ABIL_GRASS:
                 {
                     m_MagicBall = Resources.Load<GameObject>("Particle/Player/Grass/ErekiBall2");
+                    m_FirstMagicSkill = Resources.Load<GameObject>("Particle/Player/Grass/GrassWall");
+                    m_SecondMagicSkill = Resources.Load<GameObject>("Particle/Player/Grass/MagicSeedBoundary");
                 }
                 break;
         }
