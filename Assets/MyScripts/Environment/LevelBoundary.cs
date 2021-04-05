@@ -39,6 +39,11 @@ public class LevelBoundary : MonoBehaviour
             m_bCloseEnough = false;
     }
 
+    private void OnDestroy()
+    {
+        DestroyLevelBoundary();
+    }
+
     private bool CheckBoundaryDistance()
     {
         Vector3 PlayerPos = m_PlayerTrans.position;
@@ -81,6 +86,8 @@ public class LevelBoundary : MonoBehaviour
 
     public void DestroyLevelBoundary()
     {
+        foreach (Transform trans in m_LevelChildTrans)
+            Destroy(trans.gameObject);
         m_LevelChildTrans.Clear();
         m_LevelChildMat.Clear();
         Destroy(gameObject);

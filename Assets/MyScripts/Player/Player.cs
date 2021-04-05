@@ -132,17 +132,19 @@ public class Player : MonoBehaviour
         if (m_SceneName == SceneManager.GetActiveScene().name)
             return;
 
+        if (m_Pos.y <= -10f)
+        {
+            m_SceneName = SceneManager.GetActiveScene().name;
+            return;
+        }
+
         switch (SceneManager.GetActiveScene().name)
         {
             case "MainScene":
-                Debug.Log("MainScene");
                 m_Pos.x = 0;
                 m_Pos.z = 0;
                 m_Pos.y += m_Gravity * Time.deltaTime * 0.8f;
                 transform.position = new Vector3(0, m_Pos.y, 0);
-                if (m_Pos.y<=-10)
-                    m_SceneName = SceneManager.GetActiveScene().name;
-
                 break;
         }
     }

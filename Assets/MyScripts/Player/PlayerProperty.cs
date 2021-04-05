@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerProperty : MonoBehaviour
 {
@@ -42,6 +43,12 @@ public class PlayerProperty : MonoBehaviour
         m_Coin = 500;
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown("9"))
+            m_Level += 1;
+    }
+
     private void OnDestroy()
     {
         m_Property.Clear();
@@ -49,6 +56,9 @@ public class PlayerProperty : MonoBehaviour
 
     public void AddExperience(int exp)
     {
+        if (SceneManager.GetActiveScene().name == "TutorialScene")
+            return;
+
         m_Exp += exp;
 
         if(m_Exp >= m_MaxExp * m_Level)

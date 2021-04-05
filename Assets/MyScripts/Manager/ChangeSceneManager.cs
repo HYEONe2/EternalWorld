@@ -16,7 +16,7 @@ public class ChangeSceneManager : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown("0"))
-            LoadingSceneManager.LoadScene("MainScene");
+            LoadingSceneManager.LoadScene(m_SceneName);
     }
 
     private void OnTriggerEnter(Collider other)

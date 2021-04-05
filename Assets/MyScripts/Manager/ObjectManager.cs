@@ -7,6 +7,7 @@ public class ObjectManager : MonoBehaviour
 {
     private string m_SceneName;
     private Transform m_PlayerTrans;
+    private int m_Level;
 
     private List<LevelBoundary> m_LevelBoundaryList = new List<LevelBoundary>();
     private List<TreeBoundary> m_TreeBoundaryList = new List<TreeBoundary>();
@@ -18,47 +19,59 @@ public class ObjectManager : MonoBehaviour
     {
         m_SceneName = SceneManager.GetActiveScene().name;
         m_PlayerTrans = GameObject.Find("Player").transform;
+        m_Level = 0;
 
-        if (m_SceneName != "TutorialScene")
-        {
-            InitializeBoundary();
-        }
+        InitializeBoundary();
     }
 
     // Update is called once per frame
     void Update()
     {
-        UpdateScene();
+        if (UpdateScene())
+            return;
+
+        CheatKey();
         UpdateBoundary();
     }
 
     private void InitializeBoundary()
     {
+        m_LevelBoundaryList.Clear();
+        m_TreeBoundaryList.Clear();
+
         GameObject[] TempBoundary = GameObject.FindGameObjectsWithTag("LevelBoundary");
         foreach (GameObject iter in TempBoundary)
-        {
             m_LevelBoundaryList.Add(iter.GetComponent<LevelBoundary>());
-        }
 
         TempBoundary = GameObject.FindGameObjectsWithTag("TreeBoundary");
         foreach (GameObject iter in TempBoundary)
-        {
             m_TreeBoundaryList.Add(iter.GetComponent<TreeBoundary>());
-        }
     }
 
-    private void UpdateScene()
+    private bool UpdateScene()
     {
         if (m_SceneName == SceneManager.GetActiveScene().name)
-            return;
+            return false;
+
+        foreach (LevelBoundary boundary in m_LevelBoundaryList)
+        {
+            if (boundary)
+                Destroy(boundary.gameObject);
+        }
+
+        foreach (TreeBoundary boundary in m_TreeBoundaryList)
+        {
+            if (boundary)
+                Destroy(boundary.gameObject);
+        }
 
         m_SceneName = SceneManager.GetActiveScene().name;
+        InitializeBoundary();
 
-        m_LevelBoundaryList.Clear();
-        m_TreeBoundaryList.Clear();
+        return true;
     }
 
-    private void UpdateBoundary()
+    private void CheatKey()
     {
         if (Input.GetKeyDown(KeyCode.T))
         {
@@ -74,7 +87,38 @@ public class ObjectManager : MonoBehaviour
             return;
         }
     }
-    
+
+    private void UpdateBoundary()
+    {
+        int Level = m_PlayerTrans.gameObject.GetComponent<PlayerProperty>().GetLevel();
+        if (m_Level == Level)
+            return;
+
+        foreach(TreeBoundary boundary in m_TreeBoundaryList)
+        {
+            if(boundary.m_Level == Level)
+            {
+                switch(boundary.m_Level)
+                {
+                    case 1:
+                        boundary.RespawnObjects(5, 5);
+                        break;
+                }
+            }
+        }
+
+        foreach (LevelBoundary boundary in m_LevelBoundaryList)
+        {
+            if(boundary.m_Level == Level)
+            {
+                Destroy(boundary.gameObject);
+                m_LevelBoundaryList.Remove(boundary);
+                break;
+            }
+        }
+        m_Level = Level;
+    }
+
     public bool GetCloseEnough()
     {
         if (m_SceneName != "TutorialScene")
@@ -96,9 +140,9 @@ public class ObjectManager : MonoBehaviour
         }
         else
         {
-            foreach(LevelBoundary levelBoundary in m_LevelBoundaryList)
+            foreach (LevelBoundary levelBoundary in m_LevelBoundaryList)
             {
-                if(levelBoundary.m_Level == m_PlayerTrans.GetComponent<PlayerProperty>().GetLevel())
+                if (levelBoundary.m_Level == m_PlayerTrans.GetComponent<PlayerProperty>().GetLevel())
                 {
                     levelBoundary.DestroyLevelBoundary();
                     return;
