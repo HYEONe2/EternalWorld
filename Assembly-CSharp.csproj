@@ -122,12 +122,15 @@
      <Compile Include="Assets\MyScripts\Building\BuildingGuide.cs" />
      <Compile Include="Assets\MyScripts\Camera\PlayerCamera.cs" />
      <Compile Include="Assets\MyScripts\Environment\LevelBoundary.cs" />
+     <Compile Include="Assets\MyScripts\Environment\Maze.cs" />
      <Compile Include="Assets\MyScripts\Environment\TreeBoundary.cs" />
      <Compile Include="Assets\MyScripts\Manager\ChangeSceneManager.cs" />
      <Compile Include="Assets\MyScripts\Manager\KeepSceneManager.cs" />
      <Compile Include="Assets\MyScripts\Manager\LoadingSceneManager.cs" />
+     <Compile Include="Assets\MyScripts\Manager\MazeManager.cs" />
      <Compile Include="Assets\MyScripts\Manager\ObjectManager.cs" />
      <Compile Include="Assets\MyScripts\Manager\UIManager.cs" />
+     <Compile Include="Assets\MyScripts\Monster\Monster.cs" />
      <Compile Include="Assets\MyScripts\Monster\TutorialMonster.cs" />
      <Compile Include="Assets\MyScripts\Object\Commodity.cs" />
      <Compile Include="Assets\MyScripts\Object\Equipment.cs" />
@@ -822,6 +825,14 @@
  </Reference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="NavMeshComponentsEditor.csproj">
+      <Project>{327F328B-40ED-B0B4-C1D7-B06EF45F11C0}</Project>
+      <Name>NavMeshComponentsEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="NavMeshComponents.csproj">
+      <Project>{C0A43FC5-5AE7-39DB-9BD9-D661E4012AF9}</Project>
+      <Name>NavMeshComponents</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

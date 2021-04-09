@@ -22,22 +22,7 @@ public class TutorialMonster : MonoBehaviour
         
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (m_Animator.GetBool("m_bDamaged"))
-    //        return;
-
-    //    if (other.CompareTag("Weapon"))
-    //    {
-    //        //if (m_Player.GetAttack())
-    //        {
-    //            // 파티클 추가! 스파크 튀는 파티클!!
-    //            m_Animator.SetBool("m_bDamaged", true);
-    //        }
-    //    }
-    //}
-
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (m_Animator.GetBool("m_bDamaged"))
             return;
@@ -51,6 +36,21 @@ public class TutorialMonster : MonoBehaviour
             }
         }
     }
+
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    if (m_Animator.GetBool("m_bDamaged"))
+    //        return;
+
+    //    if (other.CompareTag("Weapon"))
+    //    {
+    //        //if (m_Player.GetAttack())
+    //        {
+    //            // 파티클 추가! 스파크 튀는 파티클!!
+    //            m_Animator.SetBool("m_bDamaged", true);
+    //        }
+    //    }
+    //}
 
     public void SetDamagedEnd()
     {

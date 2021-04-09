@@ -71,7 +71,10 @@ public class QuestUI : MonoBehaviour
         UpdateQuestText();
 
         if (Input.GetKeyDown(KeyCode.P))
+        {
+            m_PlayerProperty.AddProperty(PlayerProperty.OBJTYPE.OBJ_WOOD, 5);
             m_PlayerProperty.AddProperty(PlayerProperty.OBJTYPE.OBJ_STONE, 5);
+        }
     }
 
     private void OnDestroy()

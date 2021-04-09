@@ -26,7 +26,8 @@ public class MagicSeed : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Monster"))
+        if (other.CompareTag("Monster")
+            || other.CompareTag("Player"))
         {
             Instantiate(Resources.Load<GameObject>("Particle/Player/Grass/FireExplosion"), transform.position, Quaternion.identity);
             Destroy(gameObject);

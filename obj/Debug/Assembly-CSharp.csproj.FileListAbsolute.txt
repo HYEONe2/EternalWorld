@@ -838,6 +838,3 @@ E:\Unity\EternalWorld\Temp\bin\Debug\Boo.Lang.Compiler.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\Boo.Lang.PatternMatching.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\Boo.Lang.Parser.dll
 E:\Unity\EternalWorld\Temp\bin\Debug\Boo.Lang.Useful.dll
-E:\Unity\EternalWorld\Temp\bin\Debug\nunit.framework.dll
-E:\Unity\EternalWorld\Temp\bin\Debug\nunit.framework.pdb
-E:\Unity\EternalWorld\Temp\bin\Debug\nunit.framework.xml
