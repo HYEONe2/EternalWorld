@@ -4,13 +4,7 @@ using UnityEngine;
 
 public class Maze : MonoBehaviour
 {
-    public bool m_createAtOnce = true;              // true이면 미로를 한꺼번에 생성한다. false이면 생성 과정을 보여줌
-
-    private GameObject m_MazeWall;         // 미로를 구성하는 블록 오브젝트
-    //private GameObject m_Monster[3];
-    private GameObject m_MonsterSpawnBox;
-    private GameObject m_Monster;
-
+    // MAZE
     // 검사 방향
     private enum CheckDir
     {   //← ↑ → ↓ 순서
@@ -37,14 +31,12 @@ public class Maze : MonoBehaviour
         ,new int[ (int)CheckData.EnumMax] {      1,      0      }
         ,new int[ (int)CheckData.EnumMax] {      0,      1      }
     };
-
     private static readonly CheckDir[] REVERSE_DIR_LIST = new CheckDir[(int)CheckDir.EnumMax] {	// 검사 방향의 반대 방향
 		CheckDir.Right
         ,CheckDir.Down
         ,CheckDir.Left
         ,CheckDir.Up
     };
-
     private static readonly CheckDir[] CHECK_ORDER_LIST = new CheckDir[(int)CheckDir.EnumMax] { // 검사할 순서
 		CheckDir.Up
         ,CheckDir.Down
@@ -58,37 +50,31 @@ public class Maze : MonoBehaviour
     private static readonly int MAZE_GRID_X = ((MAZE_LINE_X * 2) + 1);  // 미로의 X배열 개수
     private static readonly int MAZE_GRID_Y = ((MAZE_LINE_Y * 2) + 1);  // 미로의 Y배열 개수
     private static readonly int EXEC_MAZE_COUNT_MAX = (MAZE_LINE_X * MAZE_LINE_Y / 2);  // 블록을 하나씩 생성할 때 수행 회수
-    private static readonly float MAZE_BLOCK_SCALE = 2.0f;              // 미로 스케일(블록 하나 만큼의 크기)
+    private static readonly float MAZE_BLOCK_SCALE = 7.0f;              // 미로 스케일(블록 하나 만큼의 크기)
     //private Vector3 m_MazeBlockScale;
-
-    [SerializeField] private int m_TreasureBoxNum = 0;
 
     private bool[][] m_mazeGrid = null;         // 미로 배열
     private GameObject m_blockParent = null;    // 미로 블록을 기억할 부모
     private int m_makeMazeCounter = 0;          // 블록을 하나씩 생성 할 때 사용하는 카운터
-                                                //private bool m_stageClearedFlag = false;	// 스테이지 종료 오브젝트를 생성하면 true
+
+    // Other Objects
+    //private GameObject m_MonsterSpawnBox;
+    //private GameObject m_Monster[3];
+    private GameObject m_MazeWall;         // 미로를 구성하는 블록 오브젝트
+    private GameObject m_Monster;
+
+    // Values
     private bool m_bLateInit;
+    [SerializeField] private int m_FireMonsterNum = 0;
+
+    public Vector3 GetPatrolPos() { return new Vector3((Random.Range(0, MAZE_LINE_X) * 2) + 1, 0, (Random.Range(0, MAZE_LINE_Y) * 2) + 1) * MAZE_BLOCK_SCALE; }
 
     // Start is called before the first frame update
     void Start()
     {
         InitializeObjects();
         InitializeMaze();
-
-        // 미로를 한꺼번에 만들지 여부를 검사
-        if (m_createAtOnce)
-        {
-            // 상하 좌우 가장자리에서 중심을 향해 가지를 뻗어 미로를 생성
-            int i;
-            for (i = 0; i < EXEC_MAZE_COUNT_MAX; i++)
-            {   // 상하 좌우 방향으로 검사하는 것이므로 반만 실행
-                ExecMaze();
-            }
-
-            // 미로를 생성
-            CreateMaze();
-        }
-
+        InitializeExitTrigger();
     }
 
     // Update is called once per frame
@@ -96,8 +82,12 @@ public class Maze : MonoBehaviour
     {
         if (!m_bLateInit)
         {
-            GameObject.Find("MazeManager").GetComponent<MazeManager>().GenerateNavmesh();
+            MazeManager MazeManager = GameObject.Find("MazeManager").GetComponent<MazeManager>();
+            MazeManager.GenerateNavmesh();
+            MazeManager.SetMaze(gameObject);
+
             CreateMonster();
+
             m_bLateInit = true;
         }
     }
@@ -105,7 +95,7 @@ public class Maze : MonoBehaviour
     private void InitializeObjects()
     {
         m_MazeWall = Resources.Load<GameObject>("Environment/Maze/MazeWall");
-        m_MonsterSpawnBox = Resources.Load<GameObject>("Environment/Maze/Cube");
+        //m_MonsterSpawnBox = Resources.Load<GameObject>("Environment/Maze/Cube");
         m_Monster = Resources.Load<GameObject>("Monster/FireMonster");
         //m_MazeBlockScale = m_MazeWall.transform.localScale;
     }
@@ -155,6 +145,33 @@ public class Maze : MonoBehaviour
                 //값을 대입한다
                 m_mazeGrid[gridX][gridY] = blockFlag;
             }
+        }
+
+        // 상하 좌우 가장자리에서 중심을 향해 가지를 뻗어 미로를 생성
+        int i;
+        for (i = 0; i < EXEC_MAZE_COUNT_MAX; i++)
+        {   // 상하 좌우 방향으로 검사하는 것이므로 반만 실행
+            ExecMaze();
+        }
+
+        // 미로를 생성
+        CreateMaze();
+    }
+
+    private void InitializeExitTrigger()
+    {
+        int index = 0;
+        int usableTrigger = Random.Range(0, 3);
+
+        foreach (Transform trigger in transform)
+        {
+            if (index == usableTrigger)
+            {
+                trigger.gameObject.SetActive(true);
+                break;
+            }
+            else
+                ++index;
         }
     }
 
@@ -367,11 +384,9 @@ public class Maze : MonoBehaviour
         {
             for (gridY = 0; gridY < MAZE_GRID_Y; ++gridY)
             {
-
                 // 블록인지 여부를 검사
                 if (IsBlock(gridX, gridY))
                 {
-
                     // 블록 생성 위치
                     //position = new Vector3(gridX * m_MazeBlockScale.x, 0, gridY * m_MazeBlockScale.z); // 유니티에서는 XZ 평면이 수평선임 (이 경우 왼쪽 아래에서 오른쪽 위로 진행한다)
                     position = new Vector3(gridX, 0, gridY) * MAZE_BLOCK_SCALE;
@@ -382,7 +397,9 @@ public class Maze : MonoBehaviour
                     blockObject.name = "Block(" + gridX + "," + gridY + ")";        //그리드의 위치를 기술한다
 
                     // 로컬 스케일 (크기)을 변경
-                    blockObject.transform.localScale = Vector3.one * MAZE_BLOCK_SCALE;        //Vector3.one は new Vector3( 1f, 1f, 1f) と同じ
+                    Vector3 Scale = Vector3.one * MAZE_BLOCK_SCALE;
+                    //Scale.z = 2f;
+                    blockObject.transform.localScale = Scale;        //Vector3.one は new Vector3( 1f, 1f, 1f) と同じ
 
                     // 앞서 생성한 부모 아래에 넣음
                     blockObject.transform.parent = m_blockParent.transform;
@@ -395,10 +412,11 @@ public class Maze : MonoBehaviour
     {
         Vector3 position;
 
-        for (int i = 0; i < m_TreasureBoxNum; ++i)
+        for (int i = 0; i < m_FireMonsterNum; ++i)
         {
             //position = new Vector3(((Random.Range(0, MAZE_LINE_X) * 2) + 1) * m_MazeBlockScale.x, 0, ((Random.Range(0, MAZE_LINE_Y) * 2) + 1) * m_MazeBlockScale.z);
-            position = new Vector3((Random.Range(0, MAZE_LINE_X) * 2) + 1, 0, (Random.Range(0, MAZE_LINE_Y) * 2) + 1) * MAZE_BLOCK_SCALE;
+            //position = new Vector3((Random.Range(0, MAZE_LINE_X) * 2) + 1, 0, (Random.Range(0, MAZE_LINE_Y) * 2) + 1) * MAZE_BLOCK_SCALE;
+            position = new Vector3(7, 0, 20);
             Instantiate(m_Monster, position, Quaternion.identity);
         }
     }

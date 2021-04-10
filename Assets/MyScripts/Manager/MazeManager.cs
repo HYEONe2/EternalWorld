@@ -5,8 +5,12 @@ using UnityEngine.AI;
 
 public class MazeManager : MonoBehaviour
 {
+    private Maze m_Maze;
     private GameObject m_MazePlane;
-    private Vector3 m_GeneratePos = new Vector3(50, 0, 50);
+    private Vector3 m_GeneratePos = new Vector3(0, 100, 0);
+
+    public void SetMaze(GameObject maze) { m_Maze = maze.GetComponent<Maze>(); } 
+    public Vector3 GetPatrolPos() { return m_Maze.GetPatrolPos(); }
 
     void Start()
     {
@@ -15,9 +19,8 @@ public class MazeManager : MonoBehaviour
 
     public void GenerateNavmesh()
     {
-        GameObject NewMazePlane = Instantiate(m_MazePlane, m_GeneratePos, Quaternion.identity, transform);
-        NewMazePlane.GetComponent<MeshRenderer>().enabled = false;
-        m_GeneratePos += new Vector3(50, 0, 50);
+        GameObject MazePlane = Instantiate(m_MazePlane, m_GeneratePos, Quaternion.identity, transform);
+        MazePlane.GetComponent<MeshRenderer>().enabled = false;
 
         NavMeshSurface[] surfaces = gameObject.GetComponentsInChildren<NavMeshSurface>();
         foreach (var s in surfaces)

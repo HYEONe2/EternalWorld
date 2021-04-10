@@ -658,7 +658,7 @@ public class QuestUI : MonoBehaviour
         Cursor.visible = false;
         m_AnswerOnce.SetActive(false);
 
-        GameObject.Find("Player").GetComponent<Player>().SetAbility(Player.ABILITY.ABIL_FIRE);
+        GameObject.Find("Player").GetComponent<Player>().SetAbility(ObjectManager.ABILITY.ABIL_FIRE);
         m_bFinishTask = true;
     }
 
@@ -667,7 +667,7 @@ public class QuestUI : MonoBehaviour
         Cursor.visible = false;
         m_AnswerOnce.SetActive(false);
 
-        GameObject.Find("Player").GetComponent<Player>().SetAbility(Player.ABILITY.ABIL_FIRE);
+        GameObject.Find("Player").GetComponent<Player>().SetAbility(ObjectManager.ABILITY.ABIL_FIRE);
         m_bFinishTask = true;
     }
 
@@ -676,7 +676,7 @@ public class QuestUI : MonoBehaviour
         Cursor.visible = false;
         m_AnswerOnce.SetActive(false);
 
-        GameObject.Find("Player").GetComponent<Player>().SetAbility(Player.ABILITY.ABIL_FIRE);
+        GameObject.Find("Player").GetComponent<Player>().SetAbility(ObjectManager.ABILITY.ABIL_FIRE);
         m_bFinishTask = true;
     }
 }

@@ -2284,7 +2284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 802d62e970df80d46a77dad3e7fcb5fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SceneName: TitleScene
+  m_SceneName: MazeScene
 --- !u!65 &1251211492
 BoxCollider:
   m_ObjectHideFlags: 0

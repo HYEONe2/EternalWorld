@@ -12,6 +12,7 @@ TagManager:
   - Monster
   - TreeBoundary
   - LevelBoundary
+  - MonsterWeapon
   layers:
   - Default
   - TransparentFX

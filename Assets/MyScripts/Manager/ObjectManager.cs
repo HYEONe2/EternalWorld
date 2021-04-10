@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class ObjectManager : MonoBehaviour
 {
+    public enum ABILITY { ABIL_FIRE, ABIL_WATER, ABIL_GRASS, ABIL_END };
+
     private string m_SceneName;
     private Transform m_PlayerTrans;
     private int m_Level;

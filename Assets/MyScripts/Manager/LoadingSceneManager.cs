@@ -79,6 +79,21 @@ public class LoadingSceneManager : MonoBehaviour
                     GameObject UIManager = GameObject.Find("UIManager");
                     if (UIManager)
                         UIManager.GetComponent<UIManager>().LoadingSetting(false);
+
+                    GameObject Player = GameObject.Find("Player");
+                    if (Player)
+                    {
+                        if (m_NextScene == "MainScene")
+                        {
+                            Player.transform.position = new Vector3(0, 5f, 0);
+                            Player.transform.rotation = Quaternion.Euler(Vector3.one);
+                        }
+                        else if (m_NextScene == "MazeScene")
+                        {
+                            Player.transform.position = new Vector3(7f, 0, 10f);
+                            Player.transform.rotation = Quaternion.Euler(Vector3.one);
+                        }
+                    }
                 }
             }
         }
@@ -91,6 +106,13 @@ public class LoadingSceneManager : MonoBehaviour
         {
             if (!m_ProgressBar)
                 m_ProgressBar = GameObject.Find("ProgressBar").GetComponent<Image>();
+
+            //GameObject Player = GameObject.Find("Player");
+            //if (Player)
+            //{
+            //    Debug.Log("YES");
+            //    Player.transform.position = new Vector3(0, 100f, 0);
+            //}
         }
     }
 }

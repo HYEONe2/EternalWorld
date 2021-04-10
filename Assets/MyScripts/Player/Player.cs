@@ -29,8 +29,7 @@ public class Player : MonoBehaviour
     private float[] m_CoolTime = new float[2];
 
     // Values
-    public enum ABILITY { ABIL_FIRE, ABIL_WATER, ABIL_GRASS, ABIL_END };
-    private ABILITY m_eAbility;
+    private ObjectManager.ABILITY m_eAbility;
     private string m_SceneName;
 
     private Vector3 m_Pos;
@@ -46,6 +45,13 @@ public class Player : MonoBehaviour
     private bool m_bSwing;
     private bool m_bUsePhone;
 
+    // Animator values
+    private readonly int m_bHashGrounded = Animator.StringToHash("IsGrounded");
+    private readonly int m_bHashShift = Animator.StringToHash("UseShift");
+    private readonly int m_HashMoveSpeed = Animator.StringToHash("MoveSpeed");
+    private readonly int m_bHashSpace = Animator.StringToHash("UseSpace");
+    private readonly int m_bHashLButton = Animator.StringToHash("UseLButton");
+
     // Function
     public void SetNearObject(GameObject nearObj) { m_NearObject = nearObj; }
     public void SetSkillObject(int index, GameObject skillObj) { m_SkillObject[index] = skillObj; }
@@ -58,7 +64,7 @@ public class Player : MonoBehaviour
     public GameObject GetSkillObject(int index) { return m_SkillObject[index]; }
     public GameObject GetTarget() { return m_Target; }
 
-    public ABILITY GetAbility() { return m_eAbility; }
+    public ObjectManager.ABILITY GetAbility() { return m_eAbility; }
     public bool GetAttack() { return m_bSwing; }
 
     // Start is called before the first frame update
@@ -111,7 +117,7 @@ public class Player : MonoBehaviour
 
     private void InitializeValues()
     {
-        m_eAbility = ABILITY.ABIL_END;
+        m_eAbility = ObjectManager.ABILITY.ABIL_END;
 
         // Position
         m_Pos = Vector3.zero;
@@ -137,21 +143,31 @@ public class Player : MonoBehaviour
         if (m_SceneName == SceneManager.GetActiveScene().name)
             return;
 
-        if (m_Pos.y <= -10f)
-        {
-            m_SceneName = SceneManager.GetActiveScene().name;
-            return;
-        }
+        //if (m_Pos.y <= -10f)
+        //{
+        //    m_SceneName = SceneManager.GetActiveScene().name;
+        //    return;
+        //}
 
-        switch (SceneManager.GetActiveScene().name)
-        {
-            case "MainScene":
-                m_Pos.x = 0;
-                m_Pos.z = 0;
-                m_Pos.y += m_Gravity * Time.deltaTime * 0.01f;
-                transform.position = new Vector3(0, m_Pos.y, 0);
-                break;
-        }
+        //switch (SceneManager.GetActiveScene().name)
+        //{
+        //    case "MainScene":
+        //        {
+        //            m_Pos.x = 0;
+        //            m_Pos.z = 0;
+        //            m_Pos.y += m_Gravity * Time.deltaTime * 0.001f;
+        //            transform.position = new Vector3(0, m_Pos.y, 0);
+        //        }
+        //        break;
+        //    case "MazeScene":
+        //        {
+        //            m_Pos.x = 1.8f;
+        //            m_Pos.z = 2.4f;
+        //            m_Pos.y += m_Gravity * Time.deltaTime * 0.001f;
+        //            transform.position = new Vector3(0, m_Pos.y, 0);
+        //        }
+        //        break;
+        //}
     }
 
     private void UpdateMovement()
@@ -162,19 +178,18 @@ public class Player : MonoBehaviour
         if (!m_Controller.isGrounded)
         {
             m_Pos.y += m_Gravity * Time.deltaTime * 0.8f;
-            m_Animator.SetBool("IsGrounded", false);
+            m_Animator.SetBool(m_bHashGrounded, false);
         }
         else
         {
             Jump();
-            m_Animator.SetBool("IsGrounded", true);
+            m_Animator.SetBool(m_bHashGrounded, true);
             m_SceneName = SceneManager.GetActiveScene().name;
         }
 
         Move();
 
-        if (m_SceneName == SceneManager.GetActiveScene().name)
-            m_Controller.Move(m_Pos * m_MoveSpeed * Time.deltaTime);
+        m_Controller.Move(m_Pos * m_MoveSpeed * Time.deltaTime);
     }
 
     private void UpdateKeyInput()
@@ -183,15 +198,15 @@ public class Player : MonoBehaviour
         {
             case "C":
             case "c":
-                SetAbility(ABILITY.ABIL_FIRE);
+                SetAbility(ObjectManager.ABILITY.ABIL_FIRE);
                 break;
             case "B":
             case "b":
-                SetAbility(ABILITY.ABIL_WATER);
+                SetAbility(ObjectManager.ABILITY.ABIL_WATER);
                 break;
             case "G":
             case "g":
-                SetAbility(ABILITY.ABIL_GRASS);
+                SetAbility(ObjectManager.ABILITY.ABIL_GRASS);
                 break;
             default:
                 break;
@@ -201,8 +216,8 @@ public class Player : MonoBehaviour
     private void Move()
     {
         // Animation Initialize
-        m_Animator.SetBool("UseShift", false);
-        m_Animator.SetFloat("MoveSpeed", 0);
+        m_Animator.SetBool(m_bHashShift, false);
+        m_Animator.SetFloat(m_HashMoveSpeed, 0);
 
         Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         bool isMove = moveInput.magnitude != 0;
@@ -247,8 +262,8 @@ public class Player : MonoBehaviour
 
     private void Walk(Vector3 moveDir)
     {
-        m_Animator.SetBool("UseShift", false);
-        m_Animator.SetFloat("MoveSpeed", m_MoveSpeed);
+        m_Animator.SetBool(m_bHashShift, false);
+        m_Animator.SetFloat(m_HashMoveSpeed, m_MoveSpeed);
 
         m_Controller.Move(moveDir * m_MoveSpeed * Time.deltaTime);
         m_JumpPower = 3f;
@@ -256,8 +271,8 @@ public class Player : MonoBehaviour
 
     private void Sprint(Vector3 moveDir)
     {
-        m_Animator.SetBool("UseShift", true);
-        m_Animator.SetFloat("MoveSpeed", m_MoveSpeed * 1.8f);
+        m_Animator.SetBool(m_bHashShift, true);
+        m_Animator.SetFloat(m_HashMoveSpeed, m_MoveSpeed * 1.8f);
 
         m_Controller.Move(moveDir * (m_MoveSpeed * 1.8f) * Time.deltaTime);
         m_JumpPower = 3.5f;
@@ -265,12 +280,12 @@ public class Player : MonoBehaviour
 
     private void Jump()
     {
-        m_Animator.SetBool("UseSpace", false);
+        m_Animator.SetBool(m_bHashSpace, false);
         m_bJump = false;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            m_Animator.SetBool("UseSpace", true);
+            m_Animator.SetBool(m_bHashSpace, true);
             m_bJump = true;
 
             m_Pos.y = m_JumpPower;
@@ -284,7 +299,7 @@ public class Player : MonoBehaviour
 
     void UpdateAction()
     {
-        if (m_Animator.GetBool("UseSpace") || Cursor.visible || m_bUsePhone || m_bSwing)
+        if (m_Animator.GetBool(m_bHashSpace) || Cursor.visible || m_bUsePhone || m_bSwing)
             return;
 
         Targeting();
@@ -330,7 +345,7 @@ public class Player : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 m_bSwing = true;
-                m_Animator.SetBool("UseLButton", true);
+                m_Animator.SetBool(m_bHashLButton, true);
             }
         }
         else if (m_Weapon.activeSelf)
@@ -338,7 +353,7 @@ public class Player : MonoBehaviour
             if (Input.GetMouseButton(0))
             {
                 m_bSwing = true;
-                m_Animator.SetBool("UseLButton", true);
+                m_Animator.SetBool(m_bHashLButton, true);
             }
         }
     }
@@ -358,7 +373,7 @@ public class Player : MonoBehaviour
 
         if (m_bSkillOn[1])
         {
-            if (m_CoolTime[1] > 5f)
+            if (m_CoolTime[1] > 0.1f)
             {
                 m_bSkillOn[1] = false;
                 m_CoolTime[1] = 0;
@@ -376,7 +391,7 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.Q))
         {
             m_bSwing = true;
-            m_Animator.SetBool("UseLButton", true);
+            m_Animator.SetBool(m_bHashLButton, true);
 
             Vector3 PlayerPos = transform.position;
             Vector3 PlayerLook = m_Mesh.transform.forward;
@@ -398,7 +413,7 @@ public class Player : MonoBehaviour
         {
             m_bSkillOn[0] = true;
             m_bSwing = true;
-            m_Animator.SetBool("UseLButton", true);
+            m_Animator.SetBool(m_bHashLButton, true);
 
             Vector3 PlayerPos = transform.position;
             Vector3 NewPos;
@@ -406,7 +421,7 @@ public class Player : MonoBehaviour
 
             switch (m_eAbility)
             {
-                case ABILITY.ABIL_FIRE:
+                case ObjectManager.ABILITY.ABIL_FIRE:
                     {
                         if (m_Target)
                         {
@@ -423,7 +438,7 @@ public class Player : MonoBehaviour
                         m_SkillObject[1] = Instantiate(m_FirstMagicSkill, NewPos, Quaternion.Euler(new Vector3(90, 180, 180)));
                     }
                     break;
-                case ABILITY.ABIL_WATER:
+                case ObjectManager.ABILITY.ABIL_WATER:
                     {
                         PlayerLook = m_Mesh.transform.forward;
 
@@ -434,7 +449,7 @@ public class Player : MonoBehaviour
                         m_SkillObject[1].GetComponent<MagicBomb>().SetLookVector(PlayerLook);
                     }
                     break;
-                case ABILITY.ABIL_GRASS:
+                case ObjectManager.ABILITY.ABIL_GRASS:
                     {
                         PlayerLook = m_Mesh.transform.forward;
                         NewPos = PlayerPos + PlayerLook * 3f;
@@ -457,31 +472,32 @@ public class Player : MonoBehaviour
         {
             m_bSkillOn[1] = true;
             m_bSwing = true;
-            m_Animator.SetBool("UseLButton", true);
+            m_Animator.SetBool(m_bHashLButton, true);
 
             Vector3 PlayerPos = transform.position;
-            Vector3 NewPos;
             Vector3 PlayerLook;
+            Vector3 NewPos;
 
             switch (m_eAbility)
             {
-                case ABILITY.ABIL_FIRE:
+                case ObjectManager.ABILITY.ABIL_FIRE:
                     {
                         PlayerLook = m_Mesh.transform.forward;
-                        NewPos = PlayerPos + PlayerLook * 3f;
+                        NewPos = PlayerPos + PlayerLook;
+                        NewPos.y += 1f;
 
                         m_SkillObject[2] = Instantiate(m_SecondMagicSkill, NewPos, Quaternion.identity);
                         m_SkillObject[2].transform.rotation = Quaternion.LookRotation(PlayerLook);
                     }
                     break;
-                case ABILITY.ABIL_WATER:
+                case ObjectManager.ABILITY.ABIL_WATER:
                     {
                         NewPos = new Vector3(PlayerPos.x, PlayerPos.y + 0.5f, PlayerPos.z);
 
                         m_SkillObject[2] = Instantiate(m_SecondMagicSkill, NewPos, Quaternion.identity);
                     }
                     break;
-                case ABILITY.ABIL_GRASS:
+                case ObjectManager.ABILITY.ABIL_GRASS:
                     {
                         PlayerLook = m_Mesh.transform.forward;
                         NewPos = PlayerPos + PlayerLook * 3f;
@@ -569,27 +585,27 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void SetAbility(ABILITY eAbility)
+    public void SetAbility(ObjectManager.ABILITY ability)
     {
-        m_eAbility = eAbility;
+        m_eAbility = ability;
 
         switch (m_eAbility)
         {
-            case ABILITY.ABIL_FIRE:
+            case ObjectManager.ABILITY.ABIL_FIRE:
                 {
                     m_MagicBall = Resources.Load<GameObject>("Particle/Player/Fire/ErekiBall2");
                     m_FirstMagicSkill = Resources.Load<GameObject>("Particle/Player/Fire/fireShot");
                     m_SecondMagicSkill = Resources.Load<GameObject>("Particle/Player/Fire/FlameThrower");
                 }
                 break;
-            case ABILITY.ABIL_WATER:
+            case ObjectManager.ABILITY.ABIL_WATER:
                 {
                     m_MagicBall = Resources.Load<GameObject>("Particle/Player/Water/ErekiBall2");
                     m_FirstMagicSkill = Resources.Load<GameObject>("Particle/Player/Water/SteamBomb");
                     m_SecondMagicSkill = Resources.Load<GameObject>("Particle/Player/Water/MagicShield");
                 }
                 break;
-            case ABILITY.ABIL_GRASS:
+            case ObjectManager.ABILITY.ABIL_GRASS:
                 {
                     m_MagicBall = Resources.Load<GameObject>("Particle/Player/Grass/ErekiBall2");
                     m_FirstMagicSkill = Resources.Load<GameObject>("Particle/Player/Grass/GrassWall");
@@ -603,11 +619,11 @@ public class Player : MonoBehaviour
     {
         m_bSwing = false;
 
-        m_Animator.SetFloat("MoveSpeed", 0);
-        m_Animator.SetBool("UseShift", false);
-        m_Animator.SetBool("UseSpace", false);
-        m_Animator.SetBool("IsGrounded", true);
-        m_Animator.SetBool("UseLButton", false);
+        m_Animator.SetFloat(m_HashMoveSpeed, 0);
+        m_Animator.SetBool(m_bHashShift, false);
+        m_Animator.SetBool(m_bHashSpace, false);
+        m_Animator.SetBool(m_bHashGrounded, true);
+        m_Animator.SetBool(m_bHashLButton, false);
     }
 
     public bool GetActive(string objectName)

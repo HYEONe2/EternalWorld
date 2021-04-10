@@ -374,9 +374,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6860756994242704200}
+  - component: {fileID: 2669824066377497857}
   m_Layer: 0
   m_Name: Head
-  m_TagString: Untagged
+  m_TagString: MonsterWeapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -397,6 +398,19 @@ Transform:
   m_Father: {fileID: 6860756994242704222}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2669824066377497857
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6860756994242604904}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.8, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &6860756994242604906
 GameObject:
   m_ObjectHideFlags: 0
@@ -654,11 +668,13 @@ GameObject:
   m_Component:
   - component: {fileID: 6860756994242704218}
   - component: {fileID: 6860756994249858238}
+  - component: {fileID: 779048120799627262}
+  - component: {fileID: 5691077869029457037}
   - component: {fileID: 7891036577955940575}
   - component: {fileID: -5756376092938913044}
   m_Layer: 0
   m_Name: FireMonster
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -672,7 +688,7 @@ Transform:
   m_GameObject: {fileID: 6860756994242604922}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 6860756994242704220}
   - {fileID: 6860756994242704244}
@@ -689,7 +705,7 @@ Animator:
   m_GameObject: {fileID: 6860756994242604922}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 97e7b2e9aff997844b8b8dd53b0fffc1, type: 3}
-  m_Controller: {fileID: 9100000, guid: ad18e1e3bc906104699c48eb7dfd95dc, type: 2}
+  m_Controller: {fileID: 9100000, guid: 195cf1c9335d86b4fa03666c4edc55f6, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -698,6 +714,35 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!54 &779048120799627262
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6860756994242604922}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &5691077869029457037
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6860756994242604922}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1.5, z: 1}
+  m_Center: {x: 0, y: 0.7, z: 0}
 --- !u!195 &7891036577955940575
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -712,7 +757,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 7
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -732,6 +777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d40c0f88e831cb43878d7ef0fc31112, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_eAbility: 0
 --- !u!1 &6860756994242604924
 GameObject:
   m_ObjectHideFlags: 0

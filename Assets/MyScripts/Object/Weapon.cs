@@ -24,19 +24,19 @@ public class Weapon : MonoBehaviour
         if (m_MeshFilter.sharedMesh)
             return;
 
-        Player.ABILITY PlayerAbility = m_Player.GetAbility();
+        ObjectManager.ABILITY PlayerAbility = m_Player.GetAbility();
 
-        if(PlayerAbility == Player.ABILITY.ABIL_FIRE)
+        if(PlayerAbility == ObjectManager.ABILITY.ABIL_FIRE)
         {
             MeshFilter tempFilter= Resources.Load<MeshFilter>("Equipment/Weapon/Staff_04");
             m_MeshFilter.sharedMesh = tempFilter.sharedMesh;
         }
-        else if(PlayerAbility == Player.ABILITY.ABIL_WATER)
+        else if(PlayerAbility == ObjectManager.ABILITY.ABIL_WATER)
         {
             MeshFilter tempFilter = Resources.Load<MeshFilter>("Equipment/Weapon/Staff_05");
             m_MeshFilter.sharedMesh = tempFilter.sharedMesh;
         }
-        else if (PlayerAbility == Player.ABILITY.ABIL_GRASS)
+        else if (PlayerAbility == ObjectManager.ABILITY.ABIL_GRASS)
         {
             MeshFilter tempFilter = Resources.Load<MeshFilter>("Equipment/Weapon/Staff_06");
             m_MeshFilter.sharedMesh = tempFilter.sharedMesh;

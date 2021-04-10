@@ -863,3 +863,5 @@ E:\Unity\EternalWorld\obj\Debug\Assembly-CSharp-Editor.csproj.CoreCompileInputs.
 E:\Unity\EternalWorld\obj\Debug\Assembly-CSharp-Editor.csproj.CopyComplete
 E:\Unity\EternalWorld\obj\Debug\Assembly-CSharp-Editor.dll
 E:\Unity\EternalWorld\obj\Debug\Assembly-CSharp-Editor.pdb
+E:\Unity\EternalWorld\Temp\bin\Debug\NavMeshComponentsEditor.pdb
+E:\Unity\EternalWorld\Temp\bin\Debug\NavMeshComponents.pdb
