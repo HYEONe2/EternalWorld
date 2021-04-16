@@ -22,11 +22,13 @@ public class MagicCircle : MonoBehaviour
         }
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.CompareTag("Monster"))
-    //    {
-    //        GameObject.Find("Player").GetComponent<Player>().SetSkillObject(1, null);
-    //    }
-    //}
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Monster"))
+        {
+            Monster monster = other.GetComponent<Monster>();
+            if (monster)
+                monster.SetDamaged(1);
+        }
+    }
 }

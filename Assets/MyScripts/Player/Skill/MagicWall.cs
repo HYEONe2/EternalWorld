@@ -22,14 +22,16 @@ public class MagicWall : MonoBehaviour
         }
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.CompareTag("Monster"))
-    //    {
-    //        GameObject.Find("Player").GetComponent<Player>().SetSkillObject(1, null);
-    //        // 몬스터 걸음 멈춤
-    //    }
-    //}
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Monster"))
+        {
+            Monster monster = other.GetComponent<Monster>();
+            if (monster)
+                monster.SetDamaged(1);
+            // 몬스터 걸음 멈춤
+        }
+    }
 
     private void DestroyWall()
     {

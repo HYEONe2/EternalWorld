@@ -5,29 +5,47 @@ using UnityEngine;
 public class PlayerAnimationEvent : MonoBehaviour
 {
     private Player m_Player;
-    private Animator m_PlayerAnimator;
+    private PlayerProperty m_PlayerProperty;
+    private Animator m_Animator;
+
+    // Animation Values
+    private readonly int m_bHashDamaged = Animator.StringToHash("IsDamaged");
+    private readonly int m_bHashDead = Animator.StringToHash("IsDead");
 
     // Start is called before the first frame update
     void Start()
     {
-        if (!m_Player)
-            m_Player = GameObject.Find("Player").GetComponent<Player>();
-        if (!m_PlayerAnimator)
-            m_PlayerAnimator = gameObject.GetComponent<Animator>();
+        m_Player = transform.parent.GetComponent<Player>();
+        m_PlayerProperty = transform.parent.GetComponent<PlayerProperty>();
+        m_Animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
     void Update()
     {
+    }
 
+    private void OnTriggerStay(Collider other)
+    {
+        if (m_Player.GetTarget())
+            return;
+
+        if (other.CompareTag("Monster"))
+            m_Player.SetTargetMonster(other.gameObject);
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Monster"))
+            m_Player.SetTargetMonster(null);
     }
 
     void StopSwingAxe()
     {
-        if (m_PlayerAnimator)
+        if (m_Animator)
         {
             m_Player.SetSwing(false);
-            m_PlayerAnimator.SetBool("UseLButton", false);
+            m_Animator.SetBool("UseLButton", false);
         }
     }
 
@@ -42,18 +60,12 @@ public class PlayerAnimationEvent : MonoBehaviour
             commodity.SetCheckAttack(true);
     }
 
-    private void OnTriggerStay(Collider other)
+    public void ResetNormal()
     {
-        if (m_Player.GetTarget())
-            return;
+        m_Animator.SetBool(m_bHashDamaged, false);
 
-        if(other.CompareTag("Monster"))
-            m_Player.SetTargetMonster(other.gameObject);
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Monster"))
-            m_Player.SetTargetMonster(null);
+        int HP = m_PlayerProperty.GetHP();
+        if (HP <= 0)
+            m_Animator.SetBool(m_bHashDead, true);
     }
 }

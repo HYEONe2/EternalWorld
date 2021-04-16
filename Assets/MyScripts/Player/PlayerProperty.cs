@@ -14,9 +14,11 @@ public class PlayerProperty : MonoBehaviour
         OBJ_END
     };
 
+    // Values
     private int m_Level;
     private int m_Exp;
     private int m_MaxExp;
+    private int m_HP;
 
     private List<int> m_Property = new List<int>();
     private int m_Coin;
@@ -25,11 +27,12 @@ public class PlayerProperty : MonoBehaviour
     public void ReduceProperty(OBJTYPE eType, int amount) { m_Property[(int)eType] -= amount; }
     public int GetPropertyAmount(OBJTYPE eType) { return m_Property[(int)eType]; }
 
-    public int GetCoin() { return m_Coin; }
-    public void SetCoin(int coin) { m_Coin = coin; }
     public int GetLevel() { return m_Level; }
     public int GetExp() { return m_Exp; }
     public int GetMaxExp() { return m_MaxExp; }
+    public int GetHP() { return m_HP; }
+    public int GetCoin() { return m_Coin; }
+    public void SetCoin(int coin) { m_Coin = coin; }
 
     // Start is called before the first frame update
     void Start()
@@ -37,21 +40,22 @@ public class PlayerProperty : MonoBehaviour
         m_Level = 1;
         m_Exp = 0;
         m_MaxExp = 100;
+        m_HP = 10;
 
         for (int i = 0; i < (int)OBJTYPE.OBJ_END; ++i)
             m_Property.Add(0);
         m_Coin = 500;
     }
 
+    private void OnDestroy()
+    {
+        m_Property.Clear();
+    }
+
     void Update()
     {
         if (Input.GetKeyDown("9"))
             m_Level += 1;
-    }
-
-    private void OnDestroy()
-    {
-        m_Property.Clear();
     }
 
     public void AddExperience(int exp)
@@ -68,5 +72,15 @@ public class PlayerProperty : MonoBehaviour
         }
 
         Debug.Log(m_Level + ": " + m_Exp);
+    }
+
+    public void SetDamaged(int damage)
+    {
+        Player player = GetComponent<Player>();
+        if (player.GetDamaged())
+            return;
+
+        m_HP -= damage;
+        player.SetAniDamaged();
     }
 }

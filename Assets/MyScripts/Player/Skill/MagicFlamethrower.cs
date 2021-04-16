@@ -21,13 +21,13 @@ public class MagicFlamethrower : MonoBehaviour
     {
         if (!m_PartiSystem.IsAlive())
         {
-            if(m_Master)
+            if (CompareTag("Weapon"))
                 m_Master.GetComponent<Player>().SetSkillObject(2, null);
             Destroy(transform.parent.gameObject);
             return;
         }
 
-        if (m_Master)
+        if (CompareTag("Weapon"))
         {
             Vector3 PlayerPos = m_Master.transform.position;
             Vector3 PlayerLook = m_Master.transform.Find("PlayerMesh").gameObject.transform.forward;
@@ -41,18 +41,19 @@ public class MagicFlamethrower : MonoBehaviour
 
     private void OnDestroy()
     {
-        GameObject.Find("Player").GetComponent<Player>().SetSkillObject(2, null);
+        if(CompareTag("Weapon"))
+            GameObject.Find("Player").GetComponent<Player>().SetSkillObject(2, null);
         Destroy(transform.parent.gameObject);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (CompareTag("Weapon"))
         {
             if (other.CompareTag("Monster"))
             {
                 Monster monster = other.GetComponent<Monster>();
-                if (monster)
+                if (monster && !monster.GetDamaged())
                     monster.SetDamaged(1);
             }
         }
@@ -60,7 +61,9 @@ public class MagicFlamethrower : MonoBehaviour
         {
             if (other.CompareTag("Player"))
             {
-                Debug.Log("Player");
+                PlayerProperty player = other.GetComponent<PlayerProperty>();
+                if (player)
+                    player.SetDamaged(1);
             }
         }
     }

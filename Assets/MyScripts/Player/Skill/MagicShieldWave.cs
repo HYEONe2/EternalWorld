@@ -26,4 +26,14 @@ public class MagicShieldWave : MonoBehaviour
         if (m_Collider.radius <= 0.5f)
             m_Collider.radius += m_PartiSystem.time * 0.4f;
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Monster"))
+        {
+            Monster monster = other.GetComponent<Monster>();
+            if (monster)
+                monster.SetDamaged(1);
+        }
+    }
 }

@@ -222,7 +222,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.20761243
+      - time: 0.17336585
         functionName: EndFireSkill
         data: 
         objectReferenceParameter: {instanceID: 0}

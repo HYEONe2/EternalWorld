@@ -131,6 +131,9 @@
      <Compile Include="Assets\MyScripts\Manager\ObjectManager.cs" />
      <Compile Include="Assets\MyScripts\Manager\UIManager.cs" />
      <Compile Include="Assets\MyScripts\Monster\Monster.cs" />
+     <Compile Include="Assets\MyScripts\Monster\Skill\BallAttack.cs" />
+     <Compile Include="Assets\MyScripts\Monster\Skill\PoisonAttack.cs" />
+     <Compile Include="Assets\MyScripts\Monster\Skill\RazorAttack.cs" />
      <Compile Include="Assets\MyScripts\Monster\TutorialMonster.cs" />
      <Compile Include="Assets\MyScripts\Object\Commodity.cs" />
      <Compile Include="Assets\MyScripts\Object\Equipment.cs" />

@@ -51,7 +51,7 @@ public class Maze : MonoBehaviour
     private static readonly int MAZE_GRID_Y = ((MAZE_LINE_Y * 2) + 1);  // 미로의 Y배열 개수
     private static readonly int EXEC_MAZE_COUNT_MAX = (MAZE_LINE_X * MAZE_LINE_Y / 2);  // 블록을 하나씩 생성할 때 수행 회수
     private static readonly float MAZE_BLOCK_SCALE = 7.0f;              // 미로 스케일(블록 하나 만큼의 크기)
-    //private Vector3 m_MazeBlockScale;
+    private Vector3 m_MazeBlockScale;
 
     private bool[][] m_mazeGrid = null;         // 미로 배열
     private GameObject m_blockParent = null;    // 미로 블록을 기억할 부모
@@ -61,7 +61,7 @@ public class Maze : MonoBehaviour
     //private GameObject m_MonsterSpawnBox;
     //private GameObject m_Monster[3];
     private GameObject m_MazeWall;         // 미로를 구성하는 블록 오브젝트
-    private GameObject m_Monster;
+    private GameObject[] m_Monster = new GameObject[3];
 
     // Values
     private bool m_bLateInit;
@@ -75,6 +75,15 @@ public class Maze : MonoBehaviour
         InitializeObjects();
         InitializeMaze();
         InitializeExitTrigger();
+    }
+
+    private void OnDestroy()
+    {
+        //for (int i = 0; i < 3; ++i)
+        //{
+        //    Destroy(m_Monster[i]);
+        //    m_Monster[i] = null;
+        //}
     }
 
     // Update is called once per frame
@@ -95,9 +104,12 @@ public class Maze : MonoBehaviour
     private void InitializeObjects()
     {
         m_MazeWall = Resources.Load<GameObject>("Environment/Maze/MazeWall");
-        //m_MonsterSpawnBox = Resources.Load<GameObject>("Environment/Maze/Cube");
-        m_Monster = Resources.Load<GameObject>("Monster/FireMonster");
-        //m_MazeBlockScale = m_MazeWall.transform.localScale;
+
+        m_Monster[0] = Resources.Load<GameObject>("Monster/FireMonster");
+        m_Monster[1] = Resources.Load<GameObject>("Monster/GrassMonster");
+        m_Monster[2] = Resources.Load<GameObject>("Monster/WaterMonster");
+
+        m_MazeBlockScale = m_MazeWall.transform.localScale;
     }
 
     // 미로를 초기화: 배열 변수를 초기화하여 외벽과 기둥을 만듬
@@ -414,10 +426,11 @@ public class Maze : MonoBehaviour
 
         for (int i = 0; i < m_FireMonsterNum; ++i)
         {
-            //position = new Vector3(((Random.Range(0, MAZE_LINE_X) * 2) + 1) * m_MazeBlockScale.x, 0, ((Random.Range(0, MAZE_LINE_Y) * 2) + 1) * m_MazeBlockScale.z);
-            //position = new Vector3((Random.Range(0, MAZE_LINE_X) * 2) + 1, 0, (Random.Range(0, MAZE_LINE_Y) * 2) + 1) * MAZE_BLOCK_SCALE;
-            position = new Vector3(7, 0, 20);
-            Instantiate(m_Monster, position, Quaternion.identity);
+            position = new Vector3(((Random.Range(0, MAZE_LINE_X) * 2) + 1) * m_MazeBlockScale.x, 0, ((Random.Range(0, MAZE_LINE_Y) * 2) + 1) * m_MazeBlockScale.z);
+            position = new Vector3((Random.Range(0, MAZE_LINE_X) * 2) + 1, 0, (Random.Range(0, MAZE_LINE_Y) * 2) + 1) * MAZE_BLOCK_SCALE;
+
+            //position = new Vector3(7, 0, 20);
+            Instantiate(m_Monster[Random.Range(0,3)], position, Quaternion.identity);
         }
     }
 }

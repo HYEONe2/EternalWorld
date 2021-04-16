@@ -6,12 +6,15 @@ public class MagicBomb : MonoBehaviour
 {
     private ParticleSystem m_PartiSystem;
     private SphereCollider m_Collider;
+    private Monster m_Monster;
 
     private bool m_bStop;
+    private float m_StopTime;
+
     private Vector3 m_LookVector;
     private float m_Speed;
 
-    private float m_StopTime;
+    private bool m_bAttacked;
 
     public void SetLookVector(Vector3 lookVec) { m_LookVector = lookVec; }
 
@@ -22,7 +25,12 @@ public class MagicBomb : MonoBehaviour
         m_Collider = GetComponent<SphereCollider>();
 
         m_bStop = false;
-        m_Speed = 10f;
+        m_StopTime = 0;
+
+        m_LookVector = Vector3.zero;
+        m_Speed = 5f;
+
+        m_bAttacked = false;
     }
 
     // Update is called once per frame
@@ -54,16 +62,33 @@ public class MagicBomb : MonoBehaviour
         else
         {
             if (m_PartiSystem.time > 1.5f)
+            {
                 m_Collider.radius = 2.5f;
+
+                if (m_bAttacked || !m_Monster)
+                    return;
+
+                m_Monster.SetDamaged(1);
+                m_bAttacked = true;
+            }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (m_Monster)
+            return;
+
         if (other.CompareTag("Monster"))
         {
+            m_Monster = other.GetComponent<Monster>();
             m_bStop = true;
-            GameObject.Find("Player").GetComponent<Player>().SetSkillObject(1, null);
         }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Monster"))
+            m_Monster = null;
     }
 }

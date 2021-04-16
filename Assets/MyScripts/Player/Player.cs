@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -30,7 +29,6 @@ public class Player : MonoBehaviour
 
     // Values
     private ObjectManager.ABILITY m_eAbility;
-    private string m_SceneName;
 
     private Vector3 m_Pos;
     private float m_MoveSpeed;
@@ -51,6 +49,7 @@ public class Player : MonoBehaviour
     private readonly int m_HashMoveSpeed = Animator.StringToHash("MoveSpeed");
     private readonly int m_bHashSpace = Animator.StringToHash("UseSpace");
     private readonly int m_bHashLButton = Animator.StringToHash("UseLButton");
+    private readonly int m_bHashDamaged = Animator.StringToHash("IsDamaged");
 
     // Function
     public void SetNearObject(GameObject nearObj) { m_NearObject = nearObj; }
@@ -58,14 +57,16 @@ public class Player : MonoBehaviour
     public void SetSwing(bool bSwing) { m_bSwing = bSwing; }
     public void SetUsePhone(bool use) { m_bUsePhone = use; }
     public void SetPosition(Vector3 pos) { m_Pos = pos; }
-    public void SetSceneName(string name) { m_SceneName = name; }
+    //public void SetSceneName(string name) { m_SceneName = name; }
 
     public GameObject GetNearObject() { return m_NearObject; }
     public GameObject GetSkillObject(int index) { return m_SkillObject[index]; }
     public GameObject GetTarget() { return m_Target; }
 
     public ObjectManager.ABILITY GetAbility() { return m_eAbility; }
-    public bool GetAttack() { return m_bSwing; }
+    public bool GetAttack() { return m_Animator.GetBool(m_bHashLButton); }
+    public bool GetDamaged() { return m_Animator.GetBool(m_bHashDamaged); }
+    public void SetAniDamaged() { m_Animator.SetBool(m_bHashDamaged, true); }
 
     // Start is called before the first frame update
     void Start()
@@ -74,10 +75,21 @@ public class Player : MonoBehaviour
         InitializeValues();
     }
 
+    private void OnDestroy()
+    {
+        for (int i = 0; i < 3; ++i)
+        {
+            Destroy(m_SkillObject[i]);
+            m_SkillObject[i] = null;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
-        LateInit();
+        if (CheckHP())
+            return;
+
         if (Cursor.visible)
             ResetAnimator();
 
@@ -85,13 +97,21 @@ public class Player : MonoBehaviour
         UpdateKeyInput();
         UpdateAction();
         UpdateInteraction();
-
-        //Debug.Log("Player: " +transform.position.x + "\t" + transform.position.y + '\t' + transform.position.z);
     }
 
-    private void FixedUpdate()
-    {
+    //private void FixedUpdate()
+    //{
 
+    //}
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (m_Animator.GetBool(m_bHashDamaged)
+            || (m_eAbility == ObjectManager.ABILITY.ABIL_WATER && m_SkillObject[2]))
+            return;
+
+        if (other.CompareTag("Monster"))
+            GetComponent<PlayerProperty>().SetDamaged(1);
     }
 
     private void InitializeComponents()
@@ -138,36 +158,14 @@ public class Player : MonoBehaviour
         m_bSwing = false;
     }
 
-    private void LateInit()
+    private bool CheckHP()
     {
-        if (m_SceneName == SceneManager.GetActiveScene().name)
-            return;
+        int HP = GetComponent<PlayerProperty>().GetHP();
 
-        //if (m_Pos.y <= -10f)
-        //{
-        //    m_SceneName = SceneManager.GetActiveScene().name;
-        //    return;
-        //}
-
-        //switch (SceneManager.GetActiveScene().name)
-        //{
-        //    case "MainScene":
-        //        {
-        //            m_Pos.x = 0;
-        //            m_Pos.z = 0;
-        //            m_Pos.y += m_Gravity * Time.deltaTime * 0.001f;
-        //            transform.position = new Vector3(0, m_Pos.y, 0);
-        //        }
-        //        break;
-        //    case "MazeScene":
-        //        {
-        //            m_Pos.x = 1.8f;
-        //            m_Pos.z = 2.4f;
-        //            m_Pos.y += m_Gravity * Time.deltaTime * 0.001f;
-        //            transform.position = new Vector3(0, m_Pos.y, 0);
-        //        }
-        //        break;
-        //}
+        if (HP <= 0)
+            return true;
+        else
+            return false;
     }
 
     private void UpdateMovement()
@@ -184,7 +182,6 @@ public class Player : MonoBehaviour
         {
             Jump();
             m_Animator.SetBool(m_bHashGrounded, true);
-            m_SceneName = SceneManager.GetActiveScene().name;
         }
 
         Move();
@@ -215,6 +212,9 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
+        if (m_Animator.GetBool(m_bHashDamaged))
+            return;
+
         // Animation Initialize
         m_Animator.SetBool(m_bHashShift, false);
         m_Animator.SetFloat(m_HashMoveSpeed, 0);
@@ -282,6 +282,9 @@ public class Player : MonoBehaviour
     {
         m_Animator.SetBool(m_bHashSpace, false);
         m_bJump = false;
+
+        if (m_Animator.GetBool(m_bHashDamaged))
+            return;
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -373,7 +376,7 @@ public class Player : MonoBehaviour
 
         if (m_bSkillOn[1])
         {
-            if (m_CoolTime[1] > 0.1f)
+            if (m_CoolTime[1] > 5f)
             {
                 m_bSkillOn[1] = false;
                 m_CoolTime[1] = 0;
