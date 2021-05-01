@@ -174,6 +174,7 @@ public class Maze : MonoBehaviour
     {
         int index = 0;
         int usableTrigger = Random.Range(0, 3);
+        Debug.Log("TRIGGER: " + usableTrigger);
 
         foreach (Transform trigger in transform)
         {
@@ -424,13 +425,14 @@ public class Maze : MonoBehaviour
     {
         Vector3 position;
 
-        for (int i = 0; i < m_FireMonsterNum; ++i)
+        for (int i = 0; i < 10; ++i)
         {
-            position = new Vector3(((Random.Range(0, MAZE_LINE_X) * 2) + 1) * m_MazeBlockScale.x, 0, ((Random.Range(0, MAZE_LINE_Y) * 2) + 1) * m_MazeBlockScale.z);
+            //position = new Vector3(((Random.Range(0, MAZE_LINE_X) * 2) + 1) * m_MazeBlockScale.x, 0, ((Random.Range(0, MAZE_LINE_Y) * 2) + 1) * m_MazeBlockScale.z);
             position = new Vector3((Random.Range(0, MAZE_LINE_X) * 2) + 1, 0, (Random.Range(0, MAZE_LINE_Y) * 2) + 1) * MAZE_BLOCK_SCALE;
 
             //position = new Vector3(7, 0, 20);
-            Instantiate(m_Monster[Random.Range(0,3)], position, Quaternion.identity);
+            Instantiate(m_Monster[Random.Range(0, 3)], position, Quaternion.identity);
+            //Instantiate(m_Monster[0], position, Quaternion.identity);
         }
     }
 }

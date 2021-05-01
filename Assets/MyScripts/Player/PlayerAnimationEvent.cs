@@ -62,10 +62,10 @@ public class PlayerAnimationEvent : MonoBehaviour
 
     public void ResetNormal()
     {
-        m_Animator.SetBool(m_bHashDamaged, false);
-
         int HP = m_PlayerProperty.GetHP();
         if (HP <= 0)
             m_Animator.SetBool(m_bHashDead, true);
+
+        m_Animator.SetBool(m_bHashDamaged, false);
     }
 }

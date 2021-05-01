@@ -36,6 +36,7 @@ public class UIManager : MonoBehaviour
     public void SetPlayerRebuild(bool bRebuild) { m_bPlayerRebuild = bRebuild; }
     public void SetUpgrade(bool bUpgrade) { m_bUpgrade = bUpgrade; }
     public void SetEarnGem(bool bEarn) { m_bEarnGem = bEarn; }
+    public void SetQuestCanves(GameObject quest) { m_QuestCanvas = quest; }
 
     public bool GetRebuildUpgrade() { bool check = (m_bRebuild && m_bUpgrade) ? true : false; return check; }
     public bool GetEarnGem() { return m_bEarnGem; }
@@ -69,6 +70,7 @@ public class UIManager : MonoBehaviour
     {
         if(m_QuestCanvas)
             UpdateActiveCanvas();
+
         UpdatePlayerPropertyUI();
     }
 

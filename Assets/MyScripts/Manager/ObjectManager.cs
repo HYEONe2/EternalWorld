@@ -11,6 +11,9 @@ public class ObjectManager : MonoBehaviour
     private Transform m_PlayerTrans;
     private int m_Level;
 
+    private GameObject m_BuildingManager;
+    private GameObject m_Boundary;
+    private GameObject m_Environment;
     private List<LevelBoundary> m_LevelBoundaryList = new List<LevelBoundary>();
     private List<TreeBoundary> m_TreeBoundaryList = new List<TreeBoundary>();
 
@@ -22,6 +25,12 @@ public class ObjectManager : MonoBehaviour
         m_SceneName = SceneManager.GetActiveScene().name;
         m_PlayerTrans = GameObject.Find("Player").transform;
         m_Level = 0;
+
+        m_BuildingManager = transform.Find("BuildingManager").gameObject;
+        m_Boundary = transform.Find("Boundary").gameObject;
+        m_Environment = transform.Find("Environment").gameObject;
+        m_Boundary.SetActive(false);
+        m_Environment.SetActive(false);
 
         InitializeBoundary();
     }
@@ -55,19 +64,32 @@ public class ObjectManager : MonoBehaviour
         if (m_SceneName == SceneManager.GetActiveScene().name)
             return false;
 
-        foreach (LevelBoundary boundary in m_LevelBoundaryList)
-        {
-            if (boundary)
-                Destroy(boundary.gameObject);
-        }
-
-        foreach (TreeBoundary boundary in m_TreeBoundaryList)
-        {
-            if (boundary)
-                Destroy(boundary.gameObject);
-        }
-
         m_SceneName = SceneManager.GetActiveScene().name;
+        if (m_SceneName == "MainScene")
+        {
+            m_BuildingManager.SetActive(true);
+            m_Boundary.SetActive(true);
+            m_Environment.SetActive(true);
+        }
+        else
+        {
+            m_Boundary.SetActive(false);
+            m_Environment.SetActive(false);
+            return false;
+        }
+
+        //foreach (LevelBoundary boundary in m_LevelBoundaryList)
+        //{
+        //    if (boundary)
+        //        Destroy(boundary.gameObject);
+        //}
+
+        //foreach (TreeBoundary boundary in m_TreeBoundaryList)
+        //{
+        //    if (boundary)
+        //        Destroy(boundary.gameObject);
+        //}
+
         InitializeBoundary();
 
         return true;

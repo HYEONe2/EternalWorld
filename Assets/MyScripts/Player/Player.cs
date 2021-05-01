@@ -26,6 +26,8 @@ public class Player : MonoBehaviour
     private GameObject[] m_SkillObject = new GameObject[3];
     private bool[] m_bSkillOn = new bool[2];
     private float[] m_CoolTime = new float[2];
+    private float[] m_EndCoolTime = new float[2];
+    private float m_CoolPercent;
 
     // Values
     private ObjectManager.ABILITY m_eAbility;
@@ -57,11 +59,14 @@ public class Player : MonoBehaviour
     public void SetSwing(bool bSwing) { m_bSwing = bSwing; }
     public void SetUsePhone(bool use) { m_bUsePhone = use; }
     public void SetPosition(Vector3 pos) { m_Pos = pos; }
+    public void SetCoolPercent(float percent) { m_CoolPercent = percent; }
     //public void SetSceneName(string name) { m_SceneName = name; }
 
     public GameObject GetNearObject() { return m_NearObject; }
     public GameObject GetSkillObject(int index) { return m_SkillObject[index]; }
     public GameObject GetTarget() { return m_Target; }
+    public bool GetSkillOn(int index) { return m_bSkillOn[index]; }
+    public float GetCoolTime(int index) { return m_CoolTime[index] / m_EndCoolTime[index]; }
 
     public ObjectManager.ABILITY GetAbility() { return m_eAbility; }
     public bool GetAttack() { return m_Animator.GetBool(m_bHashLButton); }
@@ -156,6 +161,9 @@ public class Player : MonoBehaviour
         m_bInitialEquip[0] = false;
         m_bInitialEquip[1] = false;
         m_bSwing = false;
+
+        m_EndCoolTime[0] = 5f;
+        m_EndCoolTime[1] = 10f;
     }
 
     private bool CheckHP()
@@ -302,13 +310,14 @@ public class Player : MonoBehaviour
 
     void UpdateAction()
     {
+        UpdateCoolTime();
+
         if (m_Animator.GetBool(m_bHashSpace) || Cursor.visible || m_bUsePhone || m_bSwing)
             return;
 
         Targeting();
         Swing();
 
-        UpdateCoolTime();
         if (!m_Weapon.activeSelf)
             return;
         UseMagicBall();
@@ -334,7 +343,9 @@ public class Player : MonoBehaviour
         }
 
         m_MoveSpeed = 4.5f * 2f;
-        Vector3 vDir = m_Target.transform.position - transform.position;
+        Vector3 TargetPos = m_Target.transform.position;
+        //TargetPos.y = -3.416695f;
+        Vector3 vDir = TargetPos - transform.position;
         Quaternion newRotation = Quaternion.LookRotation(vDir * m_MoveSpeed * Time.deltaTime);
 
         m_Mesh.transform.rotation = Quaternion.Slerp(m_Mesh.transform.rotation, newRotation, m_RotateSpeed * 3f * Time.deltaTime);
@@ -365,7 +376,7 @@ public class Player : MonoBehaviour
     {
         if (m_bSkillOn[0])
         {
-            if (m_CoolTime[0] > 5f)
+            if (m_CoolTime[0] > m_EndCoolTime[0] * m_CoolPercent)
             {
                 m_bSkillOn[0] = false;
                 m_CoolTime[0] = 0;
@@ -376,7 +387,7 @@ public class Player : MonoBehaviour
 
         if (m_bSkillOn[1])
         {
-            if (m_CoolTime[1] > 5f)
+            if (m_CoolTime[1] > m_EndCoolTime[1] *m_CoolPercent)
             {
                 m_bSkillOn[1] = false;
                 m_CoolTime[1] = 0;

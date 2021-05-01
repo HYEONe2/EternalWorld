@@ -57,7 +57,7 @@ public class MagicBomb : MonoBehaviour
             if (m_PartiSystem.time >= 1f)
                 m_PartiSystem.time = 0f;
 
-            transform.position += m_LookVector * Time.deltaTime * m_Speed;
+            transform.position += m_LookVector * Time.deltaTime * 5f;
         }
         else
         {

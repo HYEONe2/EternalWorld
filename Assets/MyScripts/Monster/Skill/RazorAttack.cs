@@ -25,11 +25,12 @@ public class RazorAttack : MonoBehaviour
         m_DestroyTime += Time.deltaTime;
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player"))
         {
-            other.GetComponent<PlayerProperty>().SetDamaged(1);
+            if(!other.GetComponent<Player>().GetDamaged())
+                other.GetComponent<PlayerProperty>().SetDamaged(1);
         }
     }
 }

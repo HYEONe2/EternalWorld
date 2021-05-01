@@ -201,7 +201,7 @@ public class BuildPanel : MonoBehaviour
     public void ClickBuildButton()
     {
         // 빌드
-        if (!m_Building || m_Building.transform.parent)
+        if (!m_Building /*|| m_Building.transform.parent*/)
         {
             m_Building = Instantiate(m_PanelInfo.Building, new Vector3(0f, 0f, 0f), new Quaternion(0f, 0f, 0f, 0f));
             m_Building.transform.SetParent(m_BuildingArm.transform);

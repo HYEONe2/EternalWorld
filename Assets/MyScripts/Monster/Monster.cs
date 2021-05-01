@@ -14,6 +14,7 @@ public class Monster : MonoBehaviour
     // Others
     private MazeManager m_MazeManager;
     private GameObject m_Target;
+    private float m_TargetY;
 
     private GameObject[] m_SkillObject = new GameObject[2];
     private GameObject m_FirstSkill;
@@ -65,8 +66,6 @@ public class Monster : MonoBehaviour
 
         CheckStateByTargetDist();
         UpdateState();
-
-        Debug.Log(m_eState);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -101,6 +100,7 @@ public class Monster : MonoBehaviour
 
         m_MazeManager = GameObject.Find("MazeManager").GetComponent<MazeManager>();
         m_Target = GameObject.Find("Player");
+        m_TargetY = m_Target.transform.position.y;
     }
 
     private void InitializeValues()
@@ -138,7 +138,7 @@ public class Monster : MonoBehaviour
                 break;
         }
 
-        m_HP = 10;
+        m_HP = 1;
         m_SkillIndex = Random.Range(0, 2);
     }
 
@@ -174,8 +174,9 @@ public class Monster : MonoBehaviour
                 }
             case STATE.STATE_TARGET:
                 {
-                    Vector3 NewLook = m_Target.transform.position - transform.position;
-                    //NewLook.y = transform.position.y;
+                    Vector3 TargetPos = m_Target.transform.position;
+                    TargetPos.y = -3.169801f;
+                    Vector3 NewLook = TargetPos - transform.position;
                     transform.rotation = Quaternion.LookRotation(NewLook);
                     m_Agent.destination = m_Target.transform.position;
                 }
@@ -185,10 +186,15 @@ public class Monster : MonoBehaviour
                     if (m_Animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
                         m_Animator.SetBool(m_bHashUseSkill, false);
 
-                    Vector3 NewLook = m_Target.transform.position - transform.position;
-                    transform.rotation = Quaternion.LookRotation(NewLook);
-
                     UpdateSkill();
+
+                    if (m_eAbility == ObjectManager.ABILITY.ABIL_WATER && m_SkillObject[1])
+                        return;
+
+                    Vector3 TargetPos = m_Target.transform.position;
+                    TargetPos.y = -3.169801f;
+                    Vector3 NewLook = TargetPos - transform.position;
+                    transform.rotation = Quaternion.LookRotation(NewLook);
                 }
                 break;
         }

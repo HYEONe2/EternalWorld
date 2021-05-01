@@ -21,7 +21,7 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: Event ResetNormal has a time (1.421233) outside the
+    animationImportWarnings: Event ResetNormal has a time (1.666667) outside the
       clip's valid range (0.000000..1.133333). It will never be fired
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
@@ -60,7 +60,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.49999997
+      - time: 0.33561644
         functionName: ResetNormal
         data: 
         objectReferenceParameter: {instanceID: 0}

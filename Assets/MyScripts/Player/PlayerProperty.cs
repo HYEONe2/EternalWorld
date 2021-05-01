@@ -19,6 +19,8 @@ public class PlayerProperty : MonoBehaviour
     private int m_Exp;
     private int m_MaxExp;
     private int m_HP;
+    private int m_Str;
+    private int m_CoolTime;
 
     private List<int> m_Property = new List<int>();
     private int m_Coin;
@@ -32,6 +34,9 @@ public class PlayerProperty : MonoBehaviour
     public int GetMaxExp() { return m_MaxExp; }
     public int GetHP() { return m_HP; }
     public int GetCoin() { return m_Coin; }
+    public int GetStr() { return m_Str; }
+    public int GetCoolTime() { return m_CoolTime; }
+
     public void SetCoin(int coin) { m_Coin = coin; }
 
     // Start is called before the first frame update
@@ -42,9 +47,13 @@ public class PlayerProperty : MonoBehaviour
         m_MaxExp = 100;
         m_HP = 10;
 
+        m_Str = 1;
+        m_CoolTime = 0;
+
         for (int i = 0; i < (int)OBJTYPE.OBJ_END; ++i)
             m_Property.Add(0);
         m_Coin = 500;
+        m_Property[1] = 10;
     }
 
     private void OnDestroy()
@@ -69,6 +78,10 @@ public class PlayerProperty : MonoBehaviour
         {
             m_Exp = m_MaxExp * m_Level - m_Exp;
             ++m_Level;
+
+            ++m_Str;
+            m_CoolTime = 10 * (m_Level - 1);
+            GetComponent<Player>().SetCoolPercent((100 - m_CoolTime) / 100);
         }
 
         Debug.Log(m_Level + ": " + m_Exp);

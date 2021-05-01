@@ -438,7 +438,9 @@ public class QuestUI : MonoBehaviour
                         m_bFinishTask = true;
                     else if (m_bCheckList[1])
                     {
-                        gameObject.SetActive(false);
+                        Cursor.visible = false;
+                        m_UIManager.SetQuestCanves(null);
+                        Destroy(gameObject);
                         // 씬 전환
                     }
                 }

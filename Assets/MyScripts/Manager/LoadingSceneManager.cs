@@ -19,9 +19,10 @@ public class LoadingSceneManager : MonoBehaviour
 
     public static void LoadScene(string sceneName)
     {
-        if (m_CurScene == sceneName)
-            return;
+        //if (m_CurScene == sceneName)
+        //    return;
 
+        //Debug.Log("?!");
         m_CurScene = SceneManager.GetActiveScene().name;
         m_NextScene = sceneName;
 
@@ -58,7 +59,8 @@ public class LoadingSceneManager : MonoBehaviour
                     // Loading End
                     op.allowSceneActivation = true;
 
-                    if (m_NextScene == "MainScene")
+                    if (m_NextScene == "MainScene"
+                        || m_NextScene == "MazeScene")
                     {
                         UIManager uimanager = GameObject.Find("UIManager").GetComponent<UIManager>();
                         if (uimanager)

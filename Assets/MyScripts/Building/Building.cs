@@ -24,10 +24,11 @@ public class Building : MonoBehaviour
     private Transform m_BuildingArmTrans;
     private Transform m_CamArmTrans;
     private PlayerProperty m_PlayerProperty;
+    private GameObject m_Mark;
 
-    private Material m_MeshMaterial;
+    [SerializeField] private Material m_MeshMaterial;
     private Color m_MeshOriginColor;
-    private Color m_PingpongColor;
+    //private Color m_PingpongColor;
 
     private GameObject m_BuildingGuide;
     private RaycastHit m_Hit;
@@ -54,8 +55,10 @@ public class Building : MonoBehaviour
         m_BuildingArmTrans = Player.transform.Find("BuildingArm");
         m_CamArmTrans = Player.transform.Find("CameraArm");
         m_PlayerProperty = Player.GetComponent<PlayerProperty>();
+        m_Mark = transform.Find("Mark").gameObject;
+        m_Mark.SetActive(false);
 
-        m_MeshMaterial = transform.GetChild(0).GetComponent<MeshRenderer>().material;
+        //m_MeshMaterial = transform.GetChild(0).GetComponent<MeshRenderer>().material;
         m_MeshOriginColor = m_MeshMaterial.color;
 
         m_BuildingGuide = Instantiate(Resources.Load<GameObject>("Object/Building/BuildingGuide"), new Vector3(0,0,0), new Quaternion(0,0,0,0));
@@ -94,6 +97,7 @@ public class Building : MonoBehaviour
                 m_UIManager.SetNoticeUI((PlayerProperty.OBJTYPE)m_Info.m_eBuildingType, 1);
                 m_PlayerProperty.AddExperience(m_Info.m_Exp * m_Info.m_UpgradeAmount);
                 SetOriginOpaque();
+                m_Mark.SetActive(false);
 
                 m_CheckTime = 0;
                 m_bCanTakeReward = false;
@@ -133,7 +137,7 @@ public class Building : MonoBehaviour
 
         transform.position = m_BuildingGuide.transform.position;
         SetAlpha(1f);
-        transform.SetParent(GameObject.Find("Buildings").transform);
+        transform.SetParent(GameObject.Find("BuildingManager").transform);
         m_BuildingGuide.SetActive(false);
 
         m_UIManager.SetPlayerRebuild(false);
@@ -186,11 +190,15 @@ public class Building : MonoBehaviour
         if (m_CheckTime >= m_Info.m_BuildTime)
         {
             m_bCanTakeReward = true;
+            m_Mark.SetActive(true);
 
-            if (!m_bIsClicked)
-                SetPingPongTransparent(0, 0, 1f, 1f);
-            else
+            //if (!m_bIsClicked)
+            //    SetPingPongTransparent(0, 0, 1f, 1f);
+            //else
+            if (m_bIsClicked)
                 SetTransparent(0.5f);
+            else
+                SetOriginOpaque();
         }
         else
             m_CheckTime += Time.deltaTime;
@@ -236,20 +244,20 @@ public class Building : MonoBehaviour
         m_MeshMaterial.color = new Color(m_MeshOriginColor.r, m_MeshOriginColor.g, m_MeshOriginColor.b, alpha);
     }
 
-    private void SetPingPongTransparent(float r, float g, float b, float timeSpeed)
-    {
-        m_MeshMaterial.SetFloat("_Mode", 3f);
-        m_MeshMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-        m_MeshMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-        m_MeshMaterial.SetInt("_ZWrite", 0);
-        m_MeshMaterial.DisableKeyword("_ALPHATEST_ON");
-        m_MeshMaterial.DisableKeyword("_ALPHABLEND_ON");
-        m_MeshMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
-        m_MeshMaterial.renderQueue = 3000;
+    //private void SetPingPongTransparent(float r, float g, float b, float timeSpeed)
+    //{
+    //    m_MeshMaterial.SetFloat("_Mode", 3f);
+    //    m_MeshMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+    //    m_MeshMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+    //    m_MeshMaterial.SetInt("_ZWrite", 0);
+    //    m_MeshMaterial.DisableKeyword("_ALPHATEST_ON");
+    //    m_MeshMaterial.DisableKeyword("_ALPHABLEND_ON");
+    //    m_MeshMaterial.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+    //    m_MeshMaterial.renderQueue = 3000;
 
-        m_PingpongColor = Color.Lerp(new Color(r, g, b, 0), new Color(r, g, b, 1f), Mathf.PingPong(Time.time, timeSpeed));
-        m_MeshMaterial.color = m_PingpongColor;
-    }
+    //    m_PingpongColor = Color.Lerp(new Color(r, g, b, 0), new Color(r, g, b, 1f), Mathf.PingPong(Time.time, timeSpeed));
+    //    m_MeshMaterial.color = m_PingpongColor;
+    //}
 
     public void ClickedToUpdate()
     {
@@ -261,9 +269,10 @@ public class Building : MonoBehaviour
     {
         m_bIsClicked = false;
 
-        if (m_bCanTakeReward)
-            SetPingPongTransparent(0, 0, 1f, 1f);
-        else
+        //if (m_bCanTakeReward)
+        //    SetPingPongTransparent(0, 0, 1f, 1f);
+        //else
+        if(!m_bCanTakeReward)
             SetOriginOpaque();
     }
 }

@@ -41,12 +41,12 @@ public class MagicFlamethrower : MonoBehaviour
 
     private void OnDestroy()
     {
-        if(CompareTag("Weapon"))
+        if (CompareTag("Weapon"))
             GameObject.Find("Player").GetComponent<Player>().SetSkillObject(2, null);
         Destroy(transform.parent.gameObject);
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
         if (CompareTag("Weapon"))
         {
