@@ -16,8 +16,6 @@ public class MagicBomb : MonoBehaviour
 
     private bool m_bAttacked;
 
-    public void SetLookVector(Vector3 lookVec) { m_LookVector = lookVec; }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -27,7 +25,7 @@ public class MagicBomb : MonoBehaviour
         m_bStop = false;
         m_StopTime = 0;
 
-        m_LookVector = Vector3.zero;
+        m_LookVector = GameObject.Find("Player").transform.Find("PlayerMesh").forward;
         m_Speed = 5f;
 
         m_bAttacked = false;
@@ -57,7 +55,7 @@ public class MagicBomb : MonoBehaviour
             if (m_PartiSystem.time >= 1f)
                 m_PartiSystem.time = 0f;
 
-            transform.position += m_LookVector * Time.deltaTime * 5f;
+            transform.position += m_LookVector * Time.deltaTime * m_Speed;
         }
         else
         {

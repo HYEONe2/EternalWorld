@@ -67,7 +67,6 @@ public class QuestUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateAIImages();
         UpdateQuestText();
 
         if (Input.GetKeyDown(KeyCode.P))
@@ -252,15 +251,6 @@ public class QuestUI : MonoBehaviour
         m_TalkingText.Add(TwelvethTalking);
     }
 
-    private void UpdateAIImages()
-    {
-        //for (int i = 0; i < m_Images.Length; ++i)
-        //{
-        //    Debug.Log(i);
-        //    m_AIImage.sprite = m_Images[i];
-        //}
-    }
-
     private void UpdateQuestText()
     {
         // 마지막 인덱스에 도달한 경우 -> 새로운 이벤트의 시작
@@ -439,6 +429,7 @@ public class QuestUI : MonoBehaviour
                     else if (m_bCheckList[1])
                     {
                         Cursor.visible = false;
+                        m_UIManager.SetPhoneCanvasActive(true);
                         m_UIManager.SetQuestCanves(null);
                         Destroy(gameObject);
                         // 씬 전환
@@ -521,26 +512,26 @@ public class QuestUI : MonoBehaviour
                 break;
             case 8:
                 {
-                    if (m_Player.GetActive("Equipment"))
-                        return;
-
                     if (Input.GetKeyDown("1"))
-                        m_bFinishTask = true;
+                    {
+                        if (!m_Player.GetActive("Equipment"))
+                            m_bFinishTask = true;
+                    }
                 }
                 break;
             case 9:
                 {
-                    if (!m_Player.GetActive("Equipment"))
-                        return;
-
                     if (Input.GetKeyDown("1"))
-                        m_bFinishTask = true;
+                    {
+                        if (m_Player.GetActive("Equipment"))
+                            m_bFinishTask = true;
+                    }
                 }
                 break;
             case 10:
                 {
-                    if (m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD) >= 5
-                        && m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_STONE) >= 5)
+                    if (m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD) >= 15
+                        && m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_STONE) >= 15)
                         m_bFinishTask = true;
                 }
                 break;

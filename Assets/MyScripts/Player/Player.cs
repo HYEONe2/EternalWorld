@@ -92,13 +92,14 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (CheckHP())
-            return;
-
         if (Cursor.visible)
             ResetAnimator();
 
         UpdateMovement();
+
+        if (CheckHP())
+            return;
+
         UpdateKeyInput();
         UpdateAction();
         UpdateInteraction();
@@ -116,7 +117,15 @@ public class Player : MonoBehaviour
             return;
 
         if (other.CompareTag("Monster"))
-            GetComponent<PlayerProperty>().SetDamaged(1);
+        {
+            PlayerProperty playerProperty = GetComponent<PlayerProperty>();
+            Monster monster = other.GetComponent<Monster>();
+
+            if (monster)
+                playerProperty.SetDamaged(monster.GetAbility(), playerProperty.GetLevel());
+            else
+                playerProperty.SetDamaged(m_eAbility, playerProperty.GetLevel());
+        }
     }
 
     private void InitializeComponents()
@@ -161,6 +170,9 @@ public class Player : MonoBehaviour
         m_bInitialEquip[0] = false;
         m_bInitialEquip[1] = false;
         m_bSwing = false;
+
+        for (int i = 0; i < 2; ++i)
+            m_CoolTime[i] = 0;
 
         m_EndCoolTime[0] = 5f;
         m_EndCoolTime[1] = 10f;
@@ -220,7 +232,7 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
-        if (m_Animator.GetBool(m_bHashDamaged))
+        if (m_Animator.GetBool(m_bHashDamaged) || GetComponent<PlayerProperty>().GetHP()<= 0)
             return;
 
         // Animation Initialize
@@ -343,8 +355,10 @@ public class Player : MonoBehaviour
         }
 
         m_MoveSpeed = 4.5f * 2f;
+
         Vector3 TargetPos = m_Target.transform.position;
-        //TargetPos.y = -3.416695f;
+        TargetPos.y = transform.position.y + 0.3f;
+
         Vector3 vDir = TargetPos - transform.position;
         Quaternion newRotation = Quaternion.LookRotation(vDir * m_MoveSpeed * Time.deltaTime);
 
@@ -376,7 +390,7 @@ public class Player : MonoBehaviour
     {
         if (m_bSkillOn[0])
         {
-            if (m_CoolTime[0] > m_EndCoolTime[0] * m_CoolPercent)
+            if (m_CoolTime[0] > m_EndCoolTime[0] * (100-m_CoolPercent)*0.01)
             {
                 m_bSkillOn[0] = false;
                 m_CoolTime[0] = 0;
@@ -387,7 +401,7 @@ public class Player : MonoBehaviour
 
         if (m_bSkillOn[1])
         {
-            if (m_CoolTime[1] > m_EndCoolTime[1] *m_CoolPercent)
+            if (m_CoolTime[1] > m_EndCoolTime[1] * (100 - m_CoolPercent) * 0.01)
             {
                 m_bSkillOn[1] = false;
                 m_CoolTime[1] = 0;
@@ -459,8 +473,7 @@ public class Player : MonoBehaviour
                         NewPos = PlayerPos + PlayerLook * 3f;
                         NewPos.y = PlayerPos.y + 1f;
 
-                        m_SkillObject[1] = Instantiate(m_FirstMagicSkill, NewPos, Quaternion.Euler(new Vector3(90, 180, 180)));
-                        m_SkillObject[1].GetComponent<MagicBomb>().SetLookVector(PlayerLook);
+                        Instantiate(m_FirstMagicSkill, NewPos, Quaternion.Euler(new Vector3(90, 180, 180)));
                     }
                     break;
                 case ObjectManager.ABILITY.ABIL_GRASS:
@@ -629,7 +642,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void ResetAnimator()
+    public void ResetAnimator()
     {
         m_bSwing = false;
 
@@ -648,5 +661,11 @@ public class Player : MonoBehaviour
             return m_Weapon.activeSelf;
         else
             return false;
+    }
+
+    public void ResetCoolTime()
+    {
+        for (int i = 0; i < 2; ++i)
+            m_CoolTime[i] = 0;
     }
 }

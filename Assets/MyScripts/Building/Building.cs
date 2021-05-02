@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Building : MonoBehaviour
 {
-    public enum BUILD{ BUILDING, BUILT, BUILD_END};
+    public enum BUILD { BUILDING, BUILT, BUILD_END };
     public enum BUILDING { BUILDING_WOOD, BUILDING_STONE, BUILDING_END };
 
     [System.Serializable]
@@ -26,7 +26,7 @@ public class Building : MonoBehaviour
     private PlayerProperty m_PlayerProperty;
     private GameObject m_Mark;
 
-    [SerializeField] private Material m_MeshMaterial;
+    /*[SerializeField]*/ private Material m_MeshMaterial;
     private Color m_MeshOriginColor;
     //private Color m_PingpongColor;
 
@@ -52,22 +52,24 @@ public class Building : MonoBehaviour
 
         GameObject Player = GameObject.Find("Player");
         m_UIManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+
         m_BuildingArmTrans = Player.transform.Find("BuildingArm");
         m_CamArmTrans = Player.transform.Find("CameraArm");
         m_PlayerProperty = Player.GetComponent<PlayerProperty>();
+
         m_Mark = transform.Find("Mark").gameObject;
         m_Mark.SetActive(false);
 
-        //m_MeshMaterial = transform.GetChild(0).GetComponent<MeshRenderer>().material;
+        m_MeshMaterial = transform.GetChild(0).GetComponent<MeshRenderer>().material;
         m_MeshOriginColor = m_MeshMaterial.color;
 
-        m_BuildingGuide = Instantiate(Resources.Load<GameObject>("Object/Building/BuildingGuide"), new Vector3(0,0,0), new Quaternion(0,0,0,0));
-        m_BuildingGuide.transform.SetParent(this.transform);
+        m_BuildingGuide = transform.Find("BuildingGuide").gameObject;
 
         Vector3 Look = GameObject.Find("Player").transform.position - m_CamArmTrans.transform.position;
         Look.y = 0;
         Look.Normalize();
-        transform.localRotation = Quaternion.LookRotation(Look);
+        transform.rotation = Quaternion.LookRotation(-m_BuildingArmTrans.forward);
+        transform.Rotate(new Vector3(0, -90f, 0));
     }
 
     // Update is called once per frame
@@ -89,13 +91,14 @@ public class Building : MonoBehaviour
         if (!m_bCanTakeReward || m_bIsClicked)
             return;
 
-        if(other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
-            if(Input.GetKey(KeyCode.F))
+            if (Input.GetKey(KeyCode.F))
             {
                 m_PlayerProperty.AddProperty((PlayerProperty.OBJTYPE)m_Info.m_eBuildingType, 1);
                 m_UIManager.SetNoticeUI((PlayerProperty.OBJTYPE)m_Info.m_eBuildingType, 1);
                 m_PlayerProperty.AddExperience(m_Info.m_Exp * m_Info.m_UpgradeAmount);
+
                 SetOriginOpaque();
                 m_Mark.SetActive(false);
 
@@ -113,7 +116,7 @@ public class Building : MonoBehaviour
             return;
         }
 
-        SetAlpha(0.7f);
+        SetTransparent(0.7f);
         BuildingMovement();
         BuildingRotation();
     }
@@ -135,10 +138,11 @@ public class Building : MonoBehaviour
     {
         m_UIManager.SetPhoneCanvasActive(true);
 
-        transform.position = m_BuildingGuide.transform.position;
-        SetAlpha(1f);
-        transform.SetParent(GameObject.Find("BuildingManager").transform);
+        SetOriginOpaque();
         m_BuildingGuide.SetActive(false);
+
+        transform.position = m_BuildingGuide.transform.position;
+        transform.SetParent(GameObject.Find("BuildingManager").transform);
 
         m_UIManager.SetPlayerRebuild(false);
         m_UIManager.SetRebuild(true);
@@ -180,7 +184,7 @@ public class Building : MonoBehaviour
         if (Scroll != 0f)
         {
             transform.Rotate(new Vector3(0f, Scroll, 0f));
-            m_BuildingGuide.transform.Rotate(new Vector3(0f, Scroll, 0f));
+            //m_BuildingGuide.transform.Rotate(new Vector3(0f, Scroll, 0f));
         }
     }
 
@@ -195,27 +199,11 @@ public class Building : MonoBehaviour
             //if (!m_bIsClicked)
             //    SetPingPongTransparent(0, 0, 1f, 1f);
             //else
-            if (m_bIsClicked)
-                SetTransparent(0.5f);
-            else
-                SetOriginOpaque();
         }
         else
             m_CheckTime += Time.deltaTime;
     }
-
-    /// COLOR ///
-    private void SetAlpha(float alpha)
-    {
-        if (alpha == m_MeshMaterial.color.a)
-            return;
-
-        if (alpha < 1f)
-            SetTransparent(alpha);
-        else
-            SetOriginOpaque();
-    }
-
+    
     private void SetOriginOpaque()
     {
         m_MeshMaterial.SetFloat("_Mode", 0f);
@@ -272,8 +260,7 @@ public class Building : MonoBehaviour
         //if (m_bCanTakeReward)
         //    SetPingPongTransparent(0, 0, 1f, 1f);
         //else
-        if(!m_bCanTakeReward)
-            SetOriginOpaque();
+        //if (!m_bCanTakeReward)
+        SetOriginOpaque();
     }
 }
-

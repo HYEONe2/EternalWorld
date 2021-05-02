@@ -17,6 +17,8 @@ public class ObjectManager : MonoBehaviour
     private List<LevelBoundary> m_LevelBoundaryList = new List<LevelBoundary>();
     private List<TreeBoundary> m_TreeBoundaryList = new List<TreeBoundary>();
 
+    private static Color m_PingpongColor;
+
     public string GetSceneName() { return m_SceneName; }
 
     // Start is called before the first frame update
@@ -29,6 +31,7 @@ public class ObjectManager : MonoBehaviour
         m_BuildingManager = transform.Find("BuildingManager").gameObject;
         m_Boundary = transform.Find("Boundary").gameObject;
         m_Environment = transform.Find("Environment").gameObject;
+
         m_Boundary.SetActive(false);
         m_Environment.SetActive(false);
 
@@ -203,5 +206,48 @@ public class ObjectManager : MonoBehaviour
 
         TreeBoundary treeBoundary = GameObject.Find("TreeBoundary").GetComponent<TreeBoundary>();
         treeBoundary.RespawnObjects(0, amount);
+    }
+
+    public static void SetOriginOpaque(Material material, Color originColor)
+    {
+        material.SetFloat("_Mode", 0f);
+        material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+        material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+        material.SetInt("_ZWrite", 1);
+        material.DisableKeyword("_ALPHATEST_ON");
+        material.DisableKeyword("_ALPHABLEND_ON");
+        material.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        material.renderQueue = -1;
+
+        material.color = originColor;
+    }
+
+    public static void SetTransparent(Material material, Color originColor, float alpha)
+    {
+        material.SetFloat("_Mode", 3f);
+        material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+        material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        material.SetInt("_ZWrite", 0);
+        material.DisableKeyword("_ALPHATEST_ON");
+        material.DisableKeyword("_ALPHABLEND_ON");
+        material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+        material.renderQueue = 3000;
+        
+        material.color = new Color(originColor.r, originColor.g, originColor.b, alpha);
+    }
+
+    public static void SetPingPongTransparent(Material material, float r, float g, float b, float timeSpeed)
+    {
+        material.SetFloat("_Mode", 3f);
+        material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+        material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        material.SetInt("_ZWrite", 0);
+        material.DisableKeyword("_ALPHATEST_ON");
+        material.DisableKeyword("_ALPHABLEND_ON");
+        material.EnableKeyword("_ALPHAPREMULTIPLY_ON");
+        material.renderQueue = 3000;
+
+        m_PingpongColor = Color.Lerp(new Color(r, g, b, 0), new Color(r, g, b, 1f), Mathf.PingPong(Time.time, timeSpeed));
+        material.color = m_PingpongColor;
     }
 }

@@ -61,9 +61,8 @@ public class MagicFlamethrower : MonoBehaviour
         {
             if (other.CompareTag("Player"))
             {
-                PlayerProperty player = other.GetComponent<PlayerProperty>();
-                if (player)
-                    player.SetDamaged(1);
+                PlayerProperty playerProperty = other.GetComponent<PlayerProperty>();
+                playerProperty.SetDamaged(ObjectManager.ABILITY.ABIL_FIRE, playerProperty.GetLevel());
             }
         }
     }

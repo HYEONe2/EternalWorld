@@ -141,6 +141,7 @@
      <Compile Include="Assets\MyScripts\Object\Gemstone.cs" />
      <Compile Include="Assets\MyScripts\Object\Reward.cs" />
      <Compile Include="Assets\MyScripts\Object\Weapon.cs" />
+     <Compile Include="Assets\MyScripts\Player\Particle\LevelUpParticle.cs" />
      <Compile Include="Assets\MyScripts\Player\Player.cs" />
      <Compile Include="Assets\MyScripts\Player\PlayerAnimationEvent.cs" />
      <Compile Include="Assets\MyScripts\Player\PlayerProperty.cs" />
@@ -155,6 +156,8 @@
      <Compile Include="Assets\MyScripts\Player\Skill\MagicWall.cs" />
      <Compile Include="Assets\MyScripts\UI\BuildPanel.cs" />
      <Compile Include="Assets\MyScripts\UI\CommodityText.cs" />
+     <Compile Include="Assets\MyScripts\UI\EndingUI.cs" />
+     <Compile Include="Assets\MyScripts\UI\HPUI.cs" />
      <Compile Include="Assets\MyScripts\UI\NoticeUI.cs" />
      <Compile Include="Assets\MyScripts\UI\PhoneCanvas.cs" />
      <Compile Include="Assets\MyScripts\UI\PlayerCanvas.cs" />

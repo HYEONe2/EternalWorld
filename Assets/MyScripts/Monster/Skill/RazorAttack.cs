@@ -30,7 +30,12 @@ public class RazorAttack : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             if(!other.GetComponent<Player>().GetDamaged())
-                other.GetComponent<PlayerProperty>().SetDamaged(1);
+            {
+                PlayerProperty playerProperty = other.GetComponent<PlayerProperty>();
+                playerProperty.SetDamaged(ObjectManager.ABILITY.ABIL_GRASS, playerProperty.GetLevel());
+
+                m_DestroyTime = 3f;
+            }
         }
     }
 }

@@ -11,10 +11,16 @@ public class LoadingSceneManager : MonoBehaviour
 
     private Image m_ProgressBar;
 
+    private GameObject[] m_Background = new GameObject[3];
+
     // Start is called before the first frame update
     void Start()
     {
         StartCoroutine(LoadScene());
+
+        m_Background[0] = GameObject.Find("TutorialImage");
+        m_Background[1] = GameObject.Find("MainImage");
+        m_Background[2] = GameObject.Find("MazeImage");
     }
 
     public static void LoadScene(string sceneName)
@@ -22,7 +28,6 @@ public class LoadingSceneManager : MonoBehaviour
         //if (m_CurScene == sceneName)
         //    return;
 
-        //Debug.Log("?!");
         m_CurScene = SceneManager.GetActiveScene().name;
         m_NextScene = sceneName;
 
@@ -109,12 +114,24 @@ public class LoadingSceneManager : MonoBehaviour
             if (!m_ProgressBar)
                 m_ProgressBar = GameObject.Find("ProgressBar").GetComponent<Image>();
 
-            //GameObject Player = GameObject.Find("Player");
-            //if (Player)
-            //{
-            //    Debug.Log("YES");
-            //    Player.transform.position = new Vector3(0, 100f, 0);
-            //}
+            if(m_NextScene == "TutorialScene")
+            {
+                m_Background[0].SetActive(true);
+                m_Background[1].SetActive(false);
+                m_Background[2].SetActive(false);
+            }
+            else if(m_NextScene == "MainScene")
+            {
+                m_Background[0].SetActive(false);
+                m_Background[1].SetActive(true);
+                m_Background[2].SetActive(false);
+            }
+            else if(m_NextScene == "MazeScene")
+            {
+                m_Background[0].SetActive(false);
+                m_Background[1].SetActive(false);
+                m_Background[2].SetActive(true);
+            }
         }
     }
 }

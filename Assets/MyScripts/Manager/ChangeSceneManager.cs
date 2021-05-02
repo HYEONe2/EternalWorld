@@ -17,16 +17,19 @@ public class ChangeSceneManager : MonoBehaviour
     {
         if (Input.GetKeyDown("0"))
             LoadingSceneManager.LoadScene(m_SceneName);
-        if (Input.GetKeyDown("8"))
+        if (Input.GetKeyDown("9"))
             LoadingSceneManager.LoadScene("TutorialScene");
-        if (Input.GetKeyDown("6"))
+        if (Input.GetKeyDown("8"))
             LoadingSceneManager.LoadScene("MazeScene");
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
+        {
+            other.GetComponent<Player>().ResetCoolTime();
             LoadingSceneManager.LoadScene(m_SceneName);
+        }
     }
 
     public void StartGame()

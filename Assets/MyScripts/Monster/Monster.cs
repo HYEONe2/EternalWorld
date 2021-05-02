@@ -34,6 +34,12 @@ public class Monster : MonoBehaviour
     private int m_HP;
     private bool m_bAttack;
 
+    private bool m_bDamaged;
+    private float m_DamageTime;
+
+    private Material m_Material;
+    private Color m_OriginColor;
+
     // Animator Values
     private readonly int m_bHashTargetAround = Animator.StringToHash("IsTargetAround");
     private readonly int m_bHashOnBattle = Animator.StringToHash("OnBattle");
@@ -44,6 +50,7 @@ public class Monster : MonoBehaviour
 
     public bool GetAttack() { return m_bAttack; }
     public bool GetDamaged() { return m_Animator.GetBool(m_bHashDamaged); }
+    public ObjectManager.ABILITY GetAbility() { return m_eAbility; }
 
     // Start is called before the first frame update
     void Start()
@@ -64,6 +71,22 @@ public class Monster : MonoBehaviour
         if (m_HP <= 0)
             return;
 
+        if(m_bDamaged)
+        {
+            if (m_DamageTime > 2f)
+            {
+                ObjectManager.SetOriginOpaque(m_Material, m_OriginColor);
+                m_Animator.SetBool(m_bHashDamaged,false);
+                m_DamageTime = 0;
+                m_bDamaged = false;
+            }
+            else
+            {
+                ObjectManager.SetPingPongTransparent(m_Material, 1f, 0, 0, 1f);
+                m_DamageTime += Time.deltaTime;
+            }
+        }
+
         CheckStateByTargetDist();
         UpdateState();
     }
@@ -80,7 +103,7 @@ public class Monster : MonoBehaviour
                 // 파티클 추가! 스파크 튀는 파티클!!
                 m_Agent.isStopped = true;
                 m_Animator.SetBool(m_bHashDamaged, true);
-                SetDamaged(1);
+                SetDamaged(m_Target.GetComponent<PlayerProperty>().GetStr());
             }
         }
     }
@@ -89,7 +112,7 @@ public class Monster : MonoBehaviour
     {
         if (other.CompareTag("Weapon"))
         {
-              m_Agent.isStopped = false;
+            m_Agent.isStopped = false;
         }
     }
 
@@ -138,8 +161,14 @@ public class Monster : MonoBehaviour
                 break;
         }
 
-        m_HP = 1;
+        m_HP = 10 * m_Target.GetComponent<PlayerProperty>().GetLevel();
         m_SkillIndex = Random.Range(0, 2);
+
+        m_bDamaged = false;
+        m_DamageTime = 0;
+
+        m_Material = transform.GetChild(0).GetComponent<SkinnedMeshRenderer>().material;
+        m_OriginColor = m_Material.color;
     }
 
     private void CheckStateByTargetDist()
@@ -176,6 +205,7 @@ public class Monster : MonoBehaviour
                 {
                     Vector3 TargetPos = m_Target.transform.position;
                     TargetPos.y = -3.169801f;
+
                     Vector3 NewLook = TargetPos - transform.position;
                     transform.rotation = Quaternion.LookRotation(NewLook);
                     m_Agent.destination = m_Target.transform.position;
@@ -279,9 +309,9 @@ public class Monster : MonoBehaviour
         if (m_Animator.GetBool(m_bHashDamaged))
             return;
 
-        //if (m_SkillIndex == 0)
-        //    UseFirstSkill();
-        //else
+        if (m_SkillIndex == 0)
+            UseFirstSkill();
+        else
             UseSecondSkill();
     }
 
@@ -313,7 +343,6 @@ public class Monster : MonoBehaviour
         if (!UpdateCoolTime(0) || m_bSkillOn[0])
             return;
 
-        Debug.Log("1");
         m_Animator.SetBool(m_bHashUseSkill, true);
         m_Animator.SetInteger(m_HashSkillIndex, 0);
 
@@ -355,7 +384,6 @@ public class Monster : MonoBehaviour
         if (!UpdateCoolTime(1) || m_bSkillOn[1])
             return;
 
-        Debug.Log("2");
         m_Animator.SetBool(m_bHashUseSkill, true);
         m_Animator.SetInteger(m_HashSkillIndex, 1);
 
@@ -394,7 +422,7 @@ public class Monster : MonoBehaviour
         for (int i = 0; i < 2; ++i)
         {
             m_bSkillOn[i] = false;
-            m_CoolTime[i] = 0;
+            m_CoolTime[i] = 7f;
         }
     }
 
@@ -445,10 +473,57 @@ public class Monster : MonoBehaviour
             m_SkillObject[i] = null;
         }
 
-        m_HP -= damage;
+        int damagePercent = 0;
+        ObjectManager.ABILITY eAbility = m_Target.GetComponent<Player>().GetAbility();
+        switch (m_eAbility)
+        {
+            case ObjectManager.ABILITY.ABIL_FIRE:
+                {
+                    if (eAbility == ObjectManager.ABILITY.ABIL_FIRE)
+                        damagePercent = 2;
+                    else if (eAbility == ObjectManager.ABILITY.ABIL_GRASS)
+                        damagePercent = 1;
+                    else if (eAbility == ObjectManager.ABILITY.ABIL_WATER)
+                        damagePercent = 3;
+                }
+                break;
+            case ObjectManager.ABILITY.ABIL_GRASS:
+                {
+                    if (eAbility == ObjectManager.ABILITY.ABIL_FIRE)
+                        damagePercent = 3;
+                    else if (eAbility == ObjectManager.ABILITY.ABIL_GRASS)
+                        damagePercent = 2;
+                    else if (eAbility == ObjectManager.ABILITY.ABIL_WATER)
+                        damagePercent = 1;
+                }
+                break;
+            case ObjectManager.ABILITY.ABIL_WATER:
+                {
+                    if (eAbility == ObjectManager.ABILITY.ABIL_FIRE)
+                        damagePercent = 1;
+                    else if (eAbility == ObjectManager.ABILITY.ABIL_GRASS)
+                        damagePercent = 3;
+                    else if (eAbility == ObjectManager.ABILITY.ABIL_WATER)
+                        damagePercent = 2;
+                }
+                break;
+            default:
+                damagePercent = 10;
+                break;
+        }
+
+        m_HP -= damage * damagePercent;
+        m_bDamaged = true;
 
         if (m_HP <= 0)
         {
+            PlayerProperty playerProperty = m_Target.GetComponent<PlayerProperty>();
+            PlayerProperty.OBJTYPE eType =(PlayerProperty.OBJTYPE)Random.Range(2, 4);
+
+            playerProperty.AddProperty(eType, 1);
+            GameObject.Find("UIManager").GetComponent<UIManager>().SetNoticeUI(eType, 1);
+            playerProperty.AddExperience(10* playerProperty.GetLevel());
+
             m_Animator.SetBool("IsDead", true);
             SetDestroy();
         }

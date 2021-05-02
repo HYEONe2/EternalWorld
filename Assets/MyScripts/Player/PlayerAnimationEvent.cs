@@ -8,6 +8,8 @@ public class PlayerAnimationEvent : MonoBehaviour
     private PlayerProperty m_PlayerProperty;
     private Animator m_Animator;
 
+    private float m_CoolTime;
+
     // Animation Values
     private readonly int m_bHashDamaged = Animator.StringToHash("IsDamaged");
     private readonly int m_bHashDead = Animator.StringToHash("IsDead");
@@ -23,6 +25,24 @@ public class PlayerAnimationEvent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (m_PlayerProperty.GetHP() <= 0)
+        {
+            if (m_CoolTime > 3f)
+            {
+                m_PlayerProperty.SetRebirth();
+                m_CoolTime = 0;
+
+                LoadingSceneManager.LoadScene("MainScene");
+
+                m_Animator.SetBool(m_bHashDamaged, false);
+                m_Animator.SetBool(m_bHashDead, false);
+            }
+            else
+            {
+                m_Animator.SetBool(m_bHashDead, true);
+                m_CoolTime += Time.deltaTime;
+            }
+        }
     }
 
     private void OnTriggerStay(Collider other)

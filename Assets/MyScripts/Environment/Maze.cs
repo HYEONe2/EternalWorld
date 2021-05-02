@@ -65,7 +65,7 @@ public class Maze : MonoBehaviour
 
     // Values
     private bool m_bLateInit;
-    [SerializeField] private int m_FireMonsterNum = 0;
+    //[SerializeField] private int m_FireMonsterNum = 0;
 
     public Vector3 GetPatrolPos() { return new Vector3((Random.Range(0, MAZE_LINE_X) * 2) + 1, 0, (Random.Range(0, MAZE_LINE_Y) * 2) + 1) * MAZE_BLOCK_SCALE; }
 
@@ -174,7 +174,7 @@ public class Maze : MonoBehaviour
     {
         int index = 0;
         int usableTrigger = Random.Range(0, 3);
-        Debug.Log("TRIGGER: " + usableTrigger);
+        //Debug.Log("TRIGGER: " + usableTrigger);
 
         foreach (Transform trigger in transform)
         {

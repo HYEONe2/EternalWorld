@@ -151,12 +151,10 @@ public class BuildPanel : MonoBehaviour
 
     private void ClickedBuildingSetting()
     {
-        Building BuildingScript = m_Building.GetComponent<Building>();
-
         // 빌딩타입이 일치하면
-        if (m_BuildingInfo.m_eBuildingType == BuildingScript.GetBuildingInfo().m_eBuildingType)
+        if (m_BuildingInfo.m_eBuildingType == m_BuildingScript.GetBuildingInfo().m_eBuildingType)
         {
-            m_BuildingContext.text = BuildingScript.GetBuildingInfo().m_BuildTime + m_PanelInfo.BuildingContext;
+            m_BuildingContext.text = m_BuildingScript.GetBuildingInfo().m_BuildTime + m_PanelInfo.BuildingContext;
             m_BuildButton.interactable = true;
             if (m_UpgradeAmount >= m_BuildingInfo.m_UpgradeAmount)
                 m_UpgradeButton.interactable = true;
@@ -170,7 +168,7 @@ public class BuildPanel : MonoBehaviour
 
     private void ClickTheBuilding()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
             // UI 클릭한 경우 true
             if (EventSystem.current.IsPointerOverGameObject())
@@ -181,8 +179,15 @@ public class BuildPanel : MonoBehaviour
             {
                 if (Hit.collider.gameObject.GetComponent<Building>())
                 {
+                    //if (m_Building)
+                    //    m_BuildingScript.ResetToOrigin();
+
                     if (m_Building)
-                        m_BuildingScript.ResetToOrigin();
+                        return;
+
+                    if (Hit.collider.gameObject.GetComponent<Building>().GetBuildingInfo().m_eBuildingType !=
+                        m_BuildingInfo.m_eBuildingType)
+                        return;
 
                     m_Building = Hit.collider.gameObject;
                     m_BuildingScript = m_Building.GetComponent<Building>();
