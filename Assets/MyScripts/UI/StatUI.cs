@@ -45,9 +45,11 @@ public class StatUI : MonoBehaviour
 
     private void LateInit()
     {
-        m_Level = m_PlayerProperty.GetLevel();
-        m_Exp = m_PlayerProperty.GetExp();
-        m_MaxExp = m_PlayerProperty.GetMaxExp() * m_Level;
+        PlayerProperty.PlayerStat stat = m_PlayerProperty.GetPlayerStat();
+
+        m_Level = stat.m_Level;
+        m_Exp = stat.m_Exp;
+        m_MaxExp = stat.m_MaxExp * m_Level;
 
         m_ExpImage.fillAmount = (float)m_Exp / (float)m_MaxExp;
         m_LevelText.text = m_Level + "";
@@ -58,16 +60,18 @@ public class StatUI : MonoBehaviour
 
     private void UpdateStat()
     {
-        m_Level = m_PlayerProperty.GetLevel();
-        m_Exp = m_PlayerProperty.GetExp();
-        m_MaxExp = m_PlayerProperty.GetMaxExp() * m_Level;
+        PlayerProperty.PlayerStat stat = m_PlayerProperty.GetPlayerStat();
+
+        m_Level = stat.m_Level;
+        m_Exp = stat.m_Exp;
+        m_MaxExp = stat.m_MaxExp * m_Level;
 
         m_LevelText.text = m_Level + "";
         m_ExpText.text = m_Exp + " / " + m_MaxExp;
         m_ExpImage.fillAmount = (float)m_Exp / (float)m_MaxExp;
 
-        m_Str = m_PlayerProperty.GetStr();
-        m_CoolTime = m_PlayerProperty.GetCoolTime();
+        m_Str = stat.m_Str;
+        m_CoolTime = stat.m_CoolTime;
 
         m_StrText.text = m_Str + "";
         m_CoolTimeText.text = m_CoolTime + "%";

@@ -24,11 +24,13 @@ public class HPUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_HP == m_Player.GetHP())
+        PlayerProperty.PlayerStat stat = m_Player.GetPlayerStat();
+
+        if (m_HP == stat.m_HP)
             return;
 
-        m_MaxHP = 50 * m_Player.GetLevel();
-        m_HP = m_Player.GetHP();
+        m_MaxHP = 50 * stat.m_Level;
+        m_HP = stat.m_HP;
 
         m_HPText.text = m_HP + " / " + m_MaxHP;
         m_HPImage.fillAmount = (float)(m_HP / m_MaxHP);

@@ -37,7 +37,7 @@ public class BallAttack : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             PlayerProperty playerProperty = other.GetComponent<PlayerProperty>();
-            playerProperty.SetDamaged(ObjectManager.ABILITY.ABIL_WATER, playerProperty.GetLevel());
+            playerProperty.SetDamaged(ObjectManager.ABILITY.ABIL_WATER, playerProperty.GetPlayerStat().m_Level);
             Destroy(gameObject);
         }
     }

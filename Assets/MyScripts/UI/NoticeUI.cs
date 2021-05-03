@@ -14,24 +14,31 @@ public class NoticeUI : MonoBehaviour
         switch(eType)
         {
             case PlayerProperty.OBJTYPE.OBJ_WOOD:
-                {
-                    m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Wooden Plank");
-                }
+                m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Wood Log");
                 break;
             case PlayerProperty.OBJTYPE.OBJ_STONE:
-                {
-                    m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Coal");
-                }
+                m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Coal");
+                break;
+            case PlayerProperty.OBJTYPE.OBJ_BRICK:
+                m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Wooden Plank");
+                break;
+            case PlayerProperty.OBJTYPE.OBJ_COPPER:
+                m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Copper Ingot");
+                break;
+            case PlayerProperty.OBJTYPE.OBJ_BRONZE:
+                m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Cut Topaz");
+                break;
+            case PlayerProperty.OBJTYPE.OBJ_IRON:
+                m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Silver Ingot");
                 break;
             case PlayerProperty.OBJTYPE.OBJ_REDGEMSTONE:
-                {
-                    m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Cut Ruby");
-                }
+                m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Cut Ruby");
+                break;
+            case PlayerProperty.OBJTYPE.OBJ_GREENGEMSTONE:
+                m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Cut Emerald");
                 break;
             case PlayerProperty.OBJTYPE.OBJ_BLUEGEMSTONE:
-                {
-                    m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Cut Sapphire");
-                }
+                m_NoticeIcon.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Cut Sapphire");
                 break;
 
         }

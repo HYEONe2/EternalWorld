@@ -103,7 +103,7 @@ public class Monster : MonoBehaviour
                 // 파티클 추가! 스파크 튀는 파티클!!
                 m_Agent.isStopped = true;
                 m_Animator.SetBool(m_bHashDamaged, true);
-                SetDamaged(m_Target.GetComponent<PlayerProperty>().GetStr());
+                SetDamaged(m_Target.GetComponent<PlayerProperty>().GetPlayerStat().m_Str);
             }
         }
     }
@@ -161,7 +161,7 @@ public class Monster : MonoBehaviour
                 break;
         }
 
-        m_HP = 10 * m_Target.GetComponent<PlayerProperty>().GetLevel();
+        m_HP = 10 * m_Target.GetComponent<PlayerProperty>().GetPlayerStat().m_Level;
         m_SkillIndex = Random.Range(0, 2);
 
         m_bDamaged = false;
@@ -517,14 +517,22 @@ public class Monster : MonoBehaviour
 
         if (m_HP <= 0)
         {
-            PlayerProperty playerProperty = m_Target.GetComponent<PlayerProperty>();
-            PlayerProperty.OBJTYPE eType =(PlayerProperty.OBJTYPE)Random.Range(2, 4);
+            bool bDropJewelry = (Random.Range(0, 2) == 1)? true : false;
 
-            playerProperty.AddProperty(eType, 1);
-            GameObject.Find("UIManager").GetComponent<UIManager>().SetNoticeUI(eType, 1);
-            playerProperty.AddExperience(10* playerProperty.GetLevel());
+            PlayerProperty playerProperty = m_Target.GetComponent<PlayerProperty>();
+            playerProperty.AddExperience(10 * playerProperty.GetPlayerStat().m_Level);
 
             m_Animator.SetBool("IsDead", true);
+
+            if (bDropJewelry)
+            {
+                PlayerProperty.OBJTYPE eType = (PlayerProperty.OBJTYPE)Random.Range(2, 4);
+                int amount = Random.Range(1, playerProperty.GetPlayerStat().m_Level + 1);
+
+                playerProperty.AddProperty(eType, amount);
+                GameObject.Find("UIManager").GetComponent<UIManager>().SetNoticeUI(eType, amount);
+            }
+
             SetDestroy();
         }
     }

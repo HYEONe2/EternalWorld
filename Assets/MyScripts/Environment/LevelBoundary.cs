@@ -74,7 +74,7 @@ public class LevelBoundary : MonoBehaviour
         }
         else
         {
-            if (m_Level != m_PlayerTrans.gameObject.GetComponent<PlayerProperty>().GetLevel() + 1)
+            if (m_Level != m_PlayerTrans.gameObject.GetComponent<PlayerProperty>().GetPlayerStat().m_Level + 1)
                 return false;
 
             Vector3 PlayerPos = m_PlayerTrans.position;

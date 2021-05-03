@@ -32,7 +32,7 @@ public class RazorAttack : MonoBehaviour
             if(!other.GetComponent<Player>().GetDamaged())
             {
                 PlayerProperty playerProperty = other.GetComponent<PlayerProperty>();
-                playerProperty.SetDamaged(ObjectManager.ABILITY.ABIL_GRASS, playerProperty.GetLevel());
+                playerProperty.SetDamaged(ObjectManager.ABILITY.ABIL_GRASS, playerProperty.GetPlayerStat().m_Level);
 
                 m_DestroyTime = 3f;
             }

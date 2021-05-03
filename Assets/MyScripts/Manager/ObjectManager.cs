@@ -9,23 +9,28 @@ public class ObjectManager : MonoBehaviour
 
     private string m_SceneName;
     private Transform m_PlayerTrans;
+    private PlayerProperty m_PlayerProperty;
     private int m_Level;
 
     private GameObject m_BuildingManager;
     private GameObject m_Boundary;
     private GameObject m_Environment;
+
     private List<LevelBoundary> m_LevelBoundaryList = new List<LevelBoundary>();
     private List<TreeBoundary> m_TreeBoundaryList = new List<TreeBoundary>();
+    private List<Building> m_LandmarkList = new List<Building>();
 
     private static Color m_PingpongColor;
 
     public string GetSceneName() { return m_SceneName; }
+    public void SetLandmark(Building eInfo) { m_LandmarkList.Add(eInfo); }
 
     // Start is called before the first frame update
     void Start()
     {
         m_SceneName = SceneManager.GetActiveScene().name;
         m_PlayerTrans = GameObject.Find("Player").transform;
+        m_PlayerProperty = m_PlayerTrans.gameObject.GetComponent<PlayerProperty>();
         m_Level = 0;
 
         m_BuildingManager = transform.Find("BuildingManager").gameObject;
@@ -46,6 +51,7 @@ public class ObjectManager : MonoBehaviour
 
         CheatKey();
         UpdateBoundary();
+        UpdateLandmark();
     }
 
     private void InitializeBoundary()
@@ -117,7 +123,7 @@ public class ObjectManager : MonoBehaviour
 
     private void UpdateBoundary()
     {
-        int Level = m_PlayerTrans.gameObject.GetComponent<PlayerProperty>().GetLevel();
+        int Level = m_PlayerProperty.GetPlayerStat().m_Level;
         if (m_Level == Level)
             return;
 
@@ -149,6 +155,42 @@ public class ObjectManager : MonoBehaviour
         m_Level = Level;
     }
 
+    private void UpdateLandmark()
+    {
+        foreach(Building landmark in m_LandmarkList)
+        {
+            Building.BuildingInfo eInfo = landmark.GetBuildingInfo();
+
+            if (landmark.GetCheckTime() >= eInfo.m_BuildTime)
+            {
+                PlayerProperty.PlayerStat stat = m_PlayerProperty.GetPlayerStat();
+                switch (eInfo.m_eBuildingType)
+                {
+                    case Building.BUILDING.BUILDING_HEALHP:
+                        // Player HP 올려주기
+                        m_PlayerProperty.SetHP(stat.m_HP + 1);
+                        break;
+                    case Building.BUILDING.BUILDING_BUFFHP:
+                        // PLayer HP 피통 올려주기
+                        m_PlayerProperty.AddExtraHP(1);
+                        break;
+                    case Building.BUILDING.BUILDING_BUFFCOOL:
+                        // Player Cooltime 올려주기
+                        m_PlayerProperty.AddExtraCooltime(1);
+                        break;
+                    case Building.BUILDING.BUILDING_BUFFSTR:
+                        // Player str 올려주기
+                        m_PlayerProperty.AddStr(1);
+                        break;
+                }
+
+                landmark.SetCheckTime(0); 
+            }
+            else
+                landmark.SetCheckTime(landmark.GetCheckTime() + Time.deltaTime);
+        }
+    }
+
     public bool GetCloseEnough()
     {
         if (m_SceneName != "TutorialScene")
@@ -172,7 +214,7 @@ public class ObjectManager : MonoBehaviour
         {
             foreach (LevelBoundary levelBoundary in m_LevelBoundaryList)
             {
-                if (levelBoundary.m_Level == m_PlayerTrans.GetComponent<PlayerProperty>().GetLevel())
+                if (levelBoundary.m_Level == m_PlayerTrans.GetComponent<PlayerProperty>().GetPlayerStat().m_Level)
                 {
                     levelBoundary.DestroyLevelBoundary();
                     return;

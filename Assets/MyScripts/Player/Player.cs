@@ -122,9 +122,9 @@ public class Player : MonoBehaviour
             Monster monster = other.GetComponent<Monster>();
 
             if (monster)
-                playerProperty.SetDamaged(monster.GetAbility(), playerProperty.GetLevel());
+                playerProperty.SetDamaged(monster.GetAbility(), playerProperty.GetPlayerStat().m_Level);
             else
-                playerProperty.SetDamaged(m_eAbility, playerProperty.GetLevel());
+                playerProperty.SetDamaged(m_eAbility, playerProperty.GetPlayerStat().m_Level);
         }
     }
 
@@ -180,7 +180,7 @@ public class Player : MonoBehaviour
 
     private bool CheckHP()
     {
-        int HP = GetComponent<PlayerProperty>().GetHP();
+        int HP = GetComponent<PlayerProperty>().GetPlayerStat().m_HP;
 
         if (HP <= 0)
             return true;
@@ -232,7 +232,7 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
-        if (m_Animator.GetBool(m_bHashDamaged) || GetComponent<PlayerProperty>().GetHP()<= 0)
+        if (m_Animator.GetBool(m_bHashDamaged) || GetComponent<PlayerProperty>().GetPlayerStat().m_HP <= 0)
             return;
 
         // Animation Initialize
@@ -390,7 +390,7 @@ public class Player : MonoBehaviour
     {
         if (m_bSkillOn[0])
         {
-            if (m_CoolTime[0] > m_EndCoolTime[0] * (100-m_CoolPercent)*0.01)
+            if (m_CoolTime[0] > m_EndCoolTime[0] * (100 - m_CoolPercent) * 0.01)
             {
                 m_bSkillOn[0] = false;
                 m_CoolTime[0] = 0;

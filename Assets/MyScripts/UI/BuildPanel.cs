@@ -108,7 +108,7 @@ public class BuildPanel : MonoBehaviour
         if (m_Building)
             return;
 
-        m_BuildingAmount = m_PlayerProperty.GetPropertyAmount((PlayerProperty.OBJTYPE)m_BuildingInfo.m_eBuildingType);
+        m_BuildingAmount = m_PlayerProperty.GetPropertyAmount(m_BuildingInfo.m_eMaterialType);
 
         if (m_BuildingAmount < m_BuildingInfo.m_BuildAmount)
         {
@@ -136,7 +136,7 @@ public class BuildPanel : MonoBehaviour
         else
             ClickedBuildingSetting();
 
-        m_UpgradeAmount = m_PlayerProperty.GetPropertyAmount((PlayerProperty.OBJTYPE)(m_BuildingInfo.m_eBuildingType + 2));
+        m_UpgradeAmount = m_PlayerProperty.GetPropertyAmount(m_BuildingInfo.m_eUpgradeType);
 
         if (m_UpgradeAmount < m_BuildingInfo.m_UpgradeAmount)
         {
@@ -156,6 +156,7 @@ public class BuildPanel : MonoBehaviour
         {
             m_BuildingContext.text = m_BuildingScript.GetBuildingInfo().m_BuildTime + m_PanelInfo.BuildingContext;
             m_BuildButton.interactable = true;
+
             if (m_UpgradeAmount >= m_BuildingInfo.m_UpgradeAmount)
                 m_UpgradeButton.interactable = true;
 
@@ -179,10 +180,7 @@ public class BuildPanel : MonoBehaviour
             {
                 if (Hit.collider.gameObject.GetComponent<Building>())
                 {
-                    //if (m_Building)
-                    //    m_BuildingScript.ResetToOrigin();
-
-                    if (m_Building)
+                    if (m_UIManager.GetSelectedBuilding())
                         return;
 
                     if (Hit.collider.gameObject.GetComponent<Building>().GetBuildingInfo().m_eBuildingType !=
@@ -196,9 +194,13 @@ public class BuildPanel : MonoBehaviour
                     m_BuildingScript.ClickedToUpdate();
 
                     m_UIManager.SetReturnIconActive(false);
+                    m_UIManager.SetSelectedBuilding(true);
                 }
                 else
+                {
+                    m_UIManager.SetSelectedBuilding(false);
                     ResetUI();
+                }
             }
         }
     }
@@ -214,7 +216,7 @@ public class BuildPanel : MonoBehaviour
             Building BuildingScript = m_Building.GetComponent<Building>();
 
             BuildingScript.SetBuildingInfo(m_BuildingInfo);
-            m_PlayerProperty.ReduceProperty((PlayerProperty.OBJTYPE)m_BuildingInfo.m_eBuildingType, m_BuildingInfo.m_BuildAmount);
+            m_PlayerProperty.ReduceProperty(m_BuildingInfo.m_eMaterialType, m_BuildingInfo.m_BuildAmount);
 
             m_Building = null;
         }
@@ -236,14 +238,14 @@ public class BuildPanel : MonoBehaviour
         Building BuildingScript = m_Building.GetComponent<Building>();
         float BuildTime = BuildingScript.GetBuildingInfo().m_BuildTime;
 
-        if (BuildTime - 50 <= 0)
+        if (BuildTime - m_BuildingInfo.m_ReduceTime <= 0)
             return;
 
         Building.BuildingInfo info;
         info = m_BuildingInfo;
-        info.m_BuildTime = BuildTime - 50f;
+        info.m_BuildTime = BuildTime - m_BuildingInfo.m_ReduceTime;
 
-        m_PlayerProperty.ReduceProperty((PlayerProperty.OBJTYPE)(m_BuildingInfo.m_eBuildingType + 2), m_BuildingInfo.m_UpgradeAmount);
+        m_PlayerProperty.ReduceProperty(m_BuildingInfo.m_eUpgradeType, m_BuildingInfo.m_UpgradeAmount);
         m_PlayerProperty.AddExperience(m_BuildingInfo.m_Exp);
         m_UpgradeAmount -= m_BuildingInfo.m_UpgradeAmount;
         BuildingScript.SetBuildingInfo(info);

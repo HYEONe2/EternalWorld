@@ -144,7 +144,7 @@ public class ShopPanel : MonoBehaviour
                 return;
             }
 
-            m_PlayerProperty.AddProperty(m_eType, m_Amount);
+            m_PlayerProperty.AddProperty(m_eType, m_Amount, true);
             m_PlayerProperty.SetCoin(m_Coin - (m_OnePerCoin * m_Amount));
             m_PlayerProperty.AddExperience(10 * m_Amount);
 

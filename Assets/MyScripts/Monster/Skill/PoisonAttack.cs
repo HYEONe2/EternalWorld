@@ -34,7 +34,7 @@ public class PoisonAttack : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             PlayerProperty playerProperty = other.GetComponent<PlayerProperty>();
-            playerProperty.SetDamaged(ObjectManager.ABILITY.ABIL_GRASS, playerProperty.GetLevel());
+            playerProperty.SetDamaged(ObjectManager.ABILITY.ABIL_GRASS, playerProperty.GetPlayerStat().m_Level);
         }
     }
 }

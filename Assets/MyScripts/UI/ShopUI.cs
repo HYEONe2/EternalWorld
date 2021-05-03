@@ -90,11 +90,14 @@ public class ShopUI : MonoBehaviour
         m_EndGauge = endGauge;
         m_FillImage.fillAmount = (float)m_FillGauge / (float)m_EndGauge;
 
-        m_eType = (PlayerProperty.OBJTYPE)Random.Range(2, 4);
+        m_eType = (PlayerProperty.OBJTYPE)Random.Range((int)PlayerProperty.OBJTYPE.OBJ_REDGEMSTONE, (int)(PlayerProperty.OBJTYPE.OBJ_BLUEGEMSTONE + 1));
         switch(m_eType)
         {
             case PlayerProperty.OBJTYPE.OBJ_REDGEMSTONE:
                 m_RewardImage.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Cut Ruby");
+                break;
+            case PlayerProperty.OBJTYPE.OBJ_GREENGEMSTONE:
+                m_RewardImage.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Cut Emerald");
                 break;
             case PlayerProperty.OBJTYPE.OBJ_BLUEGEMSTONE:
                 m_RewardImage.sprite = Resources.Load<Sprite>("UI/PlayerCanvas/Cut Sapphire");

@@ -25,7 +25,7 @@ public class PlayerAnimationEvent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_PlayerProperty.GetHP() <= 0)
+        if (m_PlayerProperty.GetPlayerStat().m_HP <= 0)
         {
             if (m_CoolTime > 3f)
             {
@@ -82,7 +82,7 @@ public class PlayerAnimationEvent : MonoBehaviour
 
     public void ResetNormal()
     {
-        int HP = m_PlayerProperty.GetHP();
+        int HP = m_PlayerProperty.GetPlayerStat().m_HP;
         if (HP <= 0)
             m_Animator.SetBool(m_bHashDead, true);
 

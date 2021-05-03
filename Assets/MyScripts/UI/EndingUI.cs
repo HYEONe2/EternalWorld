@@ -43,7 +43,7 @@ public class EndingUI : MonoBehaviour
 
         if (!m_bActive)
         {
-            if (m_Player.GetComponent<PlayerProperty>().GetLevel() >= 7)
+            if (m_Player.GetComponent<PlayerProperty>().GetPlayerStat().m_Level >= 7)
                 SetActive(true);
         }
         else

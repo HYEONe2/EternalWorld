@@ -9,13 +9,18 @@ public class PlayerProperty : MonoBehaviour
     {
         OBJ_WOOD,
         OBJ_STONE,
+        OBJ_BRICK,
+        OBJ_COPPER,
+        OBJ_BRONZE,
+        OBJ_IRON,
         OBJ_REDGEMSTONE,
+        OBJ_GREENGEMSTONE,
         OBJ_BLUEGEMSTONE,
         OBJ_END
     };
 
     // Values
-    private struct PlayerStat
+    public struct PlayerStat
     {
         public int m_Level;
         public int m_Exp;
@@ -24,6 +29,8 @@ public class PlayerProperty : MonoBehaviour
         public int m_Str;
         public int m_CoolTime;
     }
+    private int m_ExtraHP;
+    private int m_ExtraCoolTime;
 
     private ObjectManager.ABILITY m_eAbility;
     private PlayerStat m_PlayerStat;
@@ -31,22 +38,22 @@ public class PlayerProperty : MonoBehaviour
     private List<int> m_Property = new List<int>();
     private int m_Coin;
 
-    public void AddProperty(OBJTYPE eType, int amount) {
-        Instantiate(Resources.Load<GameObject>("Particle/Player/magic_ring_03"), transform.position, Quaternion.Euler(new Vector3(-90, 0, 0)));
+    public void AddProperty(OBJTYPE eType, int amount, bool bUseShop = false) {
+        if(!bUseShop)
+            Instantiate(Resources.Load<GameObject>("Particle/Player/magic_ring_03"), transform.position, Quaternion.Euler(new Vector3(-90, 0, 0)));
         m_Property[(int)eType] += amount;
     }
     public void ReduceProperty(OBJTYPE eType, int amount) { m_Property[(int)eType] -= amount; }
     public int GetPropertyAmount(OBJTYPE eType) { return m_Property[(int)eType]; }
 
-    public int GetLevel() { return m_PlayerStat.m_Level; }
-    public int GetExp() { return m_PlayerStat.m_Exp; }
-    public int GetMaxExp() { return m_PlayerStat.m_MaxExp; }
-    public int GetHP() { return m_PlayerStat.m_HP; }
+    public PlayerStat GetPlayerStat() { return m_PlayerStat; }
     public int GetCoin() { return m_Coin; }
-    public int GetStr() { return m_PlayerStat.m_Str; }
-    public int GetCoolTime() { return m_PlayerStat.m_CoolTime; }
 
     public void SetCoin(int coin) { m_Coin = coin; }
+    public void SetHP(int hp) { if(50 * m_PlayerStat.m_Level > m_PlayerStat.m_HP )m_PlayerStat.m_HP = hp; }
+    public void AddStr(int str) { m_PlayerStat.m_Str += str; }
+    public void AddExtraHP(int extra) { m_ExtraHP += extra; }
+    public void AddExtraCooltime(int extra) { m_ExtraCoolTime += extra; }
 
     // Start is called before the first frame update
     void Start()
@@ -65,8 +72,8 @@ public class PlayerProperty : MonoBehaviour
             m_PlayerStat.m_Level += 1;
         if(Input.GetKeyDown("6"))
         {
-            m_Property[0] += 5;
-            m_Property[1] += 5;
+            for (int i = 0; i < (int)OBJTYPE.OBJ_END; ++i)
+                m_Property[i] += 10;
         }
 
         if (m_eAbility == ObjectManager.ABILITY.ABIL_END)
@@ -84,11 +91,12 @@ public class PlayerProperty : MonoBehaviour
         m_PlayerStat.m_Str = 1;
         m_PlayerStat.m_CoolTime = 0;
 
+        m_ExtraHP = 0;
+        m_ExtraCoolTime = 0;
+
         for (int i = 0; i < (int)OBJTYPE.OBJ_END; ++i)
             m_Property.Add(10);
         m_Coin = 500;
-
-        //m_Property[1] = 10;
     }
 
     public void AddExperience(int exp)
@@ -112,9 +120,10 @@ public class PlayerProperty : MonoBehaviour
             m_PlayerStat.m_Exp = m_PlayerStat.m_Exp - m_PlayerStat.m_MaxExp * m_PlayerStat.m_Level;
             ++m_PlayerStat.m_Level;
 
-            m_PlayerStat.m_HP = 50 * m_PlayerStat.m_Level;
+            m_PlayerStat.m_HP = 50 * m_PlayerStat.m_Level + m_ExtraHP;
             ++m_PlayerStat.m_Str;
-            m_PlayerStat.m_CoolTime = 10 * (m_PlayerStat.m_Level - 1);
+
+            m_PlayerStat.m_CoolTime = 10 * (m_PlayerStat.m_Level - 1) + m_ExtraCoolTime;
             GetComponent<Player>().SetCoolPercent((100 - m_PlayerStat.m_CoolTime) / 100);
         }
     }
@@ -172,6 +181,6 @@ public class PlayerProperty : MonoBehaviour
         GetComponent<Player>().ResetAnimator();
 
         m_PlayerStat.m_Exp = 0;
-        m_PlayerStat.m_HP = 50 * m_PlayerStat.m_Level;
+        m_PlayerStat.m_HP = 50 * m_PlayerStat.m_Level + m_ExtraHP;
     }
 }

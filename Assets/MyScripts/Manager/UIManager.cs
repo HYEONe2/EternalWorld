@@ -27,19 +27,23 @@ public class UIManager : MonoBehaviour
     private bool m_bPlayerRebuild;
     private bool m_bEarnGem;
     private bool m_bReloadOnce;
+    private bool m_bSelectedBuilding;
 
     public GameObject GetCoinIcon() { return m_CoinIcon; }
     public ShopUI GetShopUIScript() { return m_Shop.GetComponent<ShopUI>(); }
     public PlayerProperty GetPlayerProperty() { return m_PlayerProperty; }
 
+    public bool GetRebuildUpgrade() { bool check = (m_bRebuild && m_bUpgrade) ? true : false; return check; }
+    public bool GetEarnGem() { return m_bEarnGem; }
+    public bool GetSelectedBuilding() { return m_bSelectedBuilding; }
+
     public void SetRebuild(bool bRebuild) { m_bRebuild = bRebuild; }
     public void SetPlayerRebuild(bool bRebuild) { m_bPlayerRebuild = bRebuild; }
     public void SetUpgrade(bool bUpgrade) { m_bUpgrade = bUpgrade; }
     public void SetEarnGem(bool bEarn) { m_bEarnGem = bEarn; }
-    public void SetQuestCanves(GameObject quest) { m_QuestCanvas = quest; }
+    public void SetSelectedBuilding(bool bSelect) { m_bSelectedBuilding = bSelect; }
 
-    public bool GetRebuildUpgrade() { bool check = (m_bRebuild && m_bUpgrade) ? true : false; return check; }
-    public bool GetEarnGem() { return m_bEarnGem; }
+    public void SetQuestCanves(GameObject quest) { m_QuestCanvas = quest; }
 
     // Start is called before the first frame update
     void Start()

@@ -33,7 +33,7 @@ public class TreeBoundary : MonoBehaviour
 
     private void UpdateLevel()
     {
-        if (m_PlayerProperty.GetLevel() != m_Level)
+        if (m_PlayerProperty.GetPlayerStat().m_Level != m_Level)
             return;
 
         RespawnObjects(5, 5);
