@@ -583,32 +583,31 @@ public class Player : MonoBehaviour
         if (m_bSwing)
             return;
 
-        if (m_bInitialEquip[0] && !m_Weapon.activeSelf)
+        if(Input.GetKeyDown("1"))
         {
-            if (m_Equipment)
-            {
-                if (Input.GetKeyDown("1"))
-                {
-                    if (m_Equipment.activeSelf)
-                        m_Equipment.SetActive(false);
-                    else
-                        m_Equipment.SetActive(true);
-                }
-            }
-        }
+            if (!m_bInitialEquip[0])
+                return;
 
-        if (m_bInitialEquip[1] && !m_Equipment.activeSelf)
-        {
+            if (m_Equipment.activeSelf)
+                m_Equipment.SetActive(false);
+            else
+                m_Equipment.SetActive(true);
+
             if (m_Weapon)
-            {
-                if (Input.GetKeyDown("2"))
-                {
-                    if (m_Weapon.activeSelf)
-                        m_Weapon.SetActive(false);
-                    else
-                        m_Weapon.SetActive(true);
-                }
-            }
+                m_Weapon.SetActive(false);
+        }
+        else if(Input.GetKeyDown("2"))
+        {
+            if (!m_bInitialEquip[1])
+                return;
+
+            if (m_Weapon.activeSelf)
+                m_Weapon.SetActive(false);
+            else
+                m_Weapon.SetActive(true);
+
+            if (m_Equipment)
+                m_Equipment.SetActive(false);
         }
     }
 

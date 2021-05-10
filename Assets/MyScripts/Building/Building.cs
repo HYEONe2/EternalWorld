@@ -24,6 +24,9 @@ public class Building : MonoBehaviour
         public int m_Exp;
     };
 
+    [SerializeField] private float m_LocationY = 0;
+    [SerializeField] private float m_RotationY = 0;
+
     private BUILD m_eBuild;
     private BuildingInfo m_Info;
 
@@ -95,7 +98,7 @@ public class Building : MonoBehaviour
         Look.y = 0;
         Look.Normalize();
         transform.rotation = Quaternion.LookRotation(-m_BuildingArmTrans.forward);
-        transform.Rotate(new Vector3(0, -90f, 0));
+        transform.Rotate(new Vector3(0, m_RotationY, 0));
     }
 
     // Update is called once per frame
@@ -169,7 +172,9 @@ public class Building : MonoBehaviour
         SetOriginOpaque();
         m_BuildingGuide.SetActive(false);
 
-        transform.position = m_BuildingGuide.transform.position;
+        Vector3 position = m_BuildingGuide.transform.position;
+        position.y += m_LocationY;
+        transform.position = position;
         transform.SetParent(GameObject.Find("BuildingManager").transform);
 
         m_UIManager.SetPlayerRebuild(false);
@@ -199,7 +204,7 @@ public class Building : MonoBehaviour
                 m_BoundaryY = transform.position.y - m_Hit.distance;
         }
 
-        m_BuildingGuide.transform.position = new Vector3(NewPos.x, m_BoundaryY, NewPos.z);
+        m_BuildingGuide.transform.position = new Vector3(NewPos.x, m_BoundaryY + 0.1f, NewPos.z);
     }
 
     private void BuildingRotation()

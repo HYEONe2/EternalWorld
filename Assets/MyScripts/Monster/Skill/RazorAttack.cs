@@ -29,7 +29,11 @@ public class RazorAttack : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            if(!other.GetComponent<Player>().GetDamaged())
+            Player player = other.GetComponent<Player>();
+            if (player.GetAbility() == ObjectManager.ABILITY.ABIL_WATER && player.GetSkillObject(2))
+                return;
+
+            if (!player.GetDamaged())
             {
                 PlayerProperty playerProperty = other.GetComponent<PlayerProperty>();
                 playerProperty.SetDamaged(ObjectManager.ABILITY.ABIL_GRASS, playerProperty.GetPlayerStat().m_Level);

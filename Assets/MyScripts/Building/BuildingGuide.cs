@@ -25,7 +25,7 @@ public class BuildingGuide : MonoBehaviour
     {
         if (!m_bOtherTag)
         {
-            SetColor(0f, 1f, 0f, 0.3f);
+            SetColor(0f, 0f, 1f, 0.3f);
 
             if (Input.GetMouseButtonDown(0))
                 m_Building.SetBuilt();

@@ -28,6 +28,9 @@ public class ChangeSceneManager : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.GetComponent<Player>().ResetCoolTime();
+            if (name == "ExitTrigger")
+                other.GetComponent<PlayerProperty>().AddClearDungeon();
+
             LoadingSceneManager.LoadScene(m_SceneName);
         }
     }

@@ -8,10 +8,13 @@ public class QuestUI : MonoBehaviour
     // Child Components
     private Image m_AIImage;
     private Text m_QuestText;
+    private GameObject m_EnterText;
     private Sprite[] m_Images;
 
     private GameObject m_Answer;
     private GameObject m_AnswerOnce;
+
+    private GameObject m_Axe;
 
     // Other Components
     private UIManager m_UIManager;
@@ -40,12 +43,16 @@ public class QuestUI : MonoBehaviour
     {
         m_AIImage = transform.Find("AIImage").GetComponent<Image>();
         m_QuestText = transform.Find("QuestText").GetComponent<Text>();
+        m_EnterText = transform.Find("EnterText").gameObject;
         m_Images = Resources.LoadAll<Sprite>("UI/QuestCanvas");
 
         m_Answer = transform.Find("Answer").gameObject;
         m_Answer.SetActive(false);
         m_AnswerOnce = transform.Find("AnswerOnce").gameObject;
         m_AnswerOnce.SetActive(false);
+
+        m_Axe = GameObject.Find("Axe");
+        m_Axe.SetActive(false);
 
         m_UIManager = GameObject.Find("UIManager").GetComponent<UIManager>();
         m_ObjMgrScript = GameObject.Find("ObjectManager").GetComponent<ObjectManager>();
@@ -68,12 +75,6 @@ public class QuestUI : MonoBehaviour
     void Update()
     {
         UpdateQuestText();
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            m_PlayerProperty.AddProperty(PlayerProperty.OBJTYPE.OBJ_WOOD, 5);
-            m_PlayerProperty.AddProperty(PlayerProperty.OBJTYPE.OBJ_STONE, 5);
-        }
     }
 
     private void OnDestroy()
@@ -150,7 +151,7 @@ public class QuestUI : MonoBehaviour
         //6 영토 설명 Queset
         SixthTalking.Add("좋습니다. 기본 이동 기술을 모두 익혔습니다.");
         SixthTalking.Add("Player님께 기본 제공품인 도끼를 드리기 앞서 영토 설명을 해드리겠습니다.");
-        SixthTalking.Add("먼저 다음 장소로 이동해보십시오.");
+        SixthTalking.Add("먼저 다음 장소인 눈 앞의 통로로 이동해보십시오.");
         m_TalkingText.Add(SixthTalking);
 
         //7 재화획득 퀘스트
@@ -178,6 +179,7 @@ public class QuestUI : MonoBehaviour
         //10
         TenthTalking.Add("잘하셨습니다.");
         TenthTalking.Add("이제 제가 생성해드릴 나무와 돌을 5개 채집해주십시오.");
+        TenthTalking.Add("F 버튼을 이용하여 재화를 얻을 수 있습니다.");
         m_TalkingText.Add(TenthTalking);
 
         EleventhTalking.Add("잘하셨습니다.");
@@ -231,12 +233,13 @@ public class QuestUI : MonoBehaviour
         //17
         EighteenthTalking.Add("좋습니다.");
         EighteenthTalking.Add("던전 파밍을 위해 다음 영토를 확장해야 하기 때문에 레벨을 임의로 올려드리겠습니다.");
-        EighteenthTalking.Add("이제 F 버튼을 통해 무기를 집고 마우스 왼 클릭으로 근접 공격을 해보십시오.");
+        EighteenthTalking.Add("이제 F 버튼을 통해 무기를 집고 2번 버튼을 눌러 장착해주십시오.");
+        EighteenthTalking.Add("마우스 왼 클릭으로 근접 공격을 해보십시오.");
         m_TalkingText.Add(EighteenthTalking);
 
         //18
         NineteenthTalking.Add("잘하셨습니다.");
-        NineteenthTalking.Add("추가로 말씀드리자면 무기 또한 도끼와 비슷하게 2번 버튼을 통해 장착과 해제하실 수 있습니다.");
+        NineteenthTalking.Add("1번은 도끼 버튼이며 2번은 무기 버튼임을 기억해주시기 바랍니다.");
         NineteenthTalking.Add("이제 몬스터 타겟팅에 대해 설명해드리도록 하겠습니다.");
         NineteenthTalking.Add("우클릭을 하면 일정 거리 안 몬스터 중 하나에게 타겟팅이 적용되게 됩니다.");
         NineteenthTalking.Add("타겟팅을 사용하게 되면 플레이어가 바라보는 방향으로 시전되는 스킬 사용이 편리해집니다.");
@@ -351,12 +354,18 @@ public class QuestUI : MonoBehaviour
         {
             case STATE.TALK:
                 ResetCheckList();
+                if (!m_EnterText.activeSelf)
+                    m_EnterText.SetActive(true);
                 SetQuestText(m_TalkingText[m_CheckEvent][m_TextCnt]);
                 break;
             case STATE.QUEST:
+                if(m_EnterText.activeSelf)
+                  m_EnterText.SetActive(false);
                 UpdateQuest();
                 break;
             case STATE.ASK:
+                if (m_EnterText.activeSelf)
+                    m_EnterText.SetActive(false);
                 UpdateAsk();
                 break;
         }
@@ -530,8 +539,8 @@ public class QuestUI : MonoBehaviour
                 break;
             case 10:
                 {
-                    if (m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD) >= 15
-                        && m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_STONE) >= 15)
+                    if (m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD) >= 5
+                        && m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_STONE) >= 5)
                         m_bFinishTask = true;
                 }
                 break;
@@ -565,13 +574,12 @@ public class QuestUI : MonoBehaviour
                     // 건물 재배치 & 업그레이드
                     if (m_UIManager.GetRebuildUpgrade())
                         m_bFinishTask = true;
+
+                    m_WoodCnt = m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD);
                 }
                 break;
             case 15:
                 {
-                    if(m_WoodCnt == 0)
-                        m_WoodCnt = m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD);
-
                     // 재화 획득
                     if (m_WoodCnt < m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD))
                         m_bFinishTask = true;
@@ -612,9 +620,11 @@ public class QuestUI : MonoBehaviour
         if (m_bFinishSpawn)
             return;
 
-        if (m_CheckEvent == 10 && m_TextCnt == 0)
+        if (m_CheckEvent == 6 && m_TextCnt == 8)
+            m_Axe.SetActive(true);
+        else if (m_CheckEvent == 10 && m_TextCnt == 0)
             m_ObjMgrScript.RespawnObjects(3, 3);
-        else if (m_CheckEvent == 18 && m_TextCnt == 0)
+        else if (m_CheckEvent == 17 && m_TextCnt == 2)
             m_ObjMgrScript.DestroyLevelBoundary();
         else
             return;
@@ -660,7 +670,7 @@ public class QuestUI : MonoBehaviour
         Cursor.visible = false;
         m_AnswerOnce.SetActive(false);
 
-        GameObject.Find("Player").GetComponent<Player>().SetAbility(ObjectManager.ABILITY.ABIL_FIRE);
+        GameObject.Find("Player").GetComponent<Player>().SetAbility(ObjectManager.ABILITY.ABIL_WATER);
         m_bFinishTask = true;
     }
 
@@ -669,7 +679,7 @@ public class QuestUI : MonoBehaviour
         Cursor.visible = false;
         m_AnswerOnce.SetActive(false);
 
-        GameObject.Find("Player").GetComponent<Player>().SetAbility(ObjectManager.ABILITY.ABIL_FIRE);
+        GameObject.Find("Player").GetComponent<Player>().SetAbility(ObjectManager.ABILITY.ABIL_GRASS);
         m_bFinishTask = true;
     }
 }

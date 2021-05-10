@@ -14,6 +14,8 @@ public class EndingUI : MonoBehaviour
     private float m_SystemOffTime;
 
     private GameObject m_Player;
+    private GameObject m_EndingCreditUI;
+    private GameObject m_UI;
 
     // Start is called before the first frame update
     void Start()
@@ -34,8 +36,11 @@ public class EndingUI : MonoBehaviour
             if(m_bActive)
                 SetActive(false);
 
-            if (m_SystemOffTime > 1f)
-                LoadingSceneManager.LoadScene("TitleScene");
+            if (m_SystemOffTime > 5f)
+            {
+                m_UI.SetActive(false);
+                m_EndingCreditUI.SetActive(true);
+            }
             else
                 m_SystemOffTime += Time.deltaTime;
             return;
@@ -61,11 +66,16 @@ public class EndingUI : MonoBehaviour
         m_EndingText = transform.Find("EndingText").GetComponent<Text>();
 
         m_Text.Add("현재 Player님이 게임을 플레이한 지 48시간 0분 지났습니다.");
+        m_Text.Add("저희 게임은 Player님의 안전을 위해 자동 종료 시스템을 갖추고 있습니다.");
         m_Text.Add("게임 내의 시간이 현실 시간보다 느리게 흐르므로 유의해주시기 바랍니다.");
-        m_Text.Add("지금부터 Player님의 휴식을 위해 10초 후에 게임이 자동 종료 되겠습니다.");
+        m_Text.Add("지금부터 Player님의 휴식을 위해 5초 후에 게임이 자동 종료 되겠습니다.");
+        m_Text.Add("충분한 휴식 후, 다시 방문해주십시오. 감사합니다.");
         m_TextCnt = 0;
 
         m_Player = GameObject.FindWithTag("Player");
+        m_UI = GameObject.Find("UI");
+        m_EndingCreditUI = transform.parent.GetChild(1).gameObject;
+        m_EndingCreditUI.SetActive(false);
     }
 
     private void SetActive(bool active)

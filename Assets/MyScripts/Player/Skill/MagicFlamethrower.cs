@@ -61,6 +61,10 @@ public class MagicFlamethrower : MonoBehaviour
         {
             if (other.CompareTag("Player"))
             {
+                Player player = other.GetComponent<Player>();
+                if (player.GetAbility() == ObjectManager.ABILITY.ABIL_WATER && player.GetSkillObject(2))
+                    return;
+
                 PlayerProperty playerProperty = other.GetComponent<PlayerProperty>();
                 playerProperty.SetDamaged(ObjectManager.ABILITY.ABIL_FIRE, playerProperty.GetPlayerStat().m_Level);
             }

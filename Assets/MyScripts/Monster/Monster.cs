@@ -526,7 +526,7 @@ public class Monster : MonoBehaviour
 
             if (bDropJewelry)
             {
-                PlayerProperty.OBJTYPE eType = (PlayerProperty.OBJTYPE)Random.Range(2, 4);
+                PlayerProperty.OBJTYPE eType = (PlayerProperty.OBJTYPE)Random.Range((int)(PlayerProperty.OBJTYPE.OBJ_REDGEMSTONE), (int)(PlayerProperty.OBJTYPE.OBJ_BLUEGEMSTONE));
                 int amount = Random.Range(1, playerProperty.GetPlayerStat().m_Level + 1);
 
                 playerProperty.AddProperty(eType, amount);

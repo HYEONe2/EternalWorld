@@ -32,6 +32,9 @@ public class HPUI : MonoBehaviour
         m_MaxHP = 50 * stat.m_Level;
         m_HP = stat.m_HP;
 
+        if (m_HP < 0)
+            m_HP = 0;
+
         m_HPText.text = m_HP + " / " + m_MaxHP;
         m_HPImage.fillAmount = (float)(m_HP / m_MaxHP);
     }

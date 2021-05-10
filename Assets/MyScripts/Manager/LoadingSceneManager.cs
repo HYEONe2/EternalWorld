@@ -11,7 +11,7 @@ public class LoadingSceneManager : MonoBehaviour
 
     private Image m_ProgressBar;
 
-    private GameObject[] m_Background = new GameObject[3];
+    private GameObject[] m_Background = new GameObject[4];
 
     // Start is called before the first frame update
     void Start()
@@ -21,6 +21,7 @@ public class LoadingSceneManager : MonoBehaviour
         m_Background[0] = GameObject.Find("TutorialImage");
         m_Background[1] = GameObject.Find("MainImage");
         m_Background[2] = GameObject.Find("MazeImage");
+        m_Background[3] = GameObject.Find("DefaultImage");
     }
 
     public static void LoadScene(string sceneName)
@@ -67,11 +68,12 @@ public class LoadingSceneManager : MonoBehaviour
                     if (m_NextScene == "MainScene"
                         || m_NextScene == "MazeScene")
                     {
-                        UIManager uimanager = GameObject.Find("UIManager").GetComponent<UIManager>();
-                        if (uimanager)
+                        UIManager UIManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+                        if (UIManager)
                         {
-                            uimanager.LoadingSetting(true);
-                            uimanager.ResetSetting();
+                            UIManager.LoadingSetting(true);
+                            UIManager.ResetSetting();
+                            UIManager.SetMainQuestUIActive(true);
                         }
                     }
 
@@ -85,7 +87,11 @@ public class LoadingSceneManager : MonoBehaviour
 
                     GameObject UIManager = GameObject.Find("UIManager");
                     if (UIManager)
-                        UIManager.GetComponent<UIManager>().LoadingSetting(false);
+                    {
+                        UIManager tempManager = UIManager.GetComponent<UIManager>();
+                        tempManager.LoadingSetting(false);
+                        tempManager.SetMainQuestUIActive(false);
+                    }
 
                     GameObject Player = GameObject.Find("Player");
                     if (Player)
@@ -119,18 +125,28 @@ public class LoadingSceneManager : MonoBehaviour
                 m_Background[0].SetActive(true);
                 m_Background[1].SetActive(false);
                 m_Background[2].SetActive(false);
+                m_Background[3].SetActive(false);
             }
             else if(m_NextScene == "MainScene")
             {
                 m_Background[0].SetActive(false);
                 m_Background[1].SetActive(true);
                 m_Background[2].SetActive(false);
+                m_Background[3].SetActive(false);
             }
             else if(m_NextScene == "MazeScene")
             {
                 m_Background[0].SetActive(false);
                 m_Background[1].SetActive(false);
                 m_Background[2].SetActive(true);
+                m_Background[3].SetActive(false);
+            }
+            else
+            {
+                m_Background[0].SetActive(false);
+                m_Background[1].SetActive(false);
+                m_Background[2].SetActive(false);
+                m_Background[3].SetActive(true);
             }
         }
     }

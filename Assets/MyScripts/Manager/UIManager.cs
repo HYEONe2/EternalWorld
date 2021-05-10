@@ -44,6 +44,7 @@ public class UIManager : MonoBehaviour
     public void SetSelectedBuilding(bool bSelect) { m_bSelectedBuilding = bSelect; }
 
     public void SetQuestCanves(GameObject quest) { m_QuestCanvas = quest; }
+    public void SetMainQuestUIActive(bool bActive) { m_PlayerCanvas.GetComponent<PlayerCanvas>().SetMainQuestUIActive(bActive); }
 
     // Start is called before the first frame update
     void Start()

@@ -156,8 +156,10 @@
      <Compile Include="Assets\MyScripts\Player\Skill\MagicWall.cs" />
      <Compile Include="Assets\MyScripts\UI\BuildPanel.cs" />
      <Compile Include="Assets\MyScripts\UI\CommodityText.cs" />
+     <Compile Include="Assets\MyScripts\UI\EndingCreditText.cs" />
      <Compile Include="Assets\MyScripts\UI\EndingUI.cs" />
      <Compile Include="Assets\MyScripts\UI\HPUI.cs" />
+     <Compile Include="Assets\MyScripts\UI\MainQuestUI.cs" />
      <Compile Include="Assets\MyScripts\UI\NoticeUI.cs" />
      <Compile Include="Assets\MyScripts\UI\PhoneCanvas.cs" />
      <Compile Include="Assets\MyScripts\UI\PlayerCanvas.cs" />

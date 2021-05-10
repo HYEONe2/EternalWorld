@@ -15,6 +15,7 @@ public class BuildPanel : MonoBehaviour
         public string BuildingName;
         public string BuildingContext;
 
+        public Sprite MaterialImage;
         public Sprite UpgradeImage;
         public GameObject Building;
     };
@@ -30,14 +31,12 @@ public class BuildPanel : MonoBehaviour
     private Building m_BuildingScript;
 
     // 실제 변수
-    private Image m_BuildingImage;
     private Text m_BuildingName;
     private Text m_BuildingContext;
 
     private Text m_BuildMaximum;
     private Color m_TextColor;
 
-    private Image m_UpgradeImage;
     private Text m_UpgradeMaximum;
 
     private Button m_BuildButton;
@@ -65,9 +64,8 @@ public class BuildPanel : MonoBehaviour
 
     private void InitializeUI()
     {
-        m_BuildingImage = transform.Find("BuildingImage").GetComponent<Image>();
-        m_BuildingImage.sprite = m_PanelInfo.BuildingImage;
-
+        transform.Find("BuildingImage").GetComponent<Image>().sprite = m_PanelInfo.BuildingImage;
+            
         m_BuildingName = transform.Find("BuildingName").GetComponent<Text>();
         m_BuildingName.text = m_PanelInfo.BuildingName;
 
@@ -79,8 +77,8 @@ public class BuildPanel : MonoBehaviour
 
         m_TextColor = m_BuildMaximum.color;
 
-        m_UpgradeImage = transform.Find("UpgradeImage").GetComponent<Image>();
-        m_UpgradeImage.sprite = m_PanelInfo.UpgradeImage;
+        transform.Find("MaterialImage").GetComponent<Image>().sprite = m_PanelInfo.MaterialImage;
+        transform.Find("UpgradeImage").GetComponent<Image>().sprite = m_PanelInfo.UpgradeImage;
 
         m_UpgradeMaximum = transform.Find("UpgradeMaximum").GetComponent<Text>();
         m_UpgradeMaximum.text = "0 / " + m_BuildingInfo.m_UpgradeAmount;
@@ -181,7 +179,7 @@ public class BuildPanel : MonoBehaviour
                 if (Hit.collider.gameObject.GetComponent<Building>())
                 {
                     if (m_UIManager.GetSelectedBuilding())
-                        return;
+                        ResetUI();
 
                     if (Hit.collider.gameObject.GetComponent<Building>().GetBuildingInfo().m_eBuildingType !=
                         m_BuildingInfo.m_eBuildingType)
@@ -249,6 +247,9 @@ public class BuildPanel : MonoBehaviour
         m_PlayerProperty.AddExperience(m_BuildingInfo.m_Exp);
         m_UpgradeAmount -= m_BuildingInfo.m_UpgradeAmount;
         BuildingScript.SetBuildingInfo(info);
+
+        if (info.m_eBuildingType == Building.BUILDING.BUILDING_IRON)
+            m_PlayerProperty.AddUpgradeCount();
 
         m_UIManager.SetUpgrade(true);
     }

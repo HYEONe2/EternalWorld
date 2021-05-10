@@ -32,6 +32,10 @@ public class PlayerProperty : MonoBehaviour
     private int m_ExtraHP;
     private int m_ExtraCoolTime;
 
+    // Quest
+    private int m_ClearDungeon;
+    private int m_UpgradeCount;
+
     private ObjectManager.ABILITY m_eAbility;
     private PlayerStat m_PlayerStat;
 
@@ -48,12 +52,17 @@ public class PlayerProperty : MonoBehaviour
 
     public PlayerStat GetPlayerStat() { return m_PlayerStat; }
     public int GetCoin() { return m_Coin; }
+    public int GetClearDungeon() { return m_ClearDungeon; }
+    public int GetUpgradeCount() { return m_UpgradeCount; }
 
     public void SetCoin(int coin) { m_Coin = coin; }
     public void SetHP(int hp) { if(50 * m_PlayerStat.m_Level > m_PlayerStat.m_HP )m_PlayerStat.m_HP = hp; }
+
     public void AddStr(int str) { m_PlayerStat.m_Str += str; }
     public void AddExtraHP(int extra) { m_ExtraHP += extra; }
     public void AddExtraCooltime(int extra) { m_ExtraCoolTime += extra; }
+    public void AddClearDungeon() { ++m_ClearDungeon; } 
+    public void AddUpgradeCount() { ++m_UpgradeCount; }
 
     // Start is called before the first frame update
     void Start()
@@ -94,8 +103,10 @@ public class PlayerProperty : MonoBehaviour
         m_ExtraHP = 0;
         m_ExtraCoolTime = 0;
 
+        m_ClearDungeon = 0;
+
         for (int i = 0; i < (int)OBJTYPE.OBJ_END; ++i)
-            m_Property.Add(10);
+            m_Property.Add(0);
         m_Coin = 500;
     }
 
