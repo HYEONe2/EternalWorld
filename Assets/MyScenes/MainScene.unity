@@ -2227,7 +2227,8 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: "Credit\n\n\n\uAE30\uD68D\nPlayer, Monster, Object\n\uCE74\uBA54\uB77C\nUI\n\uC774\uD399\uD2B8\n\uC0AC\uC6B4\uB4DC
     \uD3B8\uC9D1\n\n\uC774\uC18C\uD604\n\n\n\uC81C\uC791\uAE30\uAC04\t2021.03.08
-    ~ 2021.05.16\n\uC5D4\uC9C4\tUnity3D 2019.4.4f1\n\uC0AC\uC6A9\uC5B8\uC5B4\t\tC#\n\uC9C0\uB3C4\uAD50\uC218\t\t\uAE40\uC608\uC9C4\n\n\n\uAC10\uC0AC\uD569\uB2C8\uB2E4"
+    ~ 2021.05.16\n\uC5D4\uC9C4\tUnity3D 2019.4.4f1\n\uC0AC\uC6A9\uC5B8\uC5B4\t\tC#\n\uC9C0\uB3C4\uAD50\uC218\t\t\uAE40\uC608\uC9C4
+    \uAD50\uC218\uB2D8\n\n\n\uAC10\uC0AC\uD569\uB2C8\uB2E4"
 --- !u!1 &8276098378645642708
 GameObject:
   m_ObjectHideFlags: 0

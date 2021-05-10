@@ -130,6 +130,7 @@
      <Compile Include="Assets\MyScripts\Manager\LoadingSceneManager.cs" />
      <Compile Include="Assets\MyScripts\Manager\MazeManager.cs" />
      <Compile Include="Assets\MyScripts\Manager\ObjectManager.cs" />
+     <Compile Include="Assets\MyScripts\Manager\SoundManager.cs" />
      <Compile Include="Assets\MyScripts\Manager\UIManager.cs" />
      <Compile Include="Assets\MyScripts\Monster\Monster.cs" />
      <Compile Include="Assets\MyScripts\Monster\Skill\BallAttack.cs" />
@@ -164,6 +165,7 @@
      <Compile Include="Assets\MyScripts\UI\PhoneCanvas.cs" />
      <Compile Include="Assets\MyScripts\UI\PlayerCanvas.cs" />
      <Compile Include="Assets\MyScripts\UI\QuestUI.cs" />
+     <Compile Include="Assets\MyScripts\UI\SettingUI.cs" />
      <Compile Include="Assets\MyScripts\UI\ShopPanel.cs" />
      <Compile Include="Assets\MyScripts\UI\ShopUI.cs" />
      <Compile Include="Assets\MyScripts\UI\SkillUI.cs" />

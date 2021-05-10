@@ -639,6 +639,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9c196c9d80b7954bac534e89efb3cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_FireMonsterNum: 3
+  m_GrassMonsterNum: 3
+  m_WaterMonsterNum: 3
 --- !u!1 &1931313013
 GameObject:
   m_ObjectHideFlags: 0

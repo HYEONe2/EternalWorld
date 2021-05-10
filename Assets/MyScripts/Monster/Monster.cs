@@ -123,7 +123,7 @@ public class Monster : MonoBehaviour
 
         m_MazeManager = GameObject.Find("MazeManager").GetComponent<MazeManager>();
         m_Target = GameObject.Find("Player");
-        m_TargetY = m_Target.transform.position.y;
+        m_TargetY = -3.169801f;
     }
 
     private void InitializeValues()

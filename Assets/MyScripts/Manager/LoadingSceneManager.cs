@@ -89,6 +89,7 @@ public class LoadingSceneManager : MonoBehaviour
                     if (UIManager)
                     {
                         UIManager tempManager = UIManager.GetComponent<UIManager>();
+
                         tempManager.LoadingSetting(false);
                         tempManager.SetMainQuestUIActive(false);
                     }

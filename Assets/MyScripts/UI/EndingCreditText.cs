@@ -31,7 +31,7 @@ public class EndingCreditText : MonoBehaviour
             return;
         }
 
-        m_OriginColor.a += 8f * Time.deltaTime;
+        m_OriginColor.a += 15f * Time.deltaTime;
         m_Image.color = m_OriginColor;
 
         Pos.y += 50f * Time.deltaTime;

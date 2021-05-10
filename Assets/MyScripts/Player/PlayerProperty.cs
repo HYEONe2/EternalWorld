@@ -84,6 +84,8 @@ public class PlayerProperty : MonoBehaviour
             for (int i = 0; i < (int)OBJTYPE.OBJ_END; ++i)
                 m_Property[i] += 10;
         }
+        if (Input.GetKeyDown(KeyCode.K))
+            m_PlayerStat.m_HP = 1;
 
         if (m_eAbility == ObjectManager.ABILITY.ABIL_END)
             m_eAbility = GetComponent<Player>().GetAbility();

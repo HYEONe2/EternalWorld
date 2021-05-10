@@ -65,7 +65,9 @@ public class Maze : MonoBehaviour
 
     // Values
     private bool m_bLateInit;
-    //[SerializeField] private int m_FireMonsterNum = 0;
+    [SerializeField] private int m_FireMonsterNum = 0;
+    [SerializeField] private int m_GrassMonsterNum = 0;
+    [SerializeField] private int m_WaterMonsterNum = 0;
 
     public Vector3 GetPatrolPos() { return new Vector3((Random.Range(0, MAZE_LINE_X) * 2) + 1, 0, (Random.Range(0, MAZE_LINE_Y) * 2) + 1) * MAZE_BLOCK_SCALE; }
 
@@ -98,6 +100,12 @@ public class Maze : MonoBehaviour
             CreateMonster();
 
             m_bLateInit = true;
+        }
+
+        if(Input.GetKeyDown(KeyCode.O))
+        {
+            foreach (Transform trigger in transform)
+                trigger.gameObject.SetActive(true);
         }
     }
 
@@ -174,7 +182,6 @@ public class Maze : MonoBehaviour
     {
         int index = 0;
         int usableTrigger = Random.Range(0, 3);
-        //Debug.Log("TRIGGER: " + usableTrigger);
 
         foreach (Transform trigger in transform)
         {
@@ -425,14 +432,32 @@ public class Maze : MonoBehaviour
     {
         Vector3 position;
 
-        for (int i = 0; i < 10; ++i)
-        {
-            //position = new Vector3(((Random.Range(0, MAZE_LINE_X) * 2) + 1) * m_MazeBlockScale.x, 0, ((Random.Range(0, MAZE_LINE_Y) * 2) + 1) * m_MazeBlockScale.z);
-            position = new Vector3((Random.Range(0, MAZE_LINE_X) * 2) + 1, 0, (Random.Range(0, MAZE_LINE_Y) * 2) + 1) * MAZE_BLOCK_SCALE;
+        //for (int i = 0; i < 10; ++i)
+        //{
+        //    //position = new Vector3(((Random.Range(0, MAZE_LINE_X) * 2) + 1) * m_MazeBlockScale.x, 0, ((Random.Range(0, MAZE_LINE_Y) * 2) + 1) * m_MazeBlockScale.z);
+        //    position = new Vector3((Random.Range(0, MAZE_LINE_X) * 2) + 1, 0, (Random.Range(0, MAZE_LINE_Y) * 2) + 1) * MAZE_BLOCK_SCALE;
 
-            //position = new Vector3(7, 0, 20);
-            Instantiate(m_Monster[Random.Range(0, 3)], position, Quaternion.identity);
-            //Instantiate(m_Monster[0], position, Quaternion.identity);
+        //    //position = new Vector3(7, 0, 20);
+        //    Instantiate(m_Monster[Random.Range(0, 3)], position, Quaternion.identity);
+        //    //Instantiate(m_Monster[0], position, Quaternion.identity);
+        //}
+
+        for(int i =0;i<m_FireMonsterNum; ++i)
+        {
+            position = new Vector3((Random.Range(0, MAZE_LINE_X) * 2) + 1, 0, (Random.Range(0, MAZE_LINE_Y) * 2) + 1) * MAZE_BLOCK_SCALE;
+            Instantiate(m_Monster[0], position, Quaternion.identity);
+        }
+
+        for (int i = 0; i < m_GrassMonsterNum; ++i)
+        {
+            position = new Vector3((Random.Range(0, MAZE_LINE_X) * 2) + 1, 0, (Random.Range(0, MAZE_LINE_Y) * 2) + 1) * MAZE_BLOCK_SCALE;
+            Instantiate(m_Monster[1], position, Quaternion.identity);
+        }
+
+        for (int i = 0; i < m_WaterMonsterNum; ++i)
+        {
+            position = new Vector3((Random.Range(0, MAZE_LINE_X) * 2) + 1, 0, (Random.Range(0, MAZE_LINE_Y) * 2) + 1) * MAZE_BLOCK_SCALE;
+            Instantiate(m_Monster[2], position, Quaternion.identity);
         }
     }
 }

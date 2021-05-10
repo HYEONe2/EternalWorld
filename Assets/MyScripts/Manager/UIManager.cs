@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     private GameObject m_Inventory;
     private GameObject m_Shop;
     private GameObject m_Build;
+    private GameObject m_Setting;
 
     private GameObject m_ReturnIcon;
     private GameObject m_CoinIcon;
@@ -57,6 +58,7 @@ public class UIManager : MonoBehaviour
         if (!m_Inventory) m_Inventory = GameObject.Find("InventoryUI");
         if (!m_Shop) m_Shop = GameObject.Find("ShopUI");
         if (!m_Build) m_Build = GameObject.Find("BuildUI");
+        m_Setting = GameObject.Find("SettingUI");
 
         if (!m_ReturnIcon) m_ReturnIcon = GameObject.Find("ReturnIcon");
         if (!m_CoinIcon) m_CoinIcon = GameObject.Find("CoinIcon");
@@ -68,6 +70,7 @@ public class UIManager : MonoBehaviour
         m_Inventory.SetActive(false);
         m_Shop.SetActive(false);
         m_Build.SetActive(false);
+        m_Setting.SetActive(false);
     }
 
     // Update is called once per frame
@@ -139,6 +142,8 @@ public class UIManager : MonoBehaviour
     {
         m_Menu.SetActive(false);
         m_ReturnIcon.SetActive(true);
+
+        m_Setting.SetActive(true);
     }
 
     public void ClickBackward()
@@ -152,6 +157,7 @@ public class UIManager : MonoBehaviour
             m_Inventory.SetActive(false);
             m_Shop.SetActive(false);
             m_Build.SetActive(false);
+            m_Setting.SetActive(false);
 
             m_ReturnIcon.SetActive(false);
             m_Menu.SetActive(true);
@@ -229,6 +235,7 @@ public class UIManager : MonoBehaviour
         m_Inventory.SetActive(false);
         m_Shop.SetActive(false);
         m_Build.SetActive(false);
+        m_Setting.SetActive(false);
 
         m_ReturnIcon.SetActive(false);
         m_Menu.SetActive(true);

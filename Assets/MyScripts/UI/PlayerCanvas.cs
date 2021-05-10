@@ -15,7 +15,7 @@ public class PlayerCanvas : MonoBehaviour
 
     // Function
     public void SetUseNoticeUI(bool bUse) { m_bUseNoticeUI = bUse; }
-    public void SetMainQuestUIActive(bool bActive) { m_MainQuestUI.SetActive(bActive); }
+    public void SetMainQuestUIActive(bool bActive) { if(m_MainQuestUI) m_MainQuestUI.SetActive(bActive); }
 
     // Start is called before the first frame update
     void Start()
