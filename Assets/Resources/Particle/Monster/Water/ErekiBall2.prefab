@@ -107,7 +107,7 @@ GameObject:
   - component: {fileID: 1285429667095162730}
   m_Layer: 0
   m_Name: ErekiBall2
-  m_TagString: Weapon
+  m_TagString: MonsterWeapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -43,6 +43,7 @@ public class Building : MonoBehaviour
     private GameObject m_BuildingGuide;
     private RaycastHit m_Hit;
     private float m_BoundaryY;
+    private bool m_bOnceBuilt;
 
     private bool m_bIsLandmark;
     private float m_CheckTime;
@@ -69,6 +70,8 @@ public class Building : MonoBehaviour
         m_BuildingArmTrans = Player.transform.Find("BuildingArm");
         m_CamArmTrans = Player.transform.Find("CameraArm");
         m_PlayerProperty = Player.GetComponent<PlayerProperty>();
+
+        m_bOnceBuilt = false;
 
         if (m_Info.m_eBuildingType == BUILDING.BUILDING_HEALHP ||
             m_Info.m_eBuildingType == BUILDING.BUILDING_BUFFHP ||
@@ -167,6 +170,7 @@ public class Building : MonoBehaviour
 
     public void SetBuilt()
     {
+        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, GetComponent<AudioSource>(), 2);
         m_UIManager.SetPhoneCanvasActive(true);
 
         SetOriginOpaque();
@@ -180,8 +184,10 @@ public class Building : MonoBehaviour
         m_UIManager.SetPlayerRebuild(false);
         m_UIManager.SetRebuild(true);
 
-        m_PlayerProperty.AddExperience(m_Info.m_Exp * 10);
+        if(!m_bOnceBuilt)
+            m_PlayerProperty.AddExperience(m_Info.m_Exp * 10);
 
+        m_bOnceBuilt = true;
         m_eBuild = BUILD.BUILT;
     }
 

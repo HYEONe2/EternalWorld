@@ -18,6 +18,8 @@ public class EndingCreditText : MonoBehaviour
 
         m_Image = transform.parent.GetChild(0).GetComponent<Image>();
         m_OriginColor = m_Image.color;
+
+        SoundManager.SetEnding(true);
     }
 
     // Update is called once per frame
@@ -31,10 +33,10 @@ public class EndingCreditText : MonoBehaviour
             return;
         }
 
-        m_OriginColor.a += 15f * Time.deltaTime;
+        m_OriginColor.a += 5f * Time.deltaTime;
         m_Image.color = m_OriginColor;
 
-        Pos.y += 50f * Time.deltaTime;
+        Pos.y += 150f * Time.deltaTime;
         transform.position = Pos;
     }
 }

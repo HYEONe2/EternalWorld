@@ -248,6 +248,8 @@ public class BuildPanel : MonoBehaviour
         m_UpgradeAmount -= m_BuildingInfo.m_UpgradeAmount;
         BuildingScript.SetBuildingInfo(info);
 
+        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, BuildingScript.gameObject.GetComponent<AudioSource>(), 3);
+
         if (info.m_eBuildingType == Building.BUILDING.BUILDING_IRON)
             m_PlayerProperty.AddUpgradeCount();
 

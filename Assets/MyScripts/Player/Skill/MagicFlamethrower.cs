@@ -48,16 +48,16 @@ public class MagicFlamethrower : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (CompareTag("Weapon"))
-        {
-            if (other.CompareTag("Monster"))
-            {
-                Monster monster = other.GetComponent<Monster>();
-                if (monster && !monster.GetDamaged())
-                    monster.SetDamaged(1);
-            }
-        }
-        else if (CompareTag("MonsterWeapon"))
+        //if (CompareTag("Weapon"))
+        //{
+        //    if (other.CompareTag("Monster"))
+        //    {
+        //        Monster monster = other.GetComponent<Monster>();
+        //        if (monster && !monster.GetDamaged())
+        //            monster.SetDamaged(1);
+        //    }
+        //}
+        if (CompareTag("MonsterWeapon"))
         {
             if (other.CompareTag("Player"))
             {

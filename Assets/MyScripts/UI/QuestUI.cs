@@ -10,6 +10,7 @@ public class QuestUI : MonoBehaviour
     private Text m_QuestText;
     private GameObject m_EnterText;
     private Sprite[] m_Images;
+    private AudioSource m_EffectSound;
 
     private GameObject m_Answer;
     private GameObject m_AnswerOnce;
@@ -45,6 +46,7 @@ public class QuestUI : MonoBehaviour
         m_QuestText = transform.Find("QuestText").GetComponent<Text>();
         m_EnterText = transform.Find("EnterText").gameObject;
         m_Images = Resources.LoadAll<Sprite>("UI/QuestCanvas");
+        m_EffectSound = GetComponent<AudioSource>();
 
         m_Answer = transform.Find("Answer").gameObject;
         m_Answer.SetActive(false);
@@ -198,23 +200,7 @@ public class QuestUI : MonoBehaviour
         ThirteenthTalking.Add("이제 메인 화면으로 돌아간 뒤, 건물 짓기 어플을 이용하여 나무집을 지어보십시오.");
         m_TalkingText.Add(ThirteenthTalking);
 
-        //14
-        FourteenthTalking.Add("잘하셨습니다.");
-        FourteenthTalking.Add("지어진 건물을 클릭하면 해당 건물에 투명화가 적용되며 지목화가 됩니다.");
-        FourteenthTalking.Add("지목된 건물은 어플에 정보가 뜨게 되고 건물 재배치와 업그레이드가 가능하게 됩니다.");
-        FourteenthTalking.Add("건물 재배치로 위치를 옮겨보고 원석을 집어 업그레이드까지 진행하여 보십시오.");
-        FourteenthTalking.Add("참고로 건물 재배치는 시야 회전을 통한 위치 조절과 마우스 휠을 통해 건물 자체를 회전시킬 수 있습니다.");
-        m_TalkingText.Add(FourteenthTalking);
-
-        //15
-        FifteenthTalking.Add("잘하셨습니다.");
-        FifteenthTalking.Add("업그레이드를 진행하면 건물의 생산속도가 올라가게 되거나 생산품의 개수가 올라갑니다.");
-        FifteenthTalking.Add("건물에서 생산이 완료된 경우 건물에 반짝이는 이펙트가 뜨게 됩니다.");
-        FifteenthTalking.Add("이 때 건물 근처로 가 F 버튼을 누르면 재화를 획득하실 수 있습니다.");
-        FifteenthTalking.Add("F 버튼을 눌러 재화를 획득하여 보십시오.");
-        m_TalkingText.Add(FifteenthTalking);
-
-        //16
+        //16 -> 14
         SixteenthTalking.Add("잘하셨습니다.");
         SixteenthTalking.Add("지금까지 경험치를 얻기 위한 재화 습득의 두 가지 방법과 건물 짓기에 대해 알아보았습니다.");
         SixteenthTalking.Add("이제 세 번째 경험치 획득 방법인 상점 이용에 대해 알려드리겠습니다.");
@@ -223,6 +209,22 @@ public class QuestUI : MonoBehaviour
         SixteenthTalking.Add("그럼 판매와 구입 활동을 통하여 업그레이드 원석을 하나 얻어보십시오.");
         m_TalkingText.Add(SixteenthTalking);
 
+        //14 -> 15
+        FourteenthTalking.Add("잘하셨습니다.");
+        FourteenthTalking.Add("지어진 건물을 클릭하면 해당 건물에 투명화가 적용되며 지목화가 됩니다.");
+        FourteenthTalking.Add("지목된 건물은 어플에 정보가 뜨게 되고 건물 재배치와 업그레이드가 가능하게 됩니다.");
+        FourteenthTalking.Add("건물 재배치로 위치를 옮겨보고 원석을 집어 업그레이드까지 진행하여 보십시오.");
+        FourteenthTalking.Add("참고로 건물 재배치는 시야 회전을 통한 위치 조절과 마우스 휠을 통해 건물 자체를 회전시킬 수 있습니다.");
+        m_TalkingText.Add(FourteenthTalking);
+
+        //15 -> 16
+        FifteenthTalking.Add("잘하셨습니다.");
+        FifteenthTalking.Add("업그레이드를 진행하면 건물의 생산속도가 올라가게 되거나 생산품의 개수가 올라갑니다.");
+        FifteenthTalking.Add("건물에서 생산이 완료된 경우 건물에 반짝이는 이펙트가 뜨게 됩니다.");
+        FifteenthTalking.Add("이 때 건물 근처로 가 F 버튼을 누르면 재화를 획득하실 수 있습니다.");
+        FifteenthTalking.Add("F 버튼을 눌러 재화를 획득하여 보십시오.");
+        m_TalkingText.Add(FifteenthTalking);
+               
         //17
         SeventeenthTalking.Add("좋습니다.");
         SeventeenthTalking.Add("이제 경험치를 얻을 수 있는 마지막 방법인 던전 파밍에 대한 안내를 해드리겠습니다..");
@@ -279,7 +281,10 @@ public class QuestUI : MonoBehaviour
             {
                 // 인덱스가 하나씩 늘어남
                 if (m_eState == STATE.TALK || m_eState == STATE.PAUSE)
+                {
+                    SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 0);
                     ++m_TextCnt;
+                }
             }
         }
 
@@ -479,7 +484,10 @@ public class QuestUI : MonoBehaviour
                         else
                         {
                             if (i == 3)
+                            {
+                                SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                                 m_bFinishTask = true;
+                            }
                         }
                     }
                 }
@@ -488,35 +496,50 @@ public class QuestUI : MonoBehaviour
                 {
                     Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
                     if (mouseDelta.magnitude != 0)
+                    {
+                        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                         m_bFinishTask = true;
+                    }
                 }
                 break;
             case 4:
                 {
                     if(Input.GetKey(KeyCode.LeftShift))
                     {
-                        if (Input.GetKey(KeyCode.W)|| Input.GetKey(KeyCode.S)
+                        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)
                             || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.D))
+                        {
+                            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                             m_bFinishTask = true;
+                        }
                     }
                 }
                 break;
             case 5:
                 {
                     if (Input.GetKeyDown(KeyCode.Space))
+                    {
+                        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                         m_bFinishTask = true;
+                    }
                 }
                 break;
             case 6:
                 {
                     if (m_ObjMgrScript.GetCloseEnough())
+                    {
+                        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                         m_bFinishTask = true;
+                    }
                 }
                 break;
             case 7:
                 {
                     if (m_Player.GetActive("Equipment"))
+                    {
+                        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                         m_bFinishTask = true;
+                    }
                 }
                 break;
             case 8:
@@ -524,7 +547,10 @@ public class QuestUI : MonoBehaviour
                     if (Input.GetKeyDown("1"))
                     {
                         if (!m_Player.GetActive("Equipment"))
+                        {
+                            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                             m_bFinishTask = true;
+                        }
                     }
                 }
                 break;
@@ -533,15 +559,21 @@ public class QuestUI : MonoBehaviour
                     if (Input.GetKeyDown("1"))
                     {
                         if (m_Player.GetActive("Equipment"))
+                        {
+                            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                             m_bFinishTask = true;
+                        }
                     }
                 }
                 break;
             case 10:
                 {
-                    if (m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD) >= 5
-                        && m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_STONE) >= 5)
+                    if (m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD) >= 1
+                        && m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_STONE) >= 1)
+                    {
+                        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                         m_bFinishTask = true;
+                    }
                 }
                 break;
             case 11:
@@ -550,13 +582,19 @@ public class QuestUI : MonoBehaviour
                         return;
 
                     if (Input.GetKeyDown(KeyCode.I))
+                    {
+                        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                         m_bFinishTask = true;
+                    }
                 }
                 break;
             case 12:
                 {
                     if (m_UIManager.GetActive("InventoryUI"))
+                    {
+                        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                         m_bFinishTask = true;
+                    }
                 }
                 break;
             case 13:
@@ -565,30 +603,42 @@ public class QuestUI : MonoBehaviour
                     if(WoodHouse)
                     {
                         if (WoodHouse.GetComponent<Building>().GetBuild() == Building.BUILD.BUILT)
+                        {
+                            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                             m_bFinishTask = true;
+                        }
                     }
                 }
                 break;
             case 14:
                 {
-                    // 건물 재배치 & 업그레이드
-                    if (m_UIManager.GetRebuildUpgrade())
+                    if (m_UIManager.GetEarnGem())
+                    {
+                        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                         m_bFinishTask = true;
-
-                    m_WoodCnt = m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD);
+                    }
                 }
                 break;
             case 15:
                 {
-                    // 재화 획득
-                    if (m_WoodCnt < m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD))
+                    // 건물 재배치 & 업그레이드
+                    if (m_UIManager.GetRebuildUpgrade())
+                    {
+                        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                         m_bFinishTask = true;
+                    }
+
+                    m_WoodCnt = m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD);
                 }
                 break;
             case 16:
                 {
-                    if (m_UIManager.GetEarnGem())
+                    // 재화 획득
+                    if (m_WoodCnt < m_PlayerProperty.GetPropertyAmount(PlayerProperty.OBJTYPE.OBJ_WOOD))
+                    {
+                        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                         m_bFinishTask = true;
+                    }
                 }
                 break;
             case 18:
@@ -597,7 +647,10 @@ public class QuestUI : MonoBehaviour
                         return;
 
                     if (Input.GetMouseButtonDown(0))
+                    {
+                        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                         m_bFinishTask = true;
+                    }
                 }
                 break;
             case 19:
@@ -608,7 +661,10 @@ public class QuestUI : MonoBehaviour
                     if (Input.GetMouseButton(1))
                     {
                         if (Input.GetKeyDown(KeyCode.Q))
+                        {
+                            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 1);
                             m_bFinishTask = true;
+                        }
                     }
                 }
                 break;
@@ -645,6 +701,7 @@ public class QuestUI : MonoBehaviour
 
     public void ClickYesButton()
     {
+        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 0);
         m_bCheckList[0] = true;
     }
 
@@ -653,6 +710,7 @@ public class QuestUI : MonoBehaviour
         Cursor.visible = false;
         m_Answer.SetActive(false);
 
+        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 0);
         m_bCheckList[1] = true;
     }
 
@@ -662,6 +720,7 @@ public class QuestUI : MonoBehaviour
         m_AnswerOnce.SetActive(false);
 
         GameObject.Find("Player").GetComponent<Player>().SetAbility(ObjectManager.ABILITY.ABIL_FIRE);
+        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 0);
         m_bFinishTask = true;
     }
 
@@ -671,6 +730,7 @@ public class QuestUI : MonoBehaviour
         m_AnswerOnce.SetActive(false);
 
         GameObject.Find("Player").GetComponent<Player>().SetAbility(ObjectManager.ABILITY.ABIL_WATER);
+        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 0);
         m_bFinishTask = true;
     }
 
@@ -680,6 +740,7 @@ public class QuestUI : MonoBehaviour
         m_AnswerOnce.SetActive(false);
 
         GameObject.Find("Player").GetComponent<Player>().SetAbility(ObjectManager.ABILITY.ABIL_GRASS);
+        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_EffectSound, 0);
         m_bFinishTask = true;
     }
 }

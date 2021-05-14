@@ -17,6 +17,8 @@ public class EndingUI : MonoBehaviour
     private GameObject m_EndingCreditUI;
     private GameObject m_UI;
 
+    [SerializeField] private int m_LimitLevel = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +50,7 @@ public class EndingUI : MonoBehaviour
 
         if (!m_bActive)
         {
-            if (m_Player.GetComponent<PlayerProperty>().GetPlayerStat().m_Level >= 7)
+            if (m_Player.GetComponent<PlayerProperty>().GetPlayerStat().m_Level >= m_LimitLevel)
                 SetActive(true);
         }
         else

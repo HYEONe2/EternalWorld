@@ -5,7 +5,11 @@ using UnityEngine;
 public class ChangeSceneManager : MonoBehaviour
 {
     [SerializeField] public string m_SceneName;
-    
+
+    private bool m_bClick = false;
+    private bool m_bSoundPlay = false;
+    private bool m_bStart = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +19,29 @@ public class ChangeSceneManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (m_bClick)
+        {
+            AudioSource EffectSound = GameObject.Find("SoundManager").GetComponent<AudioSource>();
+
+            if (!m_bSoundPlay)
+            {
+                EffectSound.Play();
+                m_bSoundPlay = true;
+            }
+            else
+            {
+                if (EffectSound.time >= 0.5f)
+                {
+                    if(m_bStart)
+                        LoadingSceneManager.LoadScene(m_SceneName);
+                    else
+                        Application.Quit();
+                }
+            }
+
+            return;
+        }
+
         if (Input.GetKeyDown("0"))
             LoadingSceneManager.LoadScene(m_SceneName);
         if (Input.GetKeyDown("9"))
@@ -37,11 +64,12 @@ public class ChangeSceneManager : MonoBehaviour
 
     public void StartGame()
     {
-        LoadingSceneManager.LoadScene(m_SceneName);
+        m_bClick = true;
+        m_bStart = true;
     }
 
     public void EndGame()
     {
-        Application.Quit();
+        m_bClick = true;
     }
 }

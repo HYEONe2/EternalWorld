@@ -26,16 +26,10 @@ public class MagicSeed : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Monster")
-            || other.CompareTag("Player"))
+        if (other.CompareTag("Monster"))
         {
-            Monster monster = other.GetComponent<Monster>();
-            if (monster)
-                monster.SetDamaged(1);
-
-            //Instantiate(Resources.Load<GameObject>("Particle/Player/Grass/FireExplosion"), transform.position, Quaternion.identity);
+            Instantiate(Resources.Load<GameObject>("Particle/Player/Grass/FireExplosion"), transform.position, Quaternion.identity);
             Destroy(gameObject);
-            // 몬스터 걸음 멈춤
         }
     }
 }

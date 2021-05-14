@@ -8,7 +8,10 @@ public class PhoneCanvas : MonoBehaviour
     private Transform m_PhoneTrans;
 
     private bool m_bUsePhone;
+    private bool m_bDownEnd;
     private Vector3 m_OriginPos;
+
+    public bool GetPhoneDownEnd() { return m_bDownEnd; }
 
     // Start is called before the first frame update
     void Start()
@@ -47,6 +50,7 @@ public class PhoneCanvas : MonoBehaviour
             return;
         }
 
+        m_bDownEnd = false;
         m_PhoneTrans.position += new Vector3(0f, 500f * Time.deltaTime, 0f);
     }
 
@@ -54,6 +58,7 @@ public class PhoneCanvas : MonoBehaviour
     {
         if (m_PhoneTrans.position.y <= -300f)
         {
+            m_bDownEnd = true;
             Cursor.visible = false;
             return;
         }

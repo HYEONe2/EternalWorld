@@ -20,6 +20,7 @@ public class PlayerProperty : MonoBehaviour
     };
 
     // Values
+    private AudioSource m_EffectSound;
     public struct PlayerStat
     {
         public int m_Level;
@@ -43,13 +44,17 @@ public class PlayerProperty : MonoBehaviour
     private int m_Coin;
 
     public void AddProperty(OBJTYPE eType, int amount, bool bUseShop = false) {
-        if(!bUseShop)
+        if (!bUseShop)
+        {
             Instantiate(Resources.Load<GameObject>("Particle/Player/magic_ring_03"), transform.position, Quaternion.Euler(new Vector3(-90, 0, 0)));
+            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, m_EffectSound, 0);
+        }
         m_Property[(int)eType] += amount;
     }
     public void ReduceProperty(OBJTYPE eType, int amount) { m_Property[(int)eType] -= amount; }
-    public int GetPropertyAmount(OBJTYPE eType) { return m_Property[(int)eType]; }
+    public int GetPropertyAmount(OBJTYPE eType) {return m_Property[(int)eType]; }
 
+    public AudioSource GetAudioSource() { return m_EffectSound; }
     public PlayerStat GetPlayerStat() { return m_PlayerStat; }
     public int GetCoin() { return m_Coin; }
     public int GetClearDungeon() { return m_ClearDungeon; }
@@ -93,6 +98,8 @@ public class PlayerProperty : MonoBehaviour
 
     private void Initialize()
     {
+        m_EffectSound = GetComponent<AudioSource>();
+
         m_eAbility = GetComponent<Player>().GetAbility();
 
         m_PlayerStat.m_Level = 1;
@@ -130,6 +137,7 @@ public class PlayerProperty : MonoBehaviour
             else if (eAbility == ObjectManager.ABILITY.ABIL_WATER)
                 Instantiate(Resources.Load<GameObject>("Particle/Player/Water/magic_ring_01"), transform.position, Quaternion.Euler(new Vector3(-90, 0, 0)));
 
+            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, m_EffectSound, 6);
             m_PlayerStat.m_Exp = m_PlayerStat.m_Exp - m_PlayerStat.m_MaxExp * m_PlayerStat.m_Level;
             ++m_PlayerStat.m_Level;
 
@@ -147,6 +155,7 @@ public class PlayerProperty : MonoBehaviour
         if (player.GetDamaged())
             return;
 
+        player.ResetAnimator();
         int damagePercent = 0;
         switch(m_eAbility)
         {
@@ -185,7 +194,11 @@ public class PlayerProperty : MonoBehaviour
                 break;
         }
 
+        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, m_EffectSound, 2);
         m_PlayerStat.m_HP -= damage * damagePercent;
+
+        if (m_PlayerStat.m_HP <= 0)
+            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, m_EffectSound, 3);
         player.SetAniDamaged();
     }
 

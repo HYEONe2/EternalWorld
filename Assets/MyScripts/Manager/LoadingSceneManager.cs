@@ -107,6 +107,8 @@ public class LoadingSceneManager : MonoBehaviour
                             Player.transform.position = new Vector3(7f, 0, 10f);
                             Player.transform.rotation = Quaternion.Euler(Vector3.one);
                         }
+
+                        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, Player.GetComponent<AudioSource>(), 5);
                     }
                 }
             }

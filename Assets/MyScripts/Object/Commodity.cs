@@ -10,6 +10,7 @@ public class Commodity : MonoBehaviour
     private PlayerProperty m_PlayerProperty;
     private GameObject m_PlayerEquip;
     private Animator m_PlayerAnimator;
+    private AudioSource m_EffectSound;
 
     private GameObject m_HurtParticle;
     private GameObject m_Particle;
@@ -33,8 +34,9 @@ public class Commodity : MonoBehaviour
         m_Player = Player.GetComponent<Player>();
         m_PlayerProperty = Player.GetComponent<PlayerProperty>();
         m_PlayerEquip = GameObject.FindWithTag("Equipment");
-        m_PlayerAnimator = GameObject.Find("PlayerMesh").GetComponent<Animator>();
+        m_PlayerAnimator = Player.transform.Find("PlayerMesh").GetComponent<Animator>();
         m_Particle = Resources.Load<GameObject>("Particle/Commodity/WFX_Explosion Simple");
+        m_EffectSound = GetComponent<AudioSource>();
 
         m_bLateInit = false;
         m_bCheckAttack = false;
@@ -87,8 +89,10 @@ public class Commodity : MonoBehaviour
 
             if (m_bCheckAttack && !m_bCheckHurt)
             {
-                m_PlayerProperty.AddExperience(m_Exp);
                 Instantiate(m_HurtParticle, other.transform.position, new Quaternion(0, 0, 0, 0));
+                m_EffectSound.Play();
+
+                m_PlayerProperty.AddExperience(m_Exp);
                 m_bCheckHurt = true;
             }
         }

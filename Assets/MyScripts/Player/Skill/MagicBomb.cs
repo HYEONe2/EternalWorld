@@ -43,6 +43,8 @@ public class MagicBomb : MonoBehaviour
 
         if (!m_bStop)
         {
+            m_PartiSystem.time = 0f;
+
             if (m_StopTime > 5f)
             {
                 GameObject.Find("Player").GetComponent<Player>().SetSkillObject(1, null);
@@ -52,14 +54,16 @@ public class MagicBomb : MonoBehaviour
             else
                 m_StopTime += Time.deltaTime;
 
-            if (m_PartiSystem.time >= 1f)
-                m_PartiSystem.time = 0f;
-
             transform.position += m_LookVector * Time.deltaTime * m_Speed;
         }
         else
         {
-            if (m_PartiSystem.time > 1.5f)
+            if(m_PartiSystem.time > 0.5f)
+            {
+                if (!GetComponent<AudioSource>().isPlaying)
+                    GetComponent<AudioSource>().Play();
+            }
+            else if (m_PartiSystem.time > 1.5f)
             {
                 m_Collider.radius = 2.5f;
 

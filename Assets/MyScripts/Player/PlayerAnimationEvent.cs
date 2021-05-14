@@ -7,6 +7,7 @@ public class PlayerAnimationEvent : MonoBehaviour
     private Player m_Player;
     private PlayerProperty m_PlayerProperty;
     private Animator m_Animator;
+    private AudioSource m_EffectSound;
 
     private float m_CoolTime;
 
@@ -20,6 +21,7 @@ public class PlayerAnimationEvent : MonoBehaviour
         m_Player = transform.parent.GetComponent<Player>();
         m_PlayerProperty = transform.parent.GetComponent<PlayerProperty>();
         m_Animator = GetComponent<Animator>();
+        m_EffectSound = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -84,8 +86,16 @@ public class PlayerAnimationEvent : MonoBehaviour
     {
         int HP = m_PlayerProperty.GetPlayerStat().m_HP;
         if (HP <= 0)
+        {
             m_Animator.SetBool(m_bHashDead, true);
+        }
 
         m_Animator.SetBool(m_bHashDamaged, false);
+    }
+
+    public void PlayFootStep()
+    {
+        if(m_Animator.GetBool("IsGrounded"))
+           SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, m_EffectSound, 8);
     }
 }

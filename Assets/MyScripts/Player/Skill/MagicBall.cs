@@ -37,9 +37,9 @@ public class MagicBall : MonoBehaviour
     {
         if(other.CompareTag("Monster"))
         {
-            Monster monster = other.GetComponent<Monster>();
-            if (monster)
-                monster.SetDamaged(1);
+            //Monster monster = other.GetComponent<Monster>();
+            //if (monster)
+            //    monster.SetDamaged(1);
 
             GameObject.Find("Player").GetComponent<Player>().SetSkillObject(0, null);
             Destroy(gameObject);

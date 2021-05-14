@@ -10,6 +10,10 @@ public class Player : MonoBehaviour
     public GameObject m_Weapon;
     private GameObject m_Target;
 
+    private static AudioSource m_EffectSound;
+    private static AudioSource m_EquipmentSound;
+    private static AudioSource m_WeaponSound;
+
     // Child Components
     private GameObject m_Mesh;
     private Transform m_MeshTrans;
@@ -92,6 +96,9 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (SoundManager.GetEnding())
+            return;
+
         if (Cursor.visible)
             ResetAnimator();
 
@@ -104,11 +111,6 @@ public class Player : MonoBehaviour
         UpdateAction();
         UpdateInteraction();
     }
-
-    //private void FixedUpdate()
-    //{
-
-    //}
 
     private void OnTriggerEnter(Collider other)
     {
@@ -147,6 +149,9 @@ public class Player : MonoBehaviour
 
         // Other Components
         if (!m_NearObject) m_NearObject = null;
+
+        m_EffectSound = gameObject.AddComponent<AudioSource>();
+        m_EffectSound.loop = false;
     }
 
     private void InitializeValues()
@@ -308,6 +313,7 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, m_EffectSound, 1);
             m_Animator.SetBool(m_bHashSpace, true);
             m_bJump = true;
 
@@ -324,7 +330,7 @@ public class Player : MonoBehaviour
     {
         UpdateCoolTime();
 
-        if (m_Animator.GetBool(m_bHashSpace) || Cursor.visible || m_bUsePhone || m_bSwing)
+        if (m_Animator.GetBool(m_bHashSpace)|| m_Animator.GetBool(m_bHashDamaged) || Cursor.visible || m_bUsePhone || m_bSwing)
             return;
 
         Targeting();
@@ -374,6 +380,8 @@ public class Player : MonoBehaviour
             {
                 m_bSwing = true;
                 m_Animator.SetBool(m_bHashLButton, true);
+
+                SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, m_EffectSound, 1);
             }
         }
         else if (m_Weapon.activeSelf)
@@ -382,6 +390,9 @@ public class Player : MonoBehaviour
             {
                 m_bSwing = true;
                 m_Animator.SetBool(m_bHashLButton, true);
+
+                m_WeaponSound.Play();
+                SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, m_EffectSound, 1);
             }
         }
     }
@@ -419,6 +430,7 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.Q))
         {
             m_bSwing = true;
+            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, m_EffectSound, 1);
             m_Animator.SetBool(m_bHashLButton, true);
 
             Vector3 PlayerPos = transform.position;
@@ -487,6 +499,8 @@ public class Player : MonoBehaviour
                     }
                     break;
             }
+
+            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, m_EffectSound, 1);
         }
     }
 
@@ -536,6 +550,8 @@ public class Player : MonoBehaviour
                     }
                     break;
             }
+
+            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, m_EffectSound, 1);
         }
     }
 
@@ -560,6 +576,9 @@ public class Player : MonoBehaviour
                 {
                     if (!m_Weapon.activeSelf)
                         m_Equipment.SetActive(true);
+
+                    m_EquipmentSound = m_Equipment.transform.parent.GetComponent<AudioSource>();
+                    SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, m_EffectSound, 7);
                     m_bInitialEquip[0] = true;
                 }
             }
@@ -572,6 +591,9 @@ public class Player : MonoBehaviour
                 {
                     if (!m_Equipment.activeSelf)
                         m_Weapon.SetActive(true);
+
+                    m_WeaponSound = m_Weapon.transform.parent.GetComponent<AudioSource>();
+                    SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, m_EffectSound, 7);
                     m_bInitialEquip[1] = true;
                 }
             }
@@ -595,6 +617,8 @@ public class Player : MonoBehaviour
 
             if (m_Weapon)
                 m_Weapon.SetActive(false);
+
+            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, m_EffectSound, 7);
         }
         else if(Input.GetKeyDown("2"))
         {
@@ -608,6 +632,8 @@ public class Player : MonoBehaviour
 
             if (m_Equipment)
                 m_Equipment.SetActive(false);
+
+            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_PLAYER, m_EffectSound, 7);
         }
     }
 

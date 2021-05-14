@@ -104,7 +104,8 @@ public class ShopUI : MonoBehaviour
                 break;
         }
 
-        m_UIManager.SetEarnGem(true);
+        if(endGauge != 100 && !m_UIManager.GetEarnGem())
+            m_UIManager.SetEarnGem(true);
     }
 
     public void UpdateGauge(int gauge)

@@ -106,16 +106,20 @@ public class ObjectManager : MonoBehaviour
 
     private void CheatKey()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            TreeBoundary treeBoundary = GameObject.Find("TreeBoundary").GetComponent<TreeBoundary>();
-            RespawnTrees(3);
-            RespawnRocks(3);
-        }
+        //if (Input.GetKeyDown(KeyCode.T))
+        //{
+        //    TreeBoundary treeBoundary = GameObject.Find("TreeBoundary").GetComponent<TreeBoundary>();
+        //    RespawnTrees(3);
+        //    RespawnRocks(3);
+        //}
 
         if (Input.GetKeyDown(KeyCode.L))
         {
-            LevelBoundary levelBoundary = GameObject.Find("LevelBoundary").GetComponent<LevelBoundary>();
+            GameObject boundary = GameObject.Find("LevelBoundary");
+            if (!boundary)
+                return;
+
+            LevelBoundary levelBoundary = boundary.GetComponent<LevelBoundary>();
             levelBoundary.DestroyLevelBoundary();
             return;
         }

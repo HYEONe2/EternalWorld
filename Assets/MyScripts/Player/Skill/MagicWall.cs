@@ -22,17 +22,6 @@ public class MagicWall : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (other.CompareTag("Monster"))
-        {
-            Monster monster = other.GetComponent<Monster>();
-            if (monster)
-                monster.SetDamaged(1);
-            // 몬스터 걸음 멈춤
-        }
-    }
-
     private void DestroyWall()
     {
         for (int i = 0; i < transform.childCount; ++i)

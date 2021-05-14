@@ -161,6 +161,7 @@
      <Compile Include="Assets\MyScripts\UI\EndingUI.cs" />
      <Compile Include="Assets\MyScripts\UI\HPUI.cs" />
      <Compile Include="Assets\MyScripts\UI\MainQuestUI.cs" />
+     <Compile Include="Assets\MyScripts\UI\MouseHover.cs" />
      <Compile Include="Assets\MyScripts\UI\NoticeUI.cs" />
      <Compile Include="Assets\MyScripts\UI\PhoneCanvas.cs" />
      <Compile Include="Assets\MyScripts\UI\PlayerCanvas.cs" />

@@ -32,6 +32,7 @@ public class TutorialMonster : MonoBehaviour
             //if (m_Player.GetAttack())
             {
                 // 파티클 추가! 스파크 튀는 파티클!!
+                GetComponent<AudioSource>().Play();
                 m_Animator.SetBool("m_bDamaged", true);
             }
         }

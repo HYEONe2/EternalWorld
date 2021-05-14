@@ -102,7 +102,10 @@ public class ShopPanel : MonoBehaviour
     public void ClickMinusButton()
     {
         if (m_Amount - 1 < 1)
+        {
+            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_PlayerProperty.GetAudioSource(), 6);
             return;
+        }
 
         if (m_bChangeColor[0])
         {
@@ -123,14 +126,19 @@ public class ShopPanel : MonoBehaviour
             }
         }
 
+        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_PlayerProperty.GetAudioSource(), 5);
         m_Amount -= 1;
     }
 
     public void ClickPlusButton()
     {
         if (m_bChangeColor[0] || m_bChangeColor[1])
+        {
+            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_PlayerProperty.GetAudioSource(), 6);
             return;
+        }
 
+        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_PlayerProperty.GetAudioSource(), 5);
         m_Amount += 1;
     }
 
@@ -141,6 +149,7 @@ public class ShopPanel : MonoBehaviour
             if (m_Coin < m_OnePerCoin * m_Amount)
             {
                 m_bChangeColor[0] = true;
+                SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_PlayerProperty.GetAudioSource(), 6);
                 return;
             }
 
@@ -148,6 +157,7 @@ public class ShopPanel : MonoBehaviour
             m_PlayerProperty.SetCoin(m_Coin - (m_OnePerCoin * m_Amount));
             m_PlayerProperty.AddExperience(10 * m_Amount);
 
+            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_PlayerProperty.GetAudioSource(), 4);
             m_UIManager.GetShopUIScript().UpdateGauge(10 * m_Amount);
         }
         else
@@ -155,6 +165,7 @@ public class ShopPanel : MonoBehaviour
             if (m_MyAmount < m_Amount)
             {
                 m_bChangeColor[1] = true;
+                SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_PlayerProperty.GetAudioSource(), 6);
                 return;
             }
 
@@ -162,12 +173,14 @@ public class ShopPanel : MonoBehaviour
             m_PlayerProperty.SetCoin(m_Coin + (m_OnePerCoin * m_Amount));
             m_PlayerProperty.AddExperience(10 * m_Amount);
 
+            SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_PlayerProperty.GetAudioSource(), 4);
             m_UIManager.GetShopUIScript().UpdateGauge(10 * m_Amount);
         }
     }
 
     public void ClickResetButton()
     {
+        SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_UI, m_PlayerProperty.GetAudioSource(), 5);
         m_Amount = 1;
 
         m_UIManager.SetTextColor(m_CoinText, 0.196f, 0.196f, 0.196f, 1f);

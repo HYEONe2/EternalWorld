@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour
     private GameObject m_PhoneCanvas;
     private GameObject m_QuestCanvas;
 
+    private GameObject m_PhoneUI;
     private GameObject m_Menu;
     private GameObject m_Inventory;
     private GameObject m_Shop;
@@ -54,10 +55,11 @@ public class UIManager : MonoBehaviour
         if (!m_PhoneCanvas) m_PhoneCanvas = GameObject.Find("PhoneCanvas");
         if (!m_QuestCanvas) m_QuestCanvas = GameObject.Find("QuestCanvas");
 
-        if (!m_Menu) m_Menu = GameObject.Find("MenuUI");
-        if (!m_Inventory) m_Inventory = GameObject.Find("InventoryUI");
-        if (!m_Shop) m_Shop = GameObject.Find("ShopUI");
-        if (!m_Build) m_Build = GameObject.Find("BuildUI");
+        m_PhoneUI = m_PhoneCanvas.transform.GetChild(0).gameObject;
+        if (!m_Menu) m_Menu = m_PhoneUI.transform.Find("MenuUI").gameObject;
+        if (!m_Inventory) m_Inventory = m_PhoneUI.transform.Find("InventoryUI").gameObject;
+        if (!m_Shop) m_Shop = m_PhoneUI.transform.Find("ShopUI").gameObject;
+        if (!m_Build) m_Build = m_PhoneUI.transform.Find("BuildUI").gameObject;
         m_Setting = GameObject.Find("SettingUI");
 
         if (!m_ReturnIcon) m_ReturnIcon = GameObject.Find("ReturnIcon");
@@ -79,7 +81,13 @@ public class UIManager : MonoBehaviour
         if(m_QuestCanvas)
             UpdateActiveCanvas();
 
-        UpdatePlayerPropertyUI();
+        if (m_PhoneCanvas.GetComponent<PhoneCanvas>().GetPhoneDownEnd())
+            m_PhoneUI.SetActive(false);
+        else
+        {
+            m_PhoneUI.SetActive(true);
+            UpdatePlayerPropertyUI();
+        }
     }
 
     void UpdateActiveCanvas()

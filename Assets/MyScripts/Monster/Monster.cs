@@ -222,7 +222,7 @@ public class Monster : MonoBehaviour
                         return;
 
                     Vector3 TargetPos = m_Target.transform.position;
-                    TargetPos.y = -3.169801f;
+                    TargetPos.y = m_TargetY;
                     Vector3 NewLook = TargetPos - transform.position;
                     transform.rotation = Quaternion.LookRotation(NewLook);
                 }
@@ -354,6 +354,7 @@ public class Monster : MonoBehaviour
             case ObjectManager.ABILITY.ABIL_FIRE:
                 {
                     m_Animator.speed = 0.7f;
+                    SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_MONSTER, GetComponent<AudioSource>(), 1);
                 }
                 break;
             case ObjectManager.ABILITY.ABIL_GRASS:
@@ -371,6 +372,7 @@ public class Monster : MonoBehaviour
             case ObjectManager.ABILITY.ABIL_WATER:
                 {
                     transform.Find("Body").GetComponent<BoxCollider>().isTrigger = true;
+                    SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_MONSTER, GetComponent<AudioSource>(), 7);
                 }
                 break;
         }
@@ -394,6 +396,7 @@ public class Monster : MonoBehaviour
             case ObjectManager.ABILITY.ABIL_GRASS:
                 {
                     m_Animator.speed = 0.1f;
+                    SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_MONSTER, GetComponent<AudioSource>(), 4);
 
                     m_SecondSkill.SetActive(true);
                 }
@@ -485,7 +488,8 @@ public class Monster : MonoBehaviour
                         damagePercent = 1;
                     else if (eAbility == ObjectManager.ABILITY.ABIL_WATER)
                         damagePercent = 3;
-                }
+                    SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_MONSTER, GetComponent<AudioSource>(), 2);
+   }
                 break;
             case ObjectManager.ABILITY.ABIL_GRASS:
                 {
@@ -495,7 +499,8 @@ public class Monster : MonoBehaviour
                         damagePercent = 2;
                     else if (eAbility == ObjectManager.ABILITY.ABIL_WATER)
                         damagePercent = 1;
-                }
+                    SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_MONSTER, GetComponent<AudioSource>(), 5);
+}
                 break;
             case ObjectManager.ABILITY.ABIL_WATER:
                 {
@@ -505,6 +510,7 @@ public class Monster : MonoBehaviour
                         damagePercent = 3;
                     else if (eAbility == ObjectManager.ABILITY.ABIL_WATER)
                         damagePercent = 2;
+                    SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_MONSTER, GetComponent<AudioSource>(), 8);
                 }
                 break;
             default:
@@ -523,6 +529,13 @@ public class Monster : MonoBehaviour
             playerProperty.AddExperience(10 * playerProperty.GetPlayerStat().m_Level);
 
             m_Animator.SetBool("IsDead", true);
+
+            if (m_eAbility == ObjectManager.ABILITY.ABIL_FIRE)
+                SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_MONSTER, GetComponent<AudioSource>(), 3);
+            else if (m_eAbility == ObjectManager.ABILITY.ABIL_GRASS)
+                SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_MONSTER, GetComponent<AudioSource>(), 6);
+            else if (m_eAbility == ObjectManager.ABILITY.ABIL_WATER)
+                SoundManager.PlayEffectSound(SoundManager.TYPE.TYPE_MONSTER, GetComponent<AudioSource>(), 9);
 
             if (bDropJewelry)
             {
