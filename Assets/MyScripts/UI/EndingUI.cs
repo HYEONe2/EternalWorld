@@ -50,6 +50,7 @@ public class EndingUI : MonoBehaviour
 
         if (!m_bActive)
         {
+            //if(Input.GetKeyDown(KeyCode.U))
             if (m_Player.GetComponent<PlayerProperty>().GetPlayerStat().m_Level >= m_LimitLevel)
                 SetActive(true);
         }

@@ -91,7 +91,7 @@ public class Monster : MonoBehaviour
         UpdateState();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (m_Animator.GetBool(m_bHashDamaged))
             return;
@@ -565,7 +565,7 @@ public class Monster : MonoBehaviour
     public void SetDestroy()
     {
         // 이펙트 생성
-        Instantiate(Resources.Load<GameObject>("Particle/Player/Grass/FireExplosion"), transform.position, Quaternion.identity);
+        Instantiate(Resources.Load<GameObject>("Particle/Monster/FireExplosion"), transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 }

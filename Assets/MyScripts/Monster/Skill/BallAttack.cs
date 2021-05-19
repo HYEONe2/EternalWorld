@@ -37,6 +37,8 @@ public class BallAttack : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             Player player = other.GetComponent<Player>();
+            if (player.GetDamaged())
+                return;
             if (player.GetAbility() == ObjectManager.ABILITY.ABIL_WATER && player.GetSkillObject(2))
                 return;
 

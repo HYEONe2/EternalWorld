@@ -24215,6 +24215,10 @@ MonoBehaviour:
     HasGoalAmount: 1
     CurrentAmount: 0
     MaxAmount: 1
+  - QuestText: "\uB808\uBCA8 9 \uB2EC\uC131"
+    HasGoalAmount: 0
+    CurrentAmount: 0
+    MaxAmount: 0
 --- !u!1001 &6149794415909259641
 PrefabInstance:
   m_ObjectHideFlags: 0

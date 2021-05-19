@@ -33,13 +33,13 @@ public class RazorAttack : MonoBehaviour
             if (player.GetAbility() == ObjectManager.ABILITY.ABIL_WATER && player.GetSkillObject(2))
                 return;
 
-            //if (!player.GetDamaged())
-            //{
-            //    PlayerProperty playerProperty = other.GetComponent<PlayerProperty>();
-            //    playerProperty.SetDamaged(ObjectManager.ABILITY.ABIL_GRASS, playerProperty.GetPlayerStat().m_Level);
+            if (!player.GetDamaged())
+            {
+                PlayerProperty playerProperty = other.GetComponent<PlayerProperty>();
+                playerProperty.SetDamaged(ObjectManager.ABILITY.ABIL_GRASS, playerProperty.GetPlayerStat().m_Level);
 
                 m_DestroyTime = 2f;
-            //}
+            }
         }
     }
 }

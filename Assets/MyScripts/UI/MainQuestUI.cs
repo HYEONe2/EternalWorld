@@ -198,6 +198,12 @@ public class MainQuestUI : MonoBehaviour
                     }
                 }
                 break;
+            case 5:
+                {
+                    if (m_PlayerProperty.GetPlayerStat().m_Level >= 9)
+                        m_bFinishTask = true;
+                }
+                break;
         }
     }
 

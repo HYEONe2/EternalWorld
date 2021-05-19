@@ -91,6 +91,10 @@ public class PlayerProperty : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.K))
             m_PlayerStat.m_HP = 1;
+        if(Input.GetKeyDown("5"))
+        {
+            m_PlayerStat.m_Str = 100;
+        }
 
         if (m_eAbility == ObjectManager.ABILITY.ABIL_END)
             m_eAbility = GetComponent<Player>().GetAbility();
@@ -105,7 +109,7 @@ public class PlayerProperty : MonoBehaviour
         m_PlayerStat.m_Level = 1;
         m_PlayerStat.m_Exp = 0;
         m_PlayerStat.m_MaxExp = 100;
-        m_PlayerStat.m_HP = 1;
+        m_PlayerStat.m_HP = m_PlayerStat.m_Level * 50;
         m_PlayerStat.m_Str = 1;
         m_PlayerStat.m_CoolTime = 0;
 
