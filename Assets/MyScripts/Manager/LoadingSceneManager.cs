@@ -101,6 +101,7 @@ public class LoadingSceneManager : MonoBehaviour
                         {
                             Player.transform.position = new Vector3(0, 5f, 0);
                             Player.transform.rotation = Quaternion.Euler(Vector3.one);
+                            Player.GetComponent<PlayerProperty>().ResetStr();
                         }
                         else if (m_NextScene == "MazeScene")
                         {

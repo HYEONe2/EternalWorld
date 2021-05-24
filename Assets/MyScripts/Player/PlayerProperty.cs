@@ -62,6 +62,7 @@ public class PlayerProperty : MonoBehaviour
 
     public void SetCoin(int coin) { m_Coin = coin; }
     public void SetHP(int hp) { if(50 * m_PlayerStat.m_Level > m_PlayerStat.m_HP )m_PlayerStat.m_HP = hp; }
+    public void ResetStr() { m_PlayerStat.m_Str = m_PlayerStat.m_Level; }
 
     public void AddStr(int str) { m_PlayerStat.m_Str += str; }
     public void AddExtraHP(int extra) { m_ExtraHP += extra; }
@@ -92,9 +93,7 @@ public class PlayerProperty : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K))
             m_PlayerStat.m_HP = 1;
         if(Input.GetKeyDown("5"))
-        {
             m_PlayerStat.m_Str = 100;
-        }
 
         if (m_eAbility == ObjectManager.ABILITY.ABIL_END)
             m_eAbility = GetComponent<Player>().GetAbility();

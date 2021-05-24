@@ -16,7 +16,7 @@ public class PhoneCanvas : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Screen.SetResolution(Screen.width, (Screen.width * 16) / 9, false);
+        //Screen.SetResolution(Screen.width, (Screen.width * 16) / 9, false);
 
         if(!m_Phone) m_Phone = GameObject.Find("PhoneUI");
         if (!m_PhoneTrans) m_PhoneTrans = m_Phone.transform;

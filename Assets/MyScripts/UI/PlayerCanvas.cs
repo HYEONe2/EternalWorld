@@ -20,7 +20,7 @@ public class PlayerCanvas : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Screen.SetResolution(Screen.width, (Screen.width * 16) / 9, false);
+        //Screen.SetResolution(Screen.width, (Screen.width * 16) / 9, false);
 
         if (!m_NoticeUITrans) m_NoticeUITrans = transform.Find("NoticeUI");
         if (!m_NoticeUI) m_NoticeUI = m_NoticeUITrans.gameObject;

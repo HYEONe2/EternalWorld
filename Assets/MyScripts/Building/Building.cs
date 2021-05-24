@@ -146,6 +146,7 @@ public class Building : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             m_PlayerProperty.AddProperty(m_Info.m_eMaterialType, m_Info.m_BuildAmount, true);
+            m_UIManager.SetPlayerRebuild(false);
             SetDestroy();
             return;
         }
