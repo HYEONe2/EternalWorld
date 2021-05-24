@@ -68,7 +68,6 @@ ScriptsOnlyBuild:
     - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateEditor
     - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
@@ -1686,4 +1685,4 @@ ScriptsOnlyBuild:
   - Assets/MyScenes/TutorialScene.unity
   - Assets/MyScenes/MainScene.unity
   - Assets/MyScenes/MazeScene.unity
-  playerPath: E:/Unity/EternalWorld_Game/Eternal World.exe
+  playerPath: "E:/Unity/\uC0C8 \uD3F4\uB354/Eternal World.exe"
