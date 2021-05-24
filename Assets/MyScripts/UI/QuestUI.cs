@@ -181,7 +181,7 @@ public class QuestUI : MonoBehaviour
         //10
         TenthTalking.Add("잘하셨습니다.");
         TenthTalking.Add("이제 제가 생성해드릴 나무와 돌을 1개씩 채집해주십시오.");
-        TenthTalking.Add("F 버튼을 이용하여 재화를 얻을 수 있습니다.");
+        TenthTalking.Add("왼클릭을 이용하여 도끼를 휘두르고 F 버튼을 이용하여 재화를 얻을 수 있습니다.");
         m_TalkingText.Add(TenthTalking);
 
         EleventhTalking.Add("잘하셨습니다.");
